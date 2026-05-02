@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DivinePark - Tablero de Operador</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <!-- Iconos Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Auth Guard -->
+    <script src="js/auth-guard.js"></script>
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class='bx bxs-parking' style='font-size: 2rem; color: var(--accent-color);'></i>
+                <h2>DivinePark</h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="operador-dashboard.html" class="nav-item active">
+                    <i class='bx bx-grid-alt'></i> Panel Principal
+                </a>
+                <a href="operador-register-entry.html" class="nav-item" id="btn-entrada-sidebar">
+                    <i class='bx bx-car'></i> Registrar Vehículo
+                </a>
+                <a href="operador-register-exit.html" class="nav-item" id="btn-salida-sidebar">
+                    <i class='bx bx-log-out-circle'></i> Registrar Salida
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item" onclick="logout()">
+                    <i class='bx bx-log-out'></i> Cerrar Sesión
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="search-bar">
+                    <!-- Buscador futuro -->
+                </div>
+                <div class="user-info">
+                    <div style="text-align: right;">
+                        <div style="font-weight: 600; font-size: 0.9rem;" id="username-display">Cargando...</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Operador de Turno</div>
+                    </div>
+                    <div class="avatar">O</div>
+                </div>
+            </header>
+
+            <!-- Contenido Dinámico -->
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h1>Tablero Principal</h1>
+                    <p style="color: var(--text-secondary);">Monitoreo en tiempo real del sistema Divine Park</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="card stat-card">
+                        <div class="stat-icon" style="background-color: rgba(74, 222, 128, 0.1); color: #2e7d32;">
+                            <i class='bx bx-wifi'></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Sensores de Ocupación</h3>
+                            <div class="value" id="stat-sensores">Cargando...</div>
+                        </div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-icon" style="background-color: rgba(30, 58, 138, 0.1); color: #1e3a8a;">
+                            <i class='bx bx-info-circle'></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Cámaras OCR</h3>
+                            <div class="value" id="stat-camaras">Cargando...</div>
+                        </div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="stat-icon" style="background-color: rgba(168, 85, 247, 0.1); color: #7e22ce;">
+                            <i class='bx bx-git-commit' style="transform: rotate(90deg);"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Barreras de Acceso</h3>
+                            <div style="font-size: 1rem; margin-top: 5px;">
+                                <div id="barrera-entrada">Entrada: <span class="badge badge-active">Activo</span></div>
+                                <div id="barrera-salida">Salida: <span class="badge badge-active">Activo</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notificaciones de Alertas -->
+                <div class="card alerts-section">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 20px;">Notificaciones de Alertas</h2>
+                    <div id="alertas-container">
+                        <div class="alert-item info">Cargando notificaciones...</div>
+                    </div>
+                    <a href="#" class="section-link" id="btn-ver-notificaciones">Ver historial de notificaciones</a>
+                </div>
+
+                <!-- Historial de Entradas y Salidas -->
+                <div class="history-section">
+                    <div class="section-header">
+                        <h2>Historial de Entradas y Salidas de vehículos</h2>
+                        <a href="#" style="font-size: 0.85rem; font-weight: 600;" id="btn-ver-historial">Ver historial
+                            de entradas y salidas</a>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha/Hora</th>
+                                <th>Placa</th>
+                                <th>Tipo</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historial-tbody">
+                            <tr>
+                                <td colspan="4" style="text-align:center; color:#94a3b8; padding:20px;">Cargando
+                                    historial...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modales -->
+
+    <!-- Modal Entrada -->
+    <div class="modal-overlay" id="modal-entrada">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2>Registro de Entrada</h2>
+                <i class='bx bx-x close-modal' style="font-size: 1.5rem; cursor: pointer;"></i>
+            </div>
+
+            <form id="form-entrada">
+                <div class="input-group">
+                    <label>Placa del Vehículo</label>
+                    <input type="text" id="placa-entrada" class="input-control" placeholder="Ej. ABC123" required
+                        style="text-transform: uppercase;">
+                </div>
+                <div class="input-group">
+                    <label>Tipo de Vehículo</label>
+                    <select id="tipo-entrada" class="input-control" required>
+                        <option value="carro">Carro</option>
+                        <option value="moto">Moto</option>
+                        <option value="camioneta">Camioneta</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Espacio Asignado</label>
+                    <select id="espacio-entrada" class="input-control" required>
+                        <option value="">Cargando espacios...</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">Confirmar
+                    Entrada</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Salida -->
+    <div class="modal-overlay" id="modal-salida">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="color: var(--error-color);">Registro de Salida</h2>
+                <i class='bx bx-x close-modal' style="font-size: 1.5rem; cursor: pointer;"></i>
+            </div>
+
+            <form id="form-salida">
+                <div class="input-group">
+                    <label>Buscar por Placa</label>
+                    <input type="text" id="placa-salida" class="input-control" placeholder="Ej. ABC123" required
+                        style="text-transform: uppercase;">
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 24px;">
+                    El sistema calculará automáticamente el tiempo y la tarifa a cobrar basada en la hora de entrada.
+                </p>
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; background-color: var(--error-color);">Calcular y Registrar Salida</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- MODAL: Historial de Entradas y Salidas         -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="modal-overlay modal-fullscreen" id="modal-historial">
+        <div class="modal-content modal-xl">
+
+            <!-- Header -->
+            <div class="modal-header-row">
+                <h2>Historial de Entradas y Salidas de vehículos</h2>
+                <div class="modal-nav">
+                    <button class="nav-btn" id="hist-prev">Anterior</button>
+                    <button class="nav-btn nav-btn-active" id="hist-next">Siguiente</button>
+                    <i class='bx bx-x close-modal' style="font-size: 1.8rem; cursor:pointer; margin-left:16px;"></i>
+                </div>
+            </div>
+
+            <!-- Tabla -->
+            <div style="overflow-x: auto; flex:1; overflow-y: auto;">
+                <table class="data-table" id="hist-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha/Hora</th>
+                            <th>Placa</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hist-modal-tbody">
+                        <tr>
+                            <td colspan="4" style="text-align:center;padding:30px;color:#94a3b8;">Cargando...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer / Filtros -->
+            <div class="modal-footer-row">
+                <div class="filter-group">
+                    <i class='bx bx-calendar' style="color:#94a3b8;"></i>
+                    <input type="date" id="hist-filtro-fecha" class="filter-input" title="Filtrar por fecha">
+                </div>
+                <div class="filter-group">
+                    <i class='bx bx-time' style="color:#94a3b8;"></i>
+                    <input type="time" id="hist-filtro-desde" class="filter-input" title="Desde">
+                    <span style="color:#94a3b8; margin:0 4px;">/</span>
+                    <input type="time" id="hist-filtro-hasta" class="filter-input" title="Hasta">
+                </div>
+                <div class="filter-group">
+                    <select id="hist-filtro-tipo" class="filter-input">
+                        <option value="">Entrada/Salida</option>
+                        <option value="entrada">Entrada</option>
+                        <option value="salida">Salida</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="hist-btn-filtrar" style="padding:8px 20px; font-size:0.85rem;">
+                    Filtrar
+                </button>
+                <button class="nav-btn" id="hist-btn-limpiar" style="padding:8px 16px;">Limpiar</button>
+                <span id="hist-info-pagina" style="margin-left:auto; color:#94a3b8; font-size:0.85rem;"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- MODAL: Notificaciones de Alertas               -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="modal-overlay modal-fullscreen" id="modal-notificaciones">
+        <div class="modal-content modal-xl">
+
+            <!-- Header -->
+            <div class="modal-header-row">
+                <h2>Notificaciones de Alertas</h2>
+                <div class="modal-nav">
+                    <button class="nav-btn" id="noti-prev">Anterior</button>
+                    <button class="nav-btn nav-btn-active" id="noti-next">Siguiente</button>
+                    <i class='bx bx-x close-modal' style="font-size: 1.8rem; cursor:pointer; margin-left:16px;"></i>
+                </div>
+            </div>
+
+            <!-- Lista -->
+            <div id="noti-list"
+                style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding: 4px 2px;">
+                <div class="alert-item info">Cargando notificaciones...</div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer-row" style="justify-content: flex-end;">
+                <span id="noti-info-pagina" style="color:#94a3b8; font-size:0.85rem;"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/operador.js"></script>
+</body>
+
+</html>

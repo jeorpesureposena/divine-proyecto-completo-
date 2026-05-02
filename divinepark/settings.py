@@ -9,6 +9,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+AUTH_USER_MODEL = 'core.Usuario'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -57,7 +59,7 @@ WSGI_APPLICATION = 'divinepark.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'divinepark',
+        'NAME': 'divinepark1',
         'USER': 'postgres',
         'PASSWORD': 'Cobito18',
         'HOST': 'localhost',
@@ -102,3 +104,6 @@ SIMPLE_JWT = {
 
 # CORS - permite conexión desde la web y Flutter
 CORS_ALLOW_ALL_ORIGINS = True
+
+# Simulación de Envío de Correos (Consola)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

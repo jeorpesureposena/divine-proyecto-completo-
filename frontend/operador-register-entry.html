@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DivinePark - Registrar Vehículo</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="js/auth-guard.js"></script>
+    <style>
+        /* ── Estilos específicos de esta página ── */
+        .register-content {
+            max-width: 680px;
+        }
+
+        .form-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .field-group {
+            margin-bottom: 28px;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .field-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            background: #fafbfc;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+
+        .field-input::placeholder {
+            color: #cbd5e1;
+            font-weight: 400;
+        }
+
+        .field-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 31, 102, 0.1);
+            background: #fff;
+        }
+
+        .field-input.with-icon {
+            padding-left: 56px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #cbd5e1;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 80%;
+            margin: 32px auto 0;
+            padding: 18px;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 31, 102, 0.25);
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .submit-btn:hover   { background: #00154d; }
+        .submit-btn:active  { transform: scale(0.98); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .operator-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0f4ff;
+            border: 1px solid #c7d2fe;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 0.95rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class='bx bxs-parking' style='font-size: 2rem; color: var(--accent-color);'></i>
+            <h2>DivinePark</h2>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="operador-dashboard.html" class="nav-item">
+                <i class='bx bx-grid-alt'></i> Panel Principal
+            </a>
+            <a href="operador-register-entry.html" class="nav-item active">
+                <i class='bx bx-car'></i> Registrar Vehículo
+            </a>
+            <a href="operador-register-exit.html" class="nav-item">
+                <i class='bx bx-log-out-circle'></i> Registrar Salida
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item" onclick="logout()">
+                <i class='bx bx-log-out'></i> Cerrar Sesión
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="search-bar"></div>
+            <div class="user-info">
+                <div style="text-align: right;">
+                    <div style="font-weight: 600; font-size: 0.9rem;" id="username-display">Cargando...</div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Operador de Turno</div>
+                </div>
+                <div class="avatar" id="user-avatar">O</div>
+            </div>
+        </header>
+
+        <!-- Contenido -->
+        <div class="content-wrapper">
+            <div class="register-content">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Registro Manual de Ingreso de Vehículo</h1>
+                    <p style="color: var(--text-secondary);">
+                        Registrar entrada de parking para respaldo manual durante el tiempo de inactividad del sistema.
+                    </p>
+                </div>
+
+                <!-- Form Card -->
+                <div class="form-card">
+                    <form id="form-registro-entrada">
+
+                        <!-- Número de Placa -->
+                        <div class="field-group">
+                            <label for="placa">Número de Placa</label>
+                            <div class="input-wrapper">
+                                <i class='bx bx-car input-icon'></i>
+                                <input
+                                    type="text"
+                                    id="placa"
+                                    name="placa"
+                                    class="field-input with-icon"
+                                    placeholder="ABC-1234"
+                                    required
+                                    autocomplete="off"
+                                    style="text-transform: uppercase;"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Tipo de Vehículo -->
+                        <div class="field-group">
+                            <label for="tipo">Tipo de Vehículo</label>
+                            <div class="input-wrapper">
+                                <i class='bx bx-category input-icon'></i>
+                                <select id="tipo" name="tipo" class="field-input with-icon" required>
+                                    <option value="carro">Carro</option>
+                                    <option value="camioneta">Camioneta</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Espacio Asignado -->
+                        <div class="field-group">
+                            <label for="espacio">Espacio Asignado</label>
+                            <div class="input-wrapper">
+                                <i class='bx bx-map-pin input-icon'></i>
+                                <select id="espacio" name="espacio" class="field-input with-icon" required>
+                                    <option value="">Cargando espacios disponibles...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- ID del Operador (auto-llenado) -->
+                        <div class="field-group">
+                            <label>Operador Responsable</label>
+                            <div class="operator-badge" id="operador-badge">
+                                <i class='bx bx-user-check'></i>
+                                <span id="operador-nombre">Cargando...</span>
+                            </div>
+                        </div>
+
+                        <!-- Submit -->
+                        <button type="submit" class="submit-btn" id="btn-registrar">
+                            Registrar Entrada
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    // Verificar sesión
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+        window.location.href = 'operador-login.html';
+        return;
+    }
+
+    // Cargar datos del usuario
+    let usuario = null;
+    try { usuario = JSON.parse(localStorage.getItem('operator_data')); } catch(e) {}
+
+    if (usuario) {
+        const nombre = usuario.nombre || usuario.full_name || 'Operador';
+        document.getElementById('username-display').textContent = nombre;
+        document.getElementById('user-avatar').textContent = nombre.charAt(0).toUpperCase();
+        document.getElementById('operador-nombre').textContent = nombre;
+    }
+
+    // Cargar espacios libres
+    await cargarEspacios();
+
+    // Manejar envío del formulario
+    document.getElementById('form-registro-entrada').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-registrar');
+        btn.disabled = true;
+        btn.textContent = 'Registrando...';
+
+        const placa   = document.getElementById('placa').value.toUpperCase().trim();
+        const tipo    = document.getElementById('tipo').value;
+        const espacio = document.getElementById('espacio').value;
+
+        if (!espacio) {
+            showToast('Selecciona un espacio disponible', 'error');
+            btn.disabled = false;
+            btn.textContent = 'Registrar Entrada';
+            return;
+        }
+
+        try {
+            const resultado = await apiFetch('/sesiones/entrada-manual/', {
+                method: 'POST',
+                body: JSON.stringify({ placa, tipo, espacio_id: espacio })
+            });
+
+            const codigo = resultado.espacio_codigo || `#${espacio}`;
+            showToast(`¡Entrada de ${placa} registrada — ${codigo}!`, 'success');
+            document.getElementById('form-registro-entrada').reset();
+            await cargarEspacios(); // refrescar espacios
+
+            // Redirigir al dashboard después de 2 segundos
+            setTimeout(() => {
+                window.location.href = 'operador-dashboard.html';
+            }, 2000);
+
+        } catch (error) {
+            showToast(error.message || 'Error al registrar la entrada', 'error');
+            btn.disabled = false;
+            btn.textContent = 'Registrar Entrada';
+        }
+    });
+});
+
+async function cargarEspacios() {
+    const select = document.getElementById('espacio');
+    try {
+        const espacios = await apiFetch('/espacios/');
+        const libres = espacios.filter(e => e.estado === 'libre');
+
+        select.innerHTML = '';
+
+        if (libres.length === 0) {
+            select.innerHTML = '<option value="">No hay espacios disponibles</option>';
+            return;
+        }
+
+        // Agregar placeholder
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Selecciona un espacio...';
+        placeholder.disabled = true;
+        placeholder.selected = true;
+        select.appendChild(placeholder);
+
+        // Agrupar por zona
+        const zonas = {};
+        libres.forEach(esp => {
+            const z = esp.zona || 'A';
+            if (!zonas[z]) zonas[z] = [];
+            zonas[z].push(esp);
+        });
+
+        // Crear un <optgroup> por zona
+        const zonasOrdenadas = Object.keys(zonas).sort();
+        zonasOrdenadas.forEach(zona => {
+            const group = document.createElement('optgroup');
+            group.label = `── Zona ${zona} (${zonas[zona].length} libres)`;
+
+            zonas[zona].forEach(esp => {
+                const opt = document.createElement('option');
+                opt.value = esp.id;
+                // Calcular número dentro de la zona (1-15)
+                const numZona = String(esp.numero - (['A','B','C','D'].indexOf(zona) * 15)).padStart(2, '0');
+                const code = `${zona}-${numZona}`;
+                opt.textContent = `${code}  (${esp.tipo === 'discapacitado' ? '♿ Discapacitado' : 'Estándar'})`;
+                opt.dataset.code = code;
+                group.appendChild(opt);
+            });
+
+            select.appendChild(group);
+        });
+
+    } catch(e) {
+        select.innerHTML = '<option value="">Error al cargar espacios</option>';
+        console.error('Error cargando espacios:', e);
+    }
+}
+
+function logout() {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('operator_data');
+    window.location.href = 'operador-login.html';
+}
+</script>
+</body>
+</html>

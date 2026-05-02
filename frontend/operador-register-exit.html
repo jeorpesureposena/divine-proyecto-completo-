@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DivinePark - Registrar Salida</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="js/auth-guard.js"></script>
+    <style>
+        /* ── Estilos específicos de esta página ── */
+        .register-content {
+            max-width: 720px;
+        }
+
+        /* ── Búsqueda de placa ── */
+        .search-placa-wrapper {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .search-placa-input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            font-family: inherit;
+            text-transform: uppercase;
+            background: #fafbfc;
+            color: var(--text-primary);
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .search-placa-input::placeholder { color: #cbd5e1; font-weight: 400; }
+        .search-placa-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0,31,102,0.1);
+        }
+
+        .btn-buscar {
+            padding: 14px 24px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-buscar:hover   { background: #00154d; }
+        .btn-buscar:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ── Tarjeta de info del vehículo ── */
+        .vehicle-info-card {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: none; /* se muestra tras la búsqueda */
+        }
+
+        .vehicle-info-card.visible { display: block; }
+
+        .vehicle-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px 32px;
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .info-item .info-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .info-item .info-value.normal {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .info-divider {
+            grid-column: 1 / -1;
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 4px 0;
+        }
+
+        .info-with-icon {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-with-icon i {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+        }
+
+        /* ── Sección de autorización excepcional ── */
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .section-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+        }
+
+        .exc-textarea {
+            width: 100%;
+            min-height: 140px;
+            padding: 16px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: var(--text-primary);
+            resize: vertical;
+            background: #fafbfc;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .exc-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0,31,102,0.1);
+        }
+
+        /* ── Botón de confirmar ── */
+        .submit-btn {
+            display: block;
+            width: 80%;
+            margin: 28px auto 0;
+            padding: 18px;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,31,102,0.25);
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .submit-btn:hover   { background: #00154d; }
+        .submit-btn:active  { transform: scale(0.98); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ── Estado de búsqueda ── */
+        .search-status {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .search-status.error   { display:flex; background:#fef2f2; color:#dc2626; border:1px solid #fecaca; }
+        .search-status.success { display:flex; background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; }
+    </style>
+</head>
+<body>
+<div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class='bx bxs-parking' style='font-size: 2rem; color: var(--accent-color);'></i>
+            <h2>DivinePark</h2>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="operador-dashboard.html" class="nav-item">
+                <i class='bx bx-grid-alt'></i> Panel Principal
+            </a>
+            <a href="operador-register-entry.html" class="nav-item">
+                <i class='bx bx-car'></i> Registrar Vehículo
+            </a>
+            <a href="operador-register-exit.html" class="nav-item active">
+                <i class='bx bx-log-out-circle'></i> Registrar Salida
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item" onclick="logout()">
+                <i class='bx bx-log-out'></i> Cerrar Sesión
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="search-bar"></div>
+            <div class="user-info">
+                <div style="text-align: right;">
+                    <div style="font-weight: 600; font-size: 0.9rem;" id="username-display">Cargando...</div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Operador de Turno</div>
+                </div>
+                <div class="avatar" id="user-avatar">O</div>
+            </div>
+        </header>
+
+        <!-- Contenido -->
+        <div class="content-wrapper">
+            <div class="register-content">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Registro Manual de Salida de Vehículo</h1>
+                    <p style="color: var(--text-secondary);">
+                        Busca el vehículo por su placa, verifica los datos y confirma la salida.
+                    </p>
+                </div>
+
+                <!-- Búsqueda -->
+                <div class="search-placa-wrapper">
+                    <input
+                        type="text"
+                        id="placa-buscar"
+                        class="search-placa-input"
+                        placeholder="Ej. ABC-1234"
+                        maxlength="10"
+                    >
+                    <button class="btn-buscar" id="btn-buscar">
+                        <i class='bx bx-search'></i> Buscar
+                    </button>
+                </div>
+
+                <!-- Estado de búsqueda -->
+                <div class="search-status" id="search-status">
+                    <i class='bx bx-info-circle'></i>
+                    <span id="search-status-msg"></span>
+                </div>
+
+                <!-- Tarjeta de info del vehículo -->
+                <div class="vehicle-info-card" id="vehicle-card">
+                    <div class="vehicle-grid">
+                        <!-- Placa -->
+                        <div class="info-item">
+                            <label>Placa de Vehículo</label>
+                            <div class="info-value" id="info-placa">—</div>
+                        </div>
+                        <!-- Estado -->
+                        <div class="info-item" style="text-align:right;">
+                            <label>Estado del Vehículo</label>
+                            <div class="info-value" id="info-estado">—</div>
+                        </div>
+
+                        <hr class="info-divider">
+
+                        <!-- Hora Entrada -->
+                        <div class="info-item">
+                            <div class="info-with-icon">
+                                <i class='bx bx-time-five'></i>
+                                <div>
+                                    <label>Hora Entrada</label>
+                                    <div class="info-value normal" id="info-hora-entrada">—</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Tiempo transcurrido -->
+                        <div class="info-item" style="text-align:right;">
+                            <div class="info-with-icon" style="justify-content:flex-end;">
+                                <div>
+                                    <label>Tiempo Transcurrido</label>
+                                    <div class="info-value normal" id="info-duracion">—</div>
+                                </div>
+                                <i class='bx bx-timer'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Autorización Excepcional -->
+                <div id="seccion-autorizacion" style="display:none;">
+                    <p class="section-title">Módulo de Autorización Excepcional</p>
+                    <p class="section-subtitle">Motivo de la excepción (Obligatorio para registrar salida sin pago)</p>
+                    <textarea
+                        id="motivo-excepcion"
+                        class="exc-textarea"
+                        placeholder="Describa la razón por la cual se autoriza la salida sin pago registrado..."
+                    ></textarea>
+                </div>
+
+                <!-- Botón Confirmar -->
+                <button type="button" class="submit-btn" id="btn-confirmar-salida" style="display:none;">
+                    Confirmar Salida Manual
+                </button>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+// Estado global de la sesión encontrada
+let sesionActiva = null;
+let timerInterval = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // Verificar sesión
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+        window.location.href = 'operador-login.html';
+        return;
+    }
+
+    // Cargar datos del usuario
+    let usuario = null;
+    try { usuario = JSON.parse(localStorage.getItem('operator_data')); } catch(e) {}
+
+    if (usuario) {
+        const nombre = usuario.nombre || usuario.full_name || 'Operador';
+        document.getElementById('username-display').textContent = nombre;
+        document.getElementById('user-avatar').textContent = nombre.charAt(0).toUpperCase();
+    }
+
+    // Botón de búsqueda
+    document.getElementById('btn-buscar').addEventListener('click', buscarVehiculo);
+    document.getElementById('placa-buscar').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') buscarVehiculo();
+    });
+
+    // Botón de confirmar salida
+    document.getElementById('btn-confirmar-salida').addEventListener('click', confirmarSalida);
+});
+
+
+async function buscarVehiculo() {
+    const placa = document.getElementById('placa-buscar').value.toUpperCase().trim();
+    if (!placa) {
+        mostrarStatus('error', 'Ingresa una placa para buscar.');
+        return;
+    }
+
+    const btn = document.getElementById('btn-buscar');
+    btn.disabled = true;
+    btn.textContent = 'Buscando...';
+    ocultarInfo();
+
+    try {
+        const sesiones = await apiFetch('/sesiones/');
+        sesionActiva = sesiones.find(s =>
+            s.vehiculo_placa === placa && s.estado_sesion === 'abierta'
+        );
+
+        if (!sesionActiva) {
+            mostrarStatus('error', `No se encontró una sesión activa para la placa ${placa}.`);
+        } else {
+            mostrarStatus('success', `Sesión activa encontrada para ${placa}.`);
+            mostrarInfoVehiculo(sesionActiva);
+        }
+
+    } catch(e) {
+        mostrarStatus('error', 'Error al conectar con el servidor.');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bx bx-search"></i> Buscar';
+    }
+}
+
+
+function mostrarInfoVehiculo(sesion) {
+    // Placa y estado
+    document.getElementById('info-placa').textContent = sesion.vehiculo_placa || '—';
+    document.getElementById('info-estado').textContent = 'En Parqueadero';
+
+    // Hora de entrada
+    const horaEntrada = new Date(sesion.hora_inicio);
+    document.getElementById('info-hora-entrada').textContent =
+        horaEntrada.toLocaleTimeString('es-CO', { hour:'2-digit', minute:'2-digit' });
+
+    // Tiempo transcurrido (ticker en vivo)
+    if (timerInterval) clearInterval(timerInterval);
+    actualizarTiempo(horaEntrada);
+    timerInterval = setInterval(() => actualizarTiempo(horaEntrada), 60000);
+
+    // Mostrar card y formulario
+    document.getElementById('vehicle-card').classList.add('visible');
+    document.getElementById('seccion-autorizacion').style.display = 'block';
+    document.getElementById('btn-confirmar-salida').style.display = 'block';
+}
+
+
+function actualizarTiempo(horaEntrada) {
+    const ahora = new Date();
+    const diffMs = ahora - horaEntrada;
+    const totalMin = Math.floor(diffMs / 60000);
+    const horas = Math.floor(totalMin / 60);
+    const min = totalMin % 60;
+    const texto = horas > 0 ? `${horas}h ${min}min` : `${min} min`;
+    document.getElementById('info-duracion').textContent = texto;
+}
+
+
+async function confirmarSalida() {
+    if (!sesionActiva) return;
+
+    const motivo = document.getElementById('motivo-excepcion').value.trim();
+    if (!motivo) {
+        showToast('Describe el motivo de autorización para continuar', 'error');
+        return;
+    }
+
+    const btn = document.getElementById('btn-confirmar-salida');
+    btn.disabled = true;
+    btn.textContent = 'Procesando...';
+
+    try {
+        // 1. Registrar la salida manual
+        const resultado = await apiFetch(`/sesiones/${sesionActiva.id}/salida-manual/`, {
+            method: 'POST'
+        });
+
+        const monto = new Intl.NumberFormat('es-CO', {
+            style: 'currency', currency: 'COP', maximumFractionDigits: 0
+        }).format(resultado.pago.monto);
+
+        const durMin  = resultado.sesion.duracion_min;
+        const horas   = Math.floor(durMin / 60);
+        const minutos = durMin % 60;
+        const durStr  = horas > 0 ? `${horas}h ${minutos}min` : `${minutos}min`;
+
+        // 2. Registrar autorización excepcional en el backend
+        try {
+            await apiFetch('/autorizaciones/', {
+                method: 'POST',
+                body: JSON.stringify({
+                    placa:   sesionActiva.vehiculo_placa,
+                    tipo:    'salida',
+                    motivo:  motivo,
+                    espacio: sesionActiva.espacio,
+                    vehiculo: sesionActiva.vehiculo
+                })
+            });
+        } catch(e) {
+            console.warn('Autorización excepcional no guardada:', e);
+        }
+
+        // 3. Mostrar resumen y redirigir
+        showToast(`¡Salida registrada! Duración: ${durStr} — Cobro: ${monto}`, 'success');
+
+        if (timerInterval) clearInterval(timerInterval);
+        ocultarInfo();
+        document.getElementById('placa-buscar').value = '';
+        sesionActiva = null;
+        document.getElementById('search-status').className = 'search-status';
+
+        setTimeout(() => {
+            window.location.href = 'operador-dashboard.html';
+        }, 2500);
+
+    } catch(error) {
+        showToast(error.message || 'Error al registrar la salida', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Confirmar Salida Manual';
+    }
+}
+
+
+function mostrarStatus(tipo, msg) {
+    const el = document.getElementById('search-status');
+    el.className = `search-status ${tipo}`;
+    document.getElementById('search-status-msg').textContent = msg;
+    const icon = el.querySelector('i');
+    icon.className = tipo === 'error' ? 'bx bx-error-circle' : 'bx bx-check-circle';
+}
+
+
+function ocultarInfo() {
+    document.getElementById('vehicle-card').classList.remove('visible');
+    document.getElementById('seccion-autorizacion').style.display = 'none';
+    document.getElementById('btn-confirmar-salida').style.display = 'none';
+    document.getElementById('motivo-excepcion').value = '';
+}
+
+
+function logout() {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('operator_data');
+    window.location.href = 'operador-login.html';
+}
+</script>
+</body>
+</html>

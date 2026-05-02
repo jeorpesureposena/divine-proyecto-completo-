@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DivinePark - Login de Operador</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/login.css">
+    <!-- Iconos Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+
+    <div class="login-container">
+
+        <!-- Lado Izquierdo (Branding) -->
+        <div class="login-sidebar">
+            <div class="brand">
+                <img src="assets/logo.png" alt="Divine Park" class="brand-logo" onerror="this.style.display='none'">
+                <h1 class="brand-name">Divine Park</h1>
+                <h3 class="brand-sub">Panel de Operador</h3>
+            </div>
+            <img src="assets/logo.jpg" alt="Divine Park Hero" class="brand-hero" onerror="this.style.display='none'">
+        </div>
+
+        <!-- Lado Derecho (Formulario) -->
+        <div class="login-form-container">
+            <div class="card login-card">
+                <h2>Iniciar Sesión de Operador</h2>
+                <p class="muted">Ingresa tus credenciales de gestión para acceder al sistema.</p>
+
+                <div id="login-error" class="d-none"></div>
+
+                <form id="login-form">
+                    <div class="input-group">
+                        <label for="correo">Correo Electrónico</label>
+                        <div class="icon-input">
+                            <i class='bx bx-envelope'></i>
+                            <input type="email" id="correo" class="input-control" placeholder="operador@divinepark.com" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Contraseña</label>
+                        <div class="icon-input">
+                            <i class='bx bx-lock-alt'></i>
+                            <input type="password" id="password" class="input-control" placeholder="**********" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row between">
+                        <label class="remember"><input type="checkbox"> Recordarme</label>
+                        <a href="forgot-password.html" class="forgot">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">Iniciar Sesión</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Si ya está logueado, redirigir
+        if (localStorage.getItem('auth_token')) {
+            window.location.href = 'operador-dashboard.html';
+        }
+
+        const auth = new AuthService();
+        const loginForm = document.getElementById('login-form');
+        const errorDiv = document.getElementById('login-error');
+
+        // Si el usuario hace click en 'Olvidaste tu contraseña', guardamos el
+        // email actual en sessionStorage para prellenar el formulario siguiente.
+        const forgotLink = document.querySelector('.forgot');
+        if (forgotLink) {
+            forgotLink.addEventListener('click', (ev) => {
+                const emailInput = document.getElementById('correo');
+                if (emailInput && emailInput.value) {
+                    sessionStorage.setItem('recovery_email', emailInput.value);
+                }
+                // Permitir la navegación por defecto (a forgot-password.html)
+            });
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('correo').value;
+            const password = document.getElementById('password').value;
+
+            // Reset error state
+            errorDiv.classList.add('d-none');
+            errorDiv.textContent = '';
+
+            try {
+                // El servicio auth.login ahora acepta email y password por separado
+                const result = await auth.login(email, password);
+
+                if (result && result.success) {
+                    // La redirección a 'operador-dashboard.html' la hace AuthService.login
+                    // tras 1.5s, pero aquí podemos forzarla o mostrar éxito
+                    console.log('Login exitoso');
+                } else {
+                    errorDiv.textContent = (result && result.error) ? result.error : 'Credenciales inválidas';
+                    errorDiv.classList.remove('d-none');
+                }
+            } catch (err) {
+                errorDiv.textContent = 'Error de conexión con el servidor';
+                errorDiv.classList.remove('d-none');
+            }
+        });
+    </script>
+</body>
+</html>

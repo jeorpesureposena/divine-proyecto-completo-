@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verificar Correo - Divine Park</title>
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/auth.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Scripts:
+         - auth-guard.js: evita que usuarios autenticados accedan a páginas públicas.
+         - verify-email.js (module): controla la lógica de ingreso y verificación del código.
+    -->
+    <script src="js/auth-guard.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/verify-email.js"></script>
+  </head>
+  <body>
+    <!-- Contenedor principal: información a la izquierda y formulario a la derecha -->
+    <main class="auth-container">
+      <section class="auth-info">
+        <div class="auth-info__header">
+          <img src="assets/logo.jpg" class="logo" alt="Logo" />
+          <h1>Divine Park</h1>
+        </div>
+        <div class="auth-info__content">
+          <h2>Panel de Operador</h2>
+          <p>
+            Verifica tu identidad para continuar con la recuperación de tu
+            contraseña. Ingresa el código de 6 dígitos enviado a tu correo.
+          </p>
+        </div>
+      </section>
+
+      <section class="auth-form-section">
+        <div class="form-card">
+          <header class="form-card__header">
+            <div class="verification-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Verificar Correo</h3>
+            <p>Hemos enviado un código de 6 dígitos a tu email</p>
+          </header>
+
+          <form id="verifyCodeForm">
+            <!-- El `email` oculto puede rellenarse desde la query string o el storage por `verify-email.js` -->
+            <input type="hidden" id="email" name="email" value="" />
+
+            <!-- Entrada de código dividida en 6 inputs de un carácter para mejor UX (auto-focus/avance manejado por JS) -->
+            <div class="code-input-container">
+              <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="code-input" required />
+              <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="code-input" required />
+              <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="code-input" required />
+              <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="code-input" required />
+              <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="code-input" required />
+              <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="code-input" required />
+            </div>
+
+            <button type="submit" class="btn-primary">
+              Verificar y Continuar
+            </button>
+
+            <div class="resend-container">
+              <span class="resend-text">¿No recibiste el código? </span>
+              <!-- Botón para reenviar código; inicialmente deshabilitado mientras corre el temporizador -->
+              <button type="button" class="resend-link" disabled>
+                Reenviar en <span class="timer">00:58</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
