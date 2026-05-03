@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Divine Park - Pagos y Facturación</title>
+    <!-- Fonts: Manrope -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS v3 with plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#001A8E',
+                        'surface-light': '#f8f9fa',
+                        'surface-dim': '#d9dadb',
+                        success: '#4ADE80',
+                        danger: '#F87171',
+                    },
+                    fontFamily: {
+                        manrope: ['Manrope', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        'custom': '8px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style data-purpose="custom-scrollbar">
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="font-manrope bg-surface-light text-slate-800 antialiased h-screen flex overflow-hidden">
+    <!-- BEGIN: Sidebar -->
+    <aside class="w-72 bg-primary text-white flex flex-col flex-shrink-0">
+        <div class="p-6 flex items-center gap-3">
+            <img alt="Divine Park Logo" class="w-12 h-12 rounded-full object-cover border-2 border-white/20"
+                data-purpose="app-logo"
+                src="https://lh3.googleusercontent.com/aida/ADBb0uiGVCuZDpIGjnwRvm4t1oSpCMHfxcVIq8xtWUE_sToTXdMMjKpwhOm8aWcYMxR5vD_jDMWQ7jaHoDla_t2MPr_i0xDbLzlvCFw3WnZCoIYzSdlGFzK7lHnt-3AMAM9kNK-9cKkzI89x0lvX_v-3XlfxmUDS0QXsvDl2XE55QQufD0z_D8_3QHwNVjepmGd_CVJQDx85ko6L4Pi64TDc4TR7YllFMazfqmTHxuBsnQ49mCyEMpOuQ2XHuBga7gsTq08fjn_FcpWnedg" />
+            <h1 class="text-2xl font-extrabold tracking-tight">Divine Park</h1>
+        </div>
+        <nav class="mt-4 flex-1 px-4 space-y-1 overflow-y-auto">
+            <a class="flex items-center gap-3 px-4 py-3 rounded-custom hover:bg-white/10 transition-colors" href="dashboard-admin.html">
+                <i class="fa-solid fa-table-cells-large w-6 text-center"></i>
+                <span class="font-semibold">Tablero Principal</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-custom hover:bg-white/10 transition-colors" href="admin-User-Management.html">
+                <i class="fa-solid fa-users-gear w-6 text-center"></i>
+                <span class="font-semibold">Gestión de Usuarios</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-custom hover:bg-white/10 transition-colors" href="Monitoring-and-Sensors.html">
+                <i class="fa-solid fa-bolt w-6 text-center"></i>
+                <span class="font-semibold">Monitoreo y Sensores</span>
+            </a>
+            <!-- Active Link -->
+            <a aria-current="page"
+                class="flex items-center gap-3 px-4 py-3 rounded-custom bg-cyan-400 text-primary shadow-lg shadow-cyan-400/20"
+                href="admin-Payments-and-Billing.html">
+                <i class="fa-solid fa-credit-card w-6 text-center"></i>
+                <span class="font-bold" data-i18n="payments.title">Pagos y Facturación</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-custom hover:bg-white/10 transition-colors" href="reports-of-time-admin.html">
+                <i class="fa-solid fa-file-lines w-6 text-center"></i>
+                <span class="font-semibold">Reportes</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-custom hover:bg-white/10 transition-colors" href="settings-admin.html">
+                <i class="fa-solid fa-gear w-6 text-center"></i>
+                <span class="font-semibold">Configuración</span>
+            </a>
+        </nav>
+        <div class="p-4 mt-auto border-t border-white/10">
+            <button id="btn-logout" class="flex items-center gap-3 px-4 py-3 rounded-custom hover:bg-white/10 transition-colors text-white/80 w-full">
+                <i class="fa-solid fa-right-from-bracket w-6 text-center"></i>
+                <span class="font-semibold">Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+    <!-- END: Sidebar -->
+    <!-- BEGIN: Main Content Container -->
+    <main class="flex-1 flex flex-col min-w-0 bg-white overflow-y-auto">
+        <!-- BEGIN: Header Section -->
+        <header class="p-8 pb-4">
+            <h2 class="text-3xl font-extrabold text-slate-900" data-i18n="payments.title">Pagos y Facturación</h2>
+            <p class="text-slate-400 font-medium mt-1">Gestión de pagos, facturas y transacciones del parqueadero</p>
+        </header>
+        <!-- END: Header Section -->
+        <!-- BEGIN: Stats Dashboard -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 px-8 py-4" data-purpose="metrics-dashboard">
+            <!-- Recaudado Hoy -->
+            <article class="p-5 border border-slate-200 rounded-2xl shadow-sm bg-white flex flex-col gap-2">
+                <div class="w-10 h-10 bg-green-100 flex items-center justify-center rounded-lg text-green-600">
+                    <i class="fa-solid fa-dollar-sign text-xl"></i>
+                </div>
+                <h3 class="text-slate-500 font-semibold text-sm mt-2">Recaudado Hoy</h3>
+                <div class="flex items-baseline gap-2">
+                    <span id="stat-recaudado" class="text-2xl font-extrabold">-- <span
+                            class="text-lg font-bold uppercase">cop</span></span>
+                </div>
+                <p id="stat-recaudado-trend" class="text-green-500 text-xs font-bold">Cargando...</p>
+            </article>
+            <!-- Pagos del Mes -->
+            <article class="p-5 border border-slate-200 rounded-2xl shadow-sm bg-white flex flex-col gap-2">
+                <div class="w-10 h-10 bg-purple-100 flex items-center justify-center rounded-lg text-purple-600">
+                    <i class="fa-solid fa-calendar-days text-xl"></i>
+                </div>
+                <h3 class="text-slate-500 font-semibold text-sm mt-2">Pagos del Mes</h3>
+                <div class="flex items-center gap-3">
+                    <span id="stat-pagos-mes" class="text-3xl font-extrabold">--</span>
+                    <span
+                        class="text-xs text-purple-400 font-bold leading-tight uppercase">Transacciones<br />Procesadas</span>
+                </div>
+            </article>
+            <!-- Facturas Emitidas -->
+            <article class="p-5 border border-slate-200 rounded-2xl shadow-sm bg-white flex flex-col gap-2">
+                <div class="w-10 h-10 bg-blue-100 flex items-center justify-center rounded-lg text-blue-700">
+                    <i class="fa-solid fa-file-invoice text-xl"></i>
+                </div>
+                <h3 class="text-slate-500 font-semibold text-sm mt-2">Facturas Emitidas</h3>
+                <div class="flex items-center gap-3">
+                    <span id="stat-facturas" class="text-3xl font-extrabold">--</span>
+                    <span
+                        class="text-xs text-blue-400 font-bold leading-tight uppercase">Documentos<br />Fiscales</span>
+                </div>
+            </article>
+        </section>
+        <!-- END: Stats Dashboard -->
+        <!-- BEGIN: Filters & Actions -->
+        <section class="px-8 py-4 flex flex-wrap items-center gap-4">
+            <div class="relative flex-1 min-w-[300px]">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input
+                    class="block w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-primary focus:border-primary text-sm"
+                    id="search-transactions" name="search" placeholder="Buscar por placa o usuario..." type="text" />
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                <button
+                    class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 flex items-center gap-2">
+                    Fecha : <span class="text-slate-900 font-bold">hoy</span>
+                </button>
+                <button
+                    class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 flex items-center gap-2">
+                    Estado : <span class="text-slate-900 font-bold">Todos</span>
+                </button>
+                <button
+                    class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 flex items-center gap-2">
+                    Métodos : <span class="text-slate-900 font-bold">Todos</span>
+                </button>
+                <button class="text-primary text-sm font-bold ml-2 hover:underline">Limpiar Filtros</button>
+            </div>
+        </section>
+        <!-- END: Filters & Actions -->
+        <!-- BEGIN: Transaction Table -->
+        <section class="flex-1 px-8 pb-8 overflow-x-auto">
+            <div class="min-w-[1000px]">
+                <table class="w-full text-left" id="transactions-table">
+                    <thead class="border-b border-slate-200">
+                        <tr>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase">Id Pago</th>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase">Placa</th>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase">Usuario</th>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase">Fecha y Hora</th>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase" data-i18n="table.method">Método</th>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase text-right" data-i18n="table.amount">Monto</th>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase text-center" data-i18n="table.status">Estado</th>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="payments-tbody" class="divide-y divide-slate-100">
+                        <!-- Filas generadas dinámicamente por JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <!-- END: Transaction Table -->
+        <!-- BEGIN: Pagination -->
+        <footer class="px-8 py-4 bg-white border-t border-slate-100 flex justify-between items-center">
+            <span id="pagos-info" class="text-sm text-slate-400">Cargando...</span>
+            <div class="flex gap-6">
+                <button id="btn-prev" class="text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors" data-i18n="pagination.prev">Anterior</button>
+                <button id="btn-next" class="text-sm font-bold text-primary hover:text-blue-800 transition-colors" data-i18n="pagination.next">Siguiente</button>
+            </div>
+        </footer>
+        <!-- END: Pagination -->
+    </main>
+    <!-- END: Main Content Container -->
+    <script src="js/api.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script src="js/admin-payments.js"></script>
+</body>
+
+</html>

@@ -94,6 +94,10 @@ class EspacioParqueo(models.Model):
     zona   = models.CharField(max_length=1, choices=ZONA_CHOICES, default='A')
     tipo   = models.CharField(max_length=50, choices=TIPO_CHOICES, default='estandar')
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='libre')
+    
+    # Campos para mantenimiento
+    motivo_mantenimiento = models.TextField(blank=True, null=True)
+    duracion_mantenimiento = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return f'Zona {self.zona} - #{self.numero:02d} ({self.estado})'

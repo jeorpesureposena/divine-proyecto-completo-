@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Divine Park - Monitoreo y Sensores</title>
+    <!-- Google Fonts: Manrope -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'divine-blue': '#001A8E',
+                        'divine-active': '#00B4FF',
+                        'divine-bg': '#F9FAFB',
+                        'status-green': '#62F18A',
+                        'status-red': '#FF6B6B',
+                        'status-gray': '#D1D5DB',
+                        'text-light': '#9CA3AF',
+                    },
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        'divine': '12px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style data-purpose="custom-layout">
+        body {
+            background-color: #FFFFFF;
+            overflow-x: hidden;
+        }
+
+        .sidebar-item {
+            transition: all 0.2s ease;
+        }
+
+        .active-nav {
+            background-color: #00B4FF;
+            color: #001A8E !important;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden">
+    <!-- BEGIN: LeftSidebar -->
+    <aside class="w-64 bg-divine-blue flex-shrink-0 flex flex-col justify-between py-6 text-white"
+        data-purpose="main-navigation">
+        <div>
+            <!-- Brand Logo -->
+            <div class="px-6 mb-10 flex items-center gap-3">
+                <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border border-white/20"
+                    src="https://lh3.googleusercontent.com/aida/ADBb0uie14IlV5hAG7OuANGnAHzts3HIO4xjF2TTyvDIWVO79m1h0FIXMtOtiriyuNtk82Bm4a4Lr-eNtbg0pMdRCr5dgm0odQUQgrl5POYva4E1NxaoAwmNcXwOxa4ZB4lOK9IvNOBOJK7hSGpHKyrDS15-r1t09rsLx8qoK1wEV3OY9PscdwBrg7OayWZwJNHe7JzNJUJlzsEROAjfTec4sphlI8ClsAPuYw35FxEbjmagYcTHRIGlO-zw0odxpkK8UyWxLCYu6ai0MBs" />
+                <span class="text-xl font-extrabold tracking-tight">Divine Park</span>
+            </div>
+            <!-- Nav Links -->
+            <nav class="space-y-1 px-3">
+                <a class="flex items-center gap-3 px-4 py-3 rounded-divine hover:bg-white/10 transition-colors"
+                    href="dashboard-admin.html">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                        <path
+                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    <span class="font-semibold" data-i18n="nav.dashboard">Tablero Principal</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-divine hover:bg-white/10 transition-colors"
+                    href="admin-User-Management.html">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                        <path
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    <span class="font-semibold" data-i18n="nav.users">Gestión de Usuarios</span>
+                </a>
+                <a class="active-nav flex items-center gap-3 px-4 py-3 rounded-divine" href="Monitoring-and-Sensors.html">
+                    <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+                        <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <span class="font-bold" data-i18n="nav.monitoring">Monitoreo y Sensores</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-divine hover:bg-white/10 transition-colors"
+                    href="admin-Payments-and-Billing.html">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                        <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    <span class="font-semibold" data-i18n="nav.payments">Pagos y Facturación</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-divine hover:bg-white/10 transition-colors"
+                    href="reports-of-time-admin.html">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                        <path
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    <span class="font-semibold" data-i18n="nav.reports">Reportes</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 rounded-divine hover:bg-white/10 transition-colors"
+                    href="settings-admin.html">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                        <path
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"></path>
+                    </svg>
+                    <span class="font-semibold" data-i18n="nav.settings">Configuración</span>
+                </a>
+            </nav>
+        </div>
+        <!-- Bottom Action -->
+        <div class="px-6 pb-4">
+            <button class="flex items-center gap-3 px-2 py-2 text-white/80 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span class="font-bold" id="logout-btn" data-i18n="nav.logout">Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+    <!-- END: LeftSidebar -->
+    <!-- Main Content Container -->
+    <main class="flex-1 flex flex-col min-w-0 bg-white overflow-y-auto">
+        <!-- BEGIN: HeaderSection -->
+        <header class="px-10 py-8" data-purpose="page-header">
+            <h1 class="text-4xl font-extrabold text-slate-900" data-i18n="monitoring.title">Monitoreo y Sensores</h1>
+            <p class="text-lg text-gray-400 mt-1" data-i18n="monitoring.subtitle">Supervisión en tiempo real de sensores y eventos del parqueadero</p>
+        </header>
+        <!-- END: HeaderSection -->
+        <div class="px-10 pb-10 flex gap-8">
+            <!-- Left Main Panel -->
+            <div class="flex-1 space-y-6">
+                <!-- BEGIN: StatsGrid -->
+                <div class="grid grid-cols-4 gap-4" data-purpose="stats-overview">
+                    <!-- Card 1 -->
+                    <div class="p-5 border-2 border-green-100 rounded-divine bg-white shadow-sm flex flex-col justify-between h-36">
+                        <h3 class="text-green-500 font-bold text-lg" data-i18n="sensors.active">Sensores Activos</h3>
+                        <div id="stat-sensores-activos" class="text-4xl font-extrabold text-slate-800 text-center">0</div>
+                        <p class="text-green-400 text-xs font-bold">En la Red</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="p-5 border-2 border-purple-100 rounded-divine bg-white shadow-sm flex flex-col justify-between h-36">
+                        <h3 class="text-purple-400 font-bold text-lg" data-i18n="sensors.inactive">Sensores Inactivos</h3>
+                        <div id="stat-sensores-inactivos" class="text-4xl font-extrabold text-slate-800 text-center">0</div>
+                        <p class="text-purple-300 text-xs font-bold">Mantenimiento Pendiente</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="p-5 border-2 border-red-100 rounded-divine bg-white shadow-sm flex flex-col justify-between h-36">
+                        <h3 class="text-red-500 font-bold text-lg" data-i18n="sensors.alerts">Alertas Críticas</h3>
+                        <div id="stat-alertas" class="text-4xl font-extrabold text-slate-800 text-center">0</div>
+                        <p class="text-red-400 text-xs font-bold">Requiere acción inmediata</p>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="p-5 border-2 border-gray-200 rounded-divine bg-white shadow-sm flex flex-col justify-between h-36">
+                        <h3 class="text-gray-400 font-bold text-lg" data-i18n="sensors.last_update">Ultima Actualización</h3>
+                        <div id="stat-update" class="text-4xl font-extrabold text-slate-800 text-center">Ahora</div>
+                        <p class="text-blue-400 text-xs font-bold">Actualización automática</p>
+                    </div>
+                </div>
+                <!-- END: StatsGrid -->
+                <!-- BEGIN: DevicesTableSection -->
+                <div class="bg-white border-2 border-gray-100 rounded-divine p-6 relative"
+                    data-purpose="device-table-container">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-extrabold text-slate-800">Estado de Dispositivos</h2>
+                        <button
+                            class="bg-divine-blue text-white px-4 py-2 rounded-divine flex items-center gap-2 font-bold hover:opacity-90">
+                            Exportar
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                                <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <table class="w-full text-left" data-purpose="status-table">
+                        <thead class="text-gray-400 font-bold border-b border-gray-50">
+                            <tr>
+                                <th class="pb-3 px-2">ID Sensor</th>
+                                <th class="pb-3 px-2">Tipo</th>
+                                <th class="pb-3 px-2">Ubicación</th>
+                                <th class="pb-3 px-2">Estado</th>
+                                <th class="pb-3 px-2">Lectura</th>
+                            </tr>
+                        </thead>
+                        <tbody id="devices-tbody" class="text-slate-700 font-bold">
+                            <!-- Dynamically loaded by admin-sensors.js -->
+                        </tbody>
+                    </table>
+                    <!-- BEGIN: FilterRow -->
+                    <div class="mt-10 flex gap-4" data-purpose="table-filters">
+                        <div
+                            class="flex-1 bg-white border border-gray-300 rounded-divine px-4 py-3 text-gray-500 font-semibold shadow-sm">
+                            Ultrasonido / Cámara LPR
+                        </div>
+                        <div
+                            class="flex-1 bg-white border border-gray-300 rounded-divine px-4 py-3 text-gray-500 font-semibold shadow-sm flex justify-between items-center">
+                            Zonas: Todas
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"></path>
+                            </svg>
+                        </div>
+                        <div
+                            class="flex-1 bg-white border border-gray-300 rounded-divine px-4 py-3 text-gray-500 font-semibold shadow-sm flex justify-between items-center">
+                            Estado: Todos
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- END: FilterRow -->
+                </div>
+                <!-- END: DevicesTableSection -->
+            </div>
+            <!-- Right Sidebar Panel -->
+            <div class="w-80 flex flex-col gap-4">
+                <!-- BEGIN: NotificationsSection -->
+                <div class="border-2 border-gray-100 rounded-divine p-6 h-fit bg-white flex flex-col"
+                    data-purpose="alerts-panel">
+                    <h2 class="text-xl font-extrabold text-slate-800 mb-6">Notificaciones de Alertas</h2>
+                    <div class="space-y-4 flex-1">
+                        <!-- Critical Alert -->
+                        <div class="bg-red-200 rounded-divine p-4 border-l-8 border-red-500">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-red-600 font-bold text-sm">Crítica 02:30 PM</span>
+                            </div>
+                            <p class="text-red-700 text-xs font-semibold leading-relaxed">CAM-B-4 de la Zona B se ha
+                                perdido conexión</p>
+                        </div>
+                        <!-- Informative Alert -->
+                        <div class="bg-green-300 rounded-divine p-4 border-l-8 border-green-500">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-green-700 font-bold text-sm">Informativa 12:30 AM</span>
+                            </div>
+                            <p class="text-green-800 text-xs font-semibold leading-relaxed">Se ha realizado exitosamente
+                                la calibración de todos los sensores de ultrasonido</p>
+                        </div>
+                    </div>
+                    <button class="mt-8 text-divine-blue font-extrabold text-center hover:underline">
+                        Ver historial completo
+                    </button>
+                </div>
+                <!-- END: NotificationsSection -->
+                <!-- BEGIN: EmergencyButton -->
+                <button onclick="window.location.href='emergency-mode.html'"
+                    class="w-full bg-red-600 text-white rounded-divine py-6 flex items-center justify-center gap-4 shadow-lg hover:bg-red-700 transition-transform active:scale-95"
+                    data-purpose="emergency-trigger">
+                    <div class="animate-pulse">
+                        <svg class="w-10 h-10" fill="currentColor" viewbox="0 0 24 24">
+                            <path
+                                d="M12 2C7.03 2 3 6.03 3 11v1.17c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V11c0-3.31 2.69-6 6-6s6 2.69 6 6v1.17c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V11c0-4.97-4.03-9-9-9zM4.64 19.36c-.39.39-.39 1.02 0 1.41l.01.01c.39.39 1.02.39 1.41 0l1.41-1.41c.39-.39.39-1.02 0-1.41l-.01-.01c-.39-.39-1.02-.39-1.41 0l-1.41 1.41zM19.36 19.36c-.39.39-.39 1.02 0 1.41l.01.01c.39.39 1.02.39 1.41 0l1.41-1.41c.39-.39.39-1.02 0-1.41l-.01-.01c-.39-.39-1.02-.39-1.41 0l-1.41 1.41zM12 14c-1.66 0-3 1.34-3 3v5h6v-5c0-1.66-1.34-3-3-3z">
+                            </path>
+                        </svg>
+                    </div>
+                    <span class="text-3xl font-black tracking-widest">EMERGENCIA</span>
+                </button>
+                <!-- END: EmergencyButton -->
+            </div>
+        </div>
+    </main>
+    <script src="js/api.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script src="js/admin-sensors.js"></script>
+</body>
+
+</html>

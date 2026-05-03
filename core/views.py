@@ -461,6 +461,26 @@ class ReporteViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdministrador]
 
 
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+    permission_classes = [IsAdministrador]
+
+    @action(detail=True, methods=['post'], url_path='activar')
+    def activar(self, request, pk=None):
+        user = self.get_object()
+        user.estado = True
+        user.save()
+        return Response({'status': 'activado'})
+
+    @action(detail=True, methods=['post'], url_path='desactivar')
+    def desactivar(self, request, pk=None):
+        user = self.get_object()
+        user.estado = False
+        user.save()
+        return Response({'status': 'desactivado'})
+
+
 class EstadisticasViewSet(viewsets.ViewSet):
     permission_classes = [IsOperadorOrAdministrador]
 
@@ -476,7 +496,7 @@ class EstadisticasViewSet(viewsets.ViewSet):
 
         # Sensores
         total_sensores = Sensor.objects.count()
-        sensores_activos = Sensor.objects.filter(estado_sensor=True).count()
+        sensores_activos = Sensor.objects.filter(estado_sensor=True).exclude(espacio__estado='mantenimiento').count()
 
         # Cámaras OCR
         camaras_activas = CamaraOCR.objects.filter(activa=True).count()
@@ -497,4 +517,114 @@ class EstadisticasViewSet(viewsets.ViewSet):
             'camaras_activas': camaras_activas,
             'barrera_entrada_estado': barrera_entrada.estado if barrera_entrada else None,
             'barrera_salida_estado': barrera_salida.estado if barrera_salida else None,
+        })
+
+    @action(detail=False, methods=['get'])
+    def ventas(self, request):
+        from django.db.models import Sum, Count, Avg
+        import datetime
+
+        hoy = timezone.now()
+        inicio_mes = hoy.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+        # KPIs del mes
+        pagos_mes = Pago.objects.filter(fecha__gte=inicio_mes, estado_pago='aprobado')
+        total_ventas = pagos_mes.aggregate(total=Sum('monto'))['total'] or 0
+        total_facturas = pagos_mes.count()
+        promedio = pagos_mes.aggregate(prom=Avg('monto'))['prom'] or 0
+
+        # Ocupacion maxima del mes (% de espacios que estuvieron ocupados algun momento)
+        total_espacios = EspacioParqueo.objects.count()
+        espacios_ocupados = EspacioParqueo.objects.filter(estado='ocupado').count()
+        ocupacion_pct = round((espacios_ocupados / total_espacios * 100), 1) if total_espacios > 0 else 0
+
+        # Ventas diarias de los ultimos 7 dias
+        ventas_diarias = []
+        dias_semana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+        for i in range(6, -1, -1):
+            fecha = (hoy - datetime.timedelta(days=i)).replace(hour=0, minute=0, second=0, microsecond=0)
+            fecha_fin = fecha + datetime.timedelta(days=1)
+            total_dia = Pago.objects.filter(
+                fecha__gte=fecha, fecha__lt=fecha_fin, estado_pago='aprobado'
+            ).aggregate(total=Sum('monto'))['total'] or 0
+            ventas_diarias.append({
+                'dia': dias_semana[fecha.weekday()],
+                'total': float(total_dia)
+            })
+
+        # Ultimos 10 pagos
+        ultimos_pagos = []
+        for p in Pago.objects.select_related('sesion', 'reserva').order_by('-fecha')[:10]:
+            ticket_id = f'TK-{p.id:05d}'
+            ultimos_pagos.append({
+                'id': p.id,
+                'ticket_id': ticket_id,
+                'fecha': p.fecha.strftime('%d %b %Y'),
+                'metodo': p.metodo,
+                'estado': p.estado_pago,
+                'monto': float(p.monto),
+            })
+
+        return Response({
+            'total_ventas': float(total_ventas),
+            'total_facturas': total_facturas,
+            'promedio_venta': float(promedio),
+            'ocupacion_maxima': ocupacion_pct,
+            'ventas_diarias': ventas_diarias,
+            'ultimos_pagos': ultimos_pagos,
+        })
+
+    @action(detail=False, methods=['get'])
+    def alertas_tiempo(self, request):
+        from django.db.models import Sum, Avg, Count
+        import datetime
+
+        hoy = timezone.now()
+        inicio_mes = hoy.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+        # Sesiones con duracion mayor a 120 minutos (2 horas) = sobretiempo
+        LIMITE_MIN = 120
+        sesiones_excedidas = SesionParqueo.objects.filter(
+            hora_fin__isnull=False,
+            duracion_min__gt=LIMITE_MIN,
+            hora_inicio__gte=inicio_mes
+        ).select_related('espacio', 'vehiculo')
+
+        total_infracciones = sesiones_excedidas.count()
+        agg = sesiones_excedidas.aggregate(prom=Avg('duracion_min'))
+        prom_raw = agg['prom']
+        promedio_excedido = round(prom_raw - LIMITE_MIN, 1) if prom_raw else 0
+
+        # Zona con mas incidencias
+        zona_max = None
+        if total_infracciones > 0:
+            from django.db.models import Count as DCount
+            zona_data = sesiones_excedidas.values('espacio__zona').annotate(total=DCount('id')).order_by('-total').first()
+            zona_max = f"Zona {zona_data['espacio__zona']}" if zona_data else 'N/A'
+
+        # Lista de incidencias
+        incidencias = []
+        for s in sesiones_excedidas.order_by('-hora_inicio')[:20]:
+            excedido_min = s.duracion_min - LIMITE_MIN
+            h = excedido_min // 60
+            m = excedido_min % 60
+            tiempo_str = f"{h}h {m:02d} min" if h > 0 else f"{m} min"
+            total_str = f"{s.duracion_min // 60}h {s.duracion_min % 60:02d} min"
+            placa = s.vehiculo.placa if s.vehiculo else 'N/A'
+            zona = f"Zona {s.espacio.zona}" if s.espacio else 'N/A'
+            estado = 'En Proceso' if s.estado_sesion == 'abierta' else 'Resuelto'
+            incidencias.append({
+                'fecha': s.hora_inicio.strftime('%d %b %Y'),
+                'placa': placa,
+                'ubicacion': zona,
+                'tiempo_total': total_str,
+                'tiempo_excedido': tiempo_str,
+                'estado': estado,
+            })
+
+        return Response({
+            'total_infracciones': total_infracciones,
+            'promedio_excedido_min': promedio_excedido,
+            'zona_mas_incidencias': zona_max or 'N/A',
+            'incidencias': incidencias,
         })

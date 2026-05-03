@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Divine Park - Verificar Correo</title>
+    <!-- Google Fonts: Manrope -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'divine-blue': '#001A8E',
+                        'divine-dark': '#001470',
+                    },
+                    fontFamily: {
+                        manrope: ['Manrope', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <!-- Custom Styles -->
+    <style data-purpose="custom-layouts">
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        /* Hide number input arrows */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+    <!-- BEGIN: Verification Screen Container -->
+    <main
+        class="bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row w-full max-w-5xl min-h-[600px]"
+        id="main-container">
+        <!-- BEGIN: Left Sidebar -->
+        <section class="bg-divine-blue text-white w-full md:w-2/5 p-8 md:p-12 flex flex-col justify-between"
+            id="sidebar">
+            <!-- Brand Logo Section -->
+            <div class="flex items-center gap-4" data-purpose="brand-header">
+                <img alt="Divine Park Logo" class="w-12 h-12 rounded-lg object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTGLIHCaCzWrP3fTnvuE-kpl08s4heGAV6rjdSTjNwue4H1xtS5l6MDtLBo8uKnvcI9IC34jieyy7Xq6YrskEjA1bFKDhWvuxsHMPuoJ7AAWUE26cdfMcR_LJ06L4AQ0GM0FKX_i7bgWhkbLlq-6BVOpPBzrVaVDe-qjGvIiNUU4X2sDk2Npslp1rlzW3NsMUajY1uZALvTPLkwcLx12M3dMP4xS8oi6THcIsq5rr792eKpv5snbMdwYSEcDSHnOUVb6srepTccjab" />
+                <h1 class="text-2xl font-extrabold tracking-tight">Divine Park</h1>
+            </div>
+            <!-- Hero Text Section -->
+            <div class="mt-12 md:mt-0" data-purpose="hero-content">
+                <h2 class="text-4xl font-bold leading-tight mb-8">
+                    Panel de <br /> Administración
+                </h2>
+                <p class="text-blue-100 text-sm leading-relaxed opacity-80 max-w-xs">
+                    Recupera el acceso a tu terminal de control. Restablece tu credencial de seguridad para continuar
+                    con el monitoreo de sensores y la gestión de flujos en tiempo real sin interrupciones.
+                </p>
+            </div>
+            <!-- Bottom Spacer for alignment -->
+            <div class="hidden md:block"></div>
+        </section>
+        <!-- END: Left Sidebar -->
+        <!-- BEGIN: Verification Form Content -->
+        <section class="w-full md:w-3/5 p-8 md:p-16 flex flex-col items-center justify-center bg-white"
+            id="form-content">
+            <!-- Security Icon Header -->
+            <div class="mb-8 relative" data-purpose="security-graphic">
+                <!-- The icon container with binary pattern background simulated by styling -->
+                <div
+                    class="w-32 h-32 rounded-full overflow-hidden bg-divine-blue flex items-center justify-center relative">
+                    <!-- Simplified Binary Pattern overlay -->
+                    <div
+                        class="absolute inset-0 opacity-20 text-[8px] font-mono break-all p-2 text-white select-none pointer-events-none">
+                        10010100101010010101001010100101010010101001010100101010010101001010100101010010101001010
+                    </div>
+                    <!-- Centered Lock Icon -->
+                    <div class="bg-cyan-400 p-4 rounded-xl shadow-lg relative z-10">
+                        <svg class="h-10 w-10 text-divine-blue" fill="none" stroke="currentColor" stroke-width="2"
+                            viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <!-- Verification Headers -->
+            <div class="text-center mb-10" data-purpose="instruction-text">
+                <h3 class="text-3xl font-extrabold text-gray-900 mb-4">Verificar Correo</h3>
+                <p class="text-gray-600 font-semibold max-w-xs mx-auto">
+                    Hemos enviado un código de 6 dígitos a tu email
+                </p>
+            </div>
+            <!-- Verification Form -->
+            <form action="#" class="w-full max-w-sm flex flex-col items-center" id="verification-form" method="POST">
+                <!-- BEGIN: 6-Digit Code Input Group -->
+                <div class="flex gap-2 md:gap-3 justify-center mb-10" data-purpose="otp-inputs">
+                    <input
+                        class="w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold border-2 border-gray-200 rounded-xl focus:border-divine-blue focus:ring-0 transition-colors"
+                        maxlength="1" required="" type="text" />
+                    <input
+                        class="w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold border-2 border-gray-200 rounded-xl focus:border-divine-blue focus:ring-0 transition-colors"
+                        maxlength="1" required="" type="text" />
+                    <input
+                        class="w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold border-2 border-gray-200 rounded-xl focus:border-divine-blue focus:ring-0 transition-colors"
+                        maxlength="1" required="" type="text" />
+                    <input
+                        class="w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold border-2 border-gray-200 rounded-xl focus:border-divine-blue focus:ring-0 transition-colors"
+                        maxlength="1" required="" type="text" />
+                    <input
+                        class="w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold border-2 border-gray-200 rounded-xl focus:border-divine-blue focus:ring-0 transition-colors"
+                        maxlength="1" required="" type="text" />
+                    <input
+                        class="w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-bold border-2 border-gray-200 rounded-xl focus:border-divine-blue focus:ring-0 transition-colors"
+                        maxlength="1" required="" type="text" />
+                </div>
+                <!-- END: 6-Digit Code Input Group -->
+                <!-- Submit Button -->
+                <button
+                    class="w-full bg-divine-blue hover:bg-divine-dark text-white font-bold py-4 px-6 rounded-lg transition-all shadow-md active:transform active:scale-[0.98]"
+                    type="submit">
+                    Verificar y Continuar
+                </button>
+                <!-- Footer / Resend Link -->
+                <div class="mt-8 text-center" data-purpose="form-footer">
+                    <p class="text-sm text-gray-500 font-medium">
+                        ¿No recibiste el código?
+                        <span class="text-gray-400 cursor-not-allowed">Reenviar en <span id="timer">00:58</span></span>
+                    </p>
+                </div>
+            </form>
+        </section>
+        <!-- END: Verification Form Content -->
+    </main>
+    <!-- END: Verification Screen Container -->
+    <!-- JavaScript for Code Input focus behavior -->
+    <script data-purpose="otp-interactivity">
+        const inputs = document.querySelectorAll('#verification-form input');
+
+        inputs.forEach((input, index) => {
+            // Auto-focus next input
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            // Handle backspace
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+    </script>
+    <!-- JavaScript for Countdown Timer -->
+    <script data-purpose="countdown-timer">
+        let timeLeft = 58;
+        const timerElement = document.getElementById('timer');
+
+        const countdown = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerElement.parentElement.innerHTML = '<a href="#" class="text-divine-blue hover:underline">Reenviar ahora</a>';
+            } else {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                timeLeft--;
+            }
+        }, 1000);
+    </script>
+<script src="js/api.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script src="js/admin-verify-email.js"></script>
+</body>
+
+</html>
+
+

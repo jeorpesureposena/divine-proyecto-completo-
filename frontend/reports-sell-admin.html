@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Divine Park - Reportes de Ventas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Google Fonts: Manrope -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'divine-blue': '#001A8E',
+                        'divine-cyan': '#00D4FF',
+                        'divine-bg': '#F8F9FC',
+                    },
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style data-purpose="custom-styles">
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #F8F9FC;
+        }
+
+        .sidebar-active {
+            background-color: #00D4FF;
+            color: #001A8E;
+        }
+
+        .tab-active {
+            border-bottom: 3px solid #001A8E;
+            color: #001A8E;
+        }
+
+        /* Custom scrollbar for better look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden">
+    <!-- BEGIN: Sidebar -->
+    <aside class="w-64 bg-divine-blue text-white flex flex-col flex-shrink-0" data-purpose="navigation-sidebar">
+        <div class="p-6 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-white overflow-hidden">
+                <img alt="Divine Park Logo" class="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida/ADBb0uj81EMJzkVahdzm2j55w_ly7Emv773Dm_GldwHnud0x23andciQiy_tKVXVz0rtIaOWXC0z9YO57q9kyfrhzzKfFK3WAt7YbnsaKhNBHJuJrvOzASYCmzRjJ9Eme7Sb5gVbxkyskduuet3i2k-aABabXvWsDsVIUUbZbyzmYYgBERiJCMffDAt-5HZL3q2zcId8njB6k4Iy4spROleE9IEKJ214DMvDdYMqNnSKveSERTxsoSCQyVrGO1r_JToeiCeANjAPZgf6pg" />
+            </div>
+            <span class="text-xl font-extrabold tracking-tight">Divine Park</span>
+        </div>
+        <nav class="mt-6 flex-1 px-4 space-y-2">
+            <a class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800 transition-colors" href="dashboard-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span class="font-semibold">Tablero Principal</span>
+            </a>
+            <a class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800 transition-colors" href="admin-User-Management.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span class="font-semibold">Gestión de Usuarios</span>
+            </a>
+            <a class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800 transition-colors" href="Monitoring-and-Sensors.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
+                </svg>
+                <span class="font-semibold">Monitoreo y Sensores</span>
+            </a>
+            <a class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800 transition-colors" href="admin-Payments-and-Billing.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span class="font-semibold">Pagos y Facturación</span>
+            </a>
+            <a class="flex items-center gap-3 p-3 rounded-lg sidebar-active shadow-lg shadow-cyan-500/20" href="#">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span class="font-bold" data-i18n="reports.title">Reportes</span>
+            </a>
+            <a class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800 transition-colors" href="settings-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
+                </svg>
+                <span class="font-semibold">Configuración</span>
+            </a>
+        </nav>
+        <div class="p-6">
+            <button class="flex items-center gap-3 text-white/70 hover:text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span class="font-bold">Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+    <!-- END: Sidebar -->
+    <!-- BEGIN: Main Content Area -->
+    <main class="flex-1 overflow-y-auto bg-divine-bg p-8" data-purpose="main-content">
+        <!-- BEGIN: Header Section -->
+        <header class="mb-8" data-purpose="content-header">
+            <h1 class="text-3xl font-extrabold text-slate-800" data-i18n="reports.title">Reportes</h1>
+            <p class="text-gray-400 font-medium">Análisis detallado de ingresos y actividad operativa</p>
+        </header>
+        <!-- END: Header Section -->
+        <!-- BEGIN: Tabs Navigation -->
+        <div class="flex gap-8 border-b border-gray-200 mb-8" data-purpose="tabs">
+            <a href="reports-of-time-admin.html" class="pb-4 text-gray-400 font-bold px-2 hover:text-gray-600 transition-colors block" data-i18n="reports.time_tab">Reporte de Alertas de tiempo</a>
+            <a href="reports-sell-admin.html" class="pb-4 tab-active font-bold px-2 block" data-i18n="reports.sales_tab">Reportes de Ventas y otros</a>
+        </div>
+        <!-- END: Tabs Navigation -->
+        <!-- BEGIN: Metric Cards Grid -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" data-purpose="metrics-grid">
+            <!-- Card 1: Ventas Totales -->
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                <h3 class="text-gray-400 text-xs font-extrabold uppercase mb-2" data-i18n="reports.sales_kpi1">Ventas Totales del Mes</h3>
+                <div id="kpi-ventas" class="text-2xl font-extrabold text-slate-800">--</div>
+                <div id="kpi-ventas-tendencia" class="text-[10px] font-bold text-green-500 mt-1">calculando...</div>
+                <div class="w-full h-1 bg-green-100 rounded-full mt-3">
+                    <div class="w-3/4 h-full bg-green-400 rounded-full"></div>
+                </div>
+            </div>
+            <!-- Card 2: Facturas Generadas -->
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                <h3 class="text-gray-400 text-xs font-extrabold uppercase mb-2" data-i18n="reports.sales_kpi2">Facturas Generadas</h3>
+                <div id="kpi-facturas" class="text-2xl font-extrabold text-slate-800">--</div>
+                <div class="text-[10px] font-bold text-purple-500 mt-1">del mes actual</div>
+                <div class="w-full h-1 bg-purple-100 rounded-full mt-3">
+                    <div class="w-2/3 h-full bg-purple-400 rounded-full"></div>
+                </div>
+            </div>
+            <!-- Card 3: Promedio de Facturas -->
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                <h3 class="text-gray-400 text-xs font-extrabold uppercase mb-2" data-i18n="reports.sales_kpi3">Promedio de Facturas</h3>
+                <div id="kpi-promedio" class="text-2xl font-extrabold text-slate-800">--</div>
+                <div class="text-[10px] font-bold text-slate-400 mt-1">por transacción</div>
+                <div class="w-full h-1 bg-red-100 rounded-full mt-3">
+                    <div class="w-1/2 h-full bg-red-400 rounded-full"></div>
+                </div>
+            </div>
+            <!-- Card 4: Ocupación Máxima -->
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                <h3 class="text-gray-400 text-xs font-extrabold uppercase mb-2" data-i18n="reports.sales_kpi4">Ocupación Máxima</h3>
+                <div id="kpi-ocupacion" class="text-2xl font-extrabold text-slate-800">--</div>
+                <div class="inline-block mt-1 px-2 py-0.5 bg-cyan-100 text-cyan-600 rounded text-[10px] font-bold">Tiempo real</div>
+                <div class="w-full h-1 bg-gray-100 rounded-full mt-3">
+                    <div id="bar-ocupacion" class="h-full bg-divine-cyan rounded-full" style="width:0%"></div>
+                </div>
+            </div>
+        </section>
+        <!-- END: Metric Cards Grid -->
+        <!-- BEGIN: Chart Section -->
+        <section class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm mb-8" data-purpose="sales-chart">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-xl font-extrabold text-slate-800">Ingresos Diarios de Ventas</h2>
+                <div class="relative">
+                    <select
+                        class="appearance-none bg-white border border-gray-200 rounded-lg px-4 py-2 pr-8 text-sm font-bold text-gray-500 focus:outline-none focus:ring-2 focus:ring-divine-blue">
+                        <option>Últimos 7 días</option>
+                        <option>Último mes</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                            <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <!-- Bar Chart Visualization -->
+            <div id="chart-bars" class="flex items-end justify-between h-48 px-4 gap-4" data-purpose="chart-bars">
+                <!-- JS renderiza las barras dinámicamente -->
+            </div>
+        </section>
+        <!-- END: Chart Section -->
+        <!-- BEGIN: Table Section -->
+        <section class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden"
+            data-purpose="recent-sales-table">
+            <div class="p-6 flex justify-between items-center">
+                <h2 class="text-xl font-extrabold text-slate-800">Detalle de ventas recientes</h2>
+                <a class="text-divine-blue text-xs font-bold hover:underline" href="#">Ver Histórico de Ventas</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-gray-50 text-gray-400 text-[10px] font-extrabold uppercase">
+                            <th class="px-6 py-4">Fecha/Hora</th>
+                            <th class="px-6 py-4">Ticket ID</th>
+                            <th class="px-6 py-4" data-i18n="table.payment_method">Método de Pago</th>
+                            <th class="px-6 py-4" data-i18n="table.status">Estado</th>
+                            <th class="px-6 py-4 text-right" data-i18n="table.total">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sell-table-body" class="divide-y divide-gray-100">
+                        <tr><td colspan="5" class="py-10 text-center text-gray-400">Cargando...</td></tr>
+                    </tbody>
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 text-sm font-semibold text-slate-700">24 Oct 2026</td>
+                            <td class="px-6 py-4 text-sm font-bold text-slate-500">#TK - 90210</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2">
+                                    <!-- Payment Icon -->
+                                    <div
+                                        class="w-8 h-5 bg-gray-100 rounded flex items-center justify-center text-[8px] font-bold text-gray-500 border border-gray-200">
+                                        CARD</div>
+                                    <span class="text-sm font-semibold text-slate-700">Tarjeta de Credito</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="px-3 py-1 bg-green-400 text-white rounded-md text-[10px] font-bold">Completado</span>
+                            </td>
+                            <td class="px-6 py-4 text-right text-sm font-extrabold text-slate-800">32.500 cop</td>
+                        </tr>
+                        <!-- Repeat row for visual completeness if needed -->
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 text-sm font-semibold text-slate-700">24 Oct 2026</td>
+                            <td class="px-6 py-4 text-sm font-bold text-slate-500">#TK - 90211</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="w-8 h-5 bg-gray-100 rounded flex items-center justify-center text-[8px] font-bold text-gray-500 border border-gray-200">
+                                        CASH</div>
+                                    <span class="text-sm font-semibold text-slate-700">Efectivo</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="px-3 py-1 bg-green-400 text-white rounded-md text-[10px] font-bold">Completado</span>
+                            </td>
+                            <td class="px-6 py-4 text-right text-sm font-extrabold text-slate-800">15.000 cop</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pagination Footer -->
+            <div class="p-4 border-t border-gray-100 flex justify-end gap-4">
+                <button id="btn-prev-sell" class="text-xs font-bold text-gray-400 hover:text-divine-blue px-2 py-1 transition-colors" data-i18n="pagination.prev">Anterior</button>
+                <button id="btn-next-sell" class="text-xs font-bold text-slate-800 hover:text-divine-blue px-2 py-1 underline decoration-2 underline-offset-4 transition-colors" data-i18n="pagination.next">Siguiente</button>
+            </div>
+        </section>
+        <!-- END: Table Section -->
+    </main>
+    <!-- END: Main Content Area -->
+    <script src="js/api.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/reports-sell.js"></script>
+</body>
+
+</html>

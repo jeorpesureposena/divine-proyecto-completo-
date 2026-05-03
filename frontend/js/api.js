@@ -100,6 +100,20 @@ class APIService {
     return this.post('/auth/registro/', payload);
   }
 
+  async registerAdmin(data) {
+    // Mapeo de campos del frontend hacia Django para Admin
+    const payload = {
+      nombre: data.full_name,
+      correo: data.email,
+      password: data.password,
+      password2: data.password,
+      telefono: data.phone_number,
+      codigo_autorizacion: data.auth_code, // Validado en el backend
+      rol: 'administrador'
+    };
+    return this.post('/auth/registro/', payload);
+  }
+
   async sendEmailForgotPassword(email) {
     return this.post('/auth/recuperar-password/enviar-codigo/', { correo: email });
   }

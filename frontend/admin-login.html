@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Divine Park - Acceso Administrativo</title>
+    <!-- Tailwind CSS CDN with Plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Custom Fonts (Assuming Inter or similar clean sans-serif) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <style data-purpose="base-typography">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+    <style data-purpose="custom-colors">
+        /* Custom brand colors based on the reference image */
+        .bg-brand-blue {
+            background-color: #001f8d;
+        }
+
+        .text-brand-blue {
+            color: #001f8d;
+        }
+
+        .border-brand-blue {
+            border-color: #001f8d;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+    <!-- BEGIN: MainContainer -->
+    <main class="w-full min-h-screen flex flex-col md:flex-row shadow-2xl overflow-hidden"
+        data-purpose="login-split-container">
+        <!-- BEGIN: BrandSidebar -->
+        <section class="md:w-2/5 bg-brand-blue text-white p-8 md:p-16 flex flex-col justify-between"
+            data-purpose="sidebar-brand-info">
+            <!-- Brand Logo and Name -->
+            <div class="flex items-center space-x-3" data-purpose="brand-header">
+                <img alt="Divine Park Logo" class="w-12 h-12 rounded-lg object-cover border border-white/20"
+                    src="https://lh3.googleusercontent.com/aida/ADBb0uhj-IU9TSOeoL647SkO4YodzffbzjZSy1N25d8l9kjgpcNrY3svORx_ZxR_0HOAZdq6sb2mtFZFUI8-0JkyRMI9NjwsRaekRjzLznn0rzFvgloiHfD1PMEA02RI91lH-I8HIpoYQlDx5gZPhFODfHk2Z0jBCorLjCqM9KziJTRObsiv4VP04rcZc_pyZV5gJLzvZeA69VUbDW3OVMKTAFus0fm2v30edp2QMB4hHdMFyOpSUbmNYj1ucVfEpRTztWHOikXcdytV1_M" />
+                <h1 class="text-2xl font-bold tracking-tight">Divine Park</h1>
+            </div>
+            <!-- Marketing/Admin Message -->
+            <div class="mt-20 md:mt-0" data-purpose="sidebar-content">
+                <h2 class="text-4xl md:text-5xl font-extrabold leading-tight mb-6">
+                    Panel de<br />Administración
+                </h2>
+                <p class="text-blue-100 text-lg leading-relaxed max-w-sm">
+                    Gestiona tu estacionamiento de manera inteligente. Accede a las herramientas de control maestro para
+                    monitorear sensores, pagos y reportes en tiempo real.
+                </p>
+            </div>
+            <!-- Footer Info in Sidebar -->
+            <div class="hidden md:block pt-8 text-sm text-blue-300">
+                © 2023 Divine Park. Sistema de Gestión Inteligente.
+            </div>
+        </section>
+        <!-- END: BrandSidebar -->
+        <!-- BEGIN: LoginFormSection -->
+        <section class="flex-1 bg-white flex items-center justify-center p-6 md:p-12" data-purpose="login-form-area">
+            <!-- Form Container Card -->
+            <div class="w-full max-w-md border border-gray-100 rounded-2xl p-8 md:p-10 shadow-sm"
+                data-purpose="login-card">
+                <!-- Header Section -->
+                <header class="mb-10 text-left">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 border border-blue-100 mb-6"
+                        data-purpose="status-badge">
+                        <span class="w-2 h-2 rounded-full bg-brand-blue mr-2"></span>
+                        <span class="text-xs font-semibold text-brand-blue uppercase tracking-wider">Acceso
+                            Administrativo</span>
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-2">Iniciar Sesión de Administrador</h3>
+                    <p class="text-gray-500 text-sm">Ingresa tus credenciales de gestión para acceder al sistema</p>
+                </header>
+                <!-- Django Ready Form -->
+                <form action="#" class="space-y-6" id="admin-login-form" method="POST">
+                    <!-- CSRF Token Placeholder for Django -->
+                    <!-- {% csrf_token %} -->
+                    <!-- Email Field -->
+                    <div data-purpose="field-group">
+                        <label class="block text-sm font-bold text-gray-700 mb-2" for="id_email">Correo
+                            Electrónico</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                    viewbox="0 0 24 24">
+                                    <path
+                                        d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.206"
+                                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                </svg>
+                            </div>
+                            <input
+                                class="block w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-blue focus:border-brand-blue bg-gray-50/50 text-gray-900 placeholder-gray-400 transition-all"
+                                id="id_email" name="username" placeholder="admin@gmail.com" required="" type="email" />
+                        </div>
+                    </div>
+                    <!-- Password Field -->
+                    <div data-purpose="field-group">
+                        <label class="block text-sm font-bold text-gray-700 mb-2" for="id_password">Contraseña</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                    viewbox="0 0 24 24">
+                                    <path
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                </svg>
+                            </div>
+                            <input
+                                class="block w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-blue focus:border-brand-blue bg-gray-50/50 text-gray-900 placeholder-gray-400 transition-all"
+                                id="id_password" name="password" placeholder="••••••••••••" required=""
+                                type="password" />
+                        </div>
+                    </div>
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="flex items-center justify-between text-sm">
+                        <div class="flex items-center">
+                            <input
+                                class="h-4 w-4 text-brand-blue focus:ring-brand-blue border-gray-300 rounded cursor-pointer"
+                                id="id_remember_me" name="remember_me" type="checkbox" />
+                            <label class="ml-2 block text-gray-500 cursor-pointer" for="id_remember_me">
+                                Recordarme
+                            </label>
+                        </div>
+                        <a class="font-medium text-brand-blue hover:underline" href="admin-forgot-password.html">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                    </div>
+                    <!-- Submit Button -->
+                    <div class="pt-4">
+                        <button
+                            class="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-brand-blue hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue transition-colors duration-200"
+                            type="submit">
+                            Iniciar Sesión
+                        </button>
+                    </div>
+                    <!-- Register Link -->
+                    <div class="text-center mt-6">
+                        <span class="text-gray-500 text-sm">¿No tienes cuenta de administrador?</span>
+                        <a href="register-admin.html" class="font-medium text-brand-blue hover:underline text-sm ml-1">Regístrate aquí</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <!-- END: LoginFormSection -->
+    </main>
+    <!-- END: MainContainer -->
+    
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script src="js/admin-login.js"></script>
+</body>
+
+</html>

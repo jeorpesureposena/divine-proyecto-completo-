@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Divine Park - Tablero Principal</title>
+    <!-- Google Fonts: Manrope -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS v3 CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'divine-blue': '#001A8E',
+                        'divine-cyan': '#00F0FF',
+                        'surface': '#f8f9fa',
+                        'occupied': '#FF0000',
+                        'available': '#00FF00',
+                        'reserved': '#FFFF00',
+                        'maintenance': '#CCCCCC',
+                    },
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        'divine': '8px',
+                    },
+                    gridTemplateColumns: {
+                        '15': 'repeat(15, minmax(0, 1fr))',
+                    }
+                }
+            }
+        }
+    </script>
+    <style data-purpose="custom-layout">
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .sidebar-active {
+            background-color: #00F0FF;
+            color: #001A8E;
+        }
+
+        .grid-spot {
+            height: 32px;
+            font-size: 10px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden">
+    <!-- BEGIN: Left Sidebar -->
+    <aside class="w-64 bg-divine-blue text-white flex flex-col flex-shrink-0 h-full" data-purpose="main-navigation">
+        <!-- Brand Logo -->
+        <div class="p-6 flex items-center gap-3">
+            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+                src="https://lh3.googleusercontent.com/aida/ADBb0uivJ-MMYS6AUwo_1n4gdeQx5hADWTNzNieHQHmm1oaqgweyhx2Gdh3QNM-xJnVpXs3fIujoDXvd_ocTGEHnPXdRmgKVyezK4fph1tixvBNHHeDtvurHWJ5VvQK0tvnaBRsCvRndYzvFE9DvIQXlK_YbovpitS896uFho2H016ZnSdMchhEt976Tvya4ABpMbwclxRrcqlmx6Hwh4FexXWwaG78VsWYaIFkEPldn5AcTnK-e5Tl3zf6__0Xm1BGgINEpKlMNkvoMEhI" />
+            <span class="text-xl font-extrabold tracking-tight">Divine Park</span>
+        </div>
+        <!-- Navigation Links -->
+        <nav class="flex-grow px-4 space-y-2 mt-4">
+            <a class="sidebar-active flex items-center gap-3 px-4 py-3 rounded-divine font-bold transition-colors"
+                href="dashboard-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.dashboard" data-i18n="dashboard.title">Tablero Principal</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-User-Management.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.users">Gestión de Usuarios</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="Monitoring-and-Sensors.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.monitoring">Monitoreo y Sensores</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-Payments-and-Billing.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.payments">Pagos y Facturación</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="reports-of-time-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.reports">Reportes</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="settings-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.settings">Configuración</span>
+            </a>
+        </nav>
+        <!-- Logout -->
+        <div class="p-6 mt-auto">
+            <button id="logout-btn"
+                class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white transition-colors w-full text-left font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.logout">Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+    <!-- END: Left Sidebar -->
+    <!-- Main Content Area -->
+    <main class="flex-grow overflow-y-auto bg-white" data-purpose="main-content-area">
+        <!-- BEGIN: Header -->
+        <header class="p-8 pb-4" data-purpose="dashboard-header">
+            <h1 class="text-3xl font-extrabold text-gray-900" data-i18n="dashboard.title" data-i18n="dashboard.title">Tablero Principal</h1>
+            <p class="text-gray-500 font-medium" data-i18n="dashboard.subtitle" data-i18n="dashboard.subtitle">Monitoreo en tiempo real del sistema Divine Park</p>
+        </header>
+        <!-- END: Header -->
+        <div class="px-8 space-y-8">
+            <!-- BEGIN: Summary Cards -->
+            <section class="grid grid-cols-1 md:grid-cols-4 gap-6" data-purpose="summary-stats">
+                <!-- Card: Ingresos -->
+                <div
+                    class="bg-white border border-gray-200 p-5 rounded-divine shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-2 bg-green-100 rounded-full">
+                            <span class="text-green-600 font-bold text-xl">$</span>
+                        </div>
+                    </div>
+                    <h3 class="text-gray-500 text-sm font-semibold mb-1 uppercase tracking-wider" data-i18n="dashboard.income" data-i18n="dashboard.income">Ingresos Totales</h3>
+                    <div id="stat-ingresos" class="text-2xl font-extrabold text-gray-900">0 cop</div>
+                    <div id="stat-ingresos-trend" class="text-green-500 text-xs font-bold mt-2">Cargando...</div>
+                </div>
+                <!-- Card: Ocupación -->
+                <div
+                    class="bg-white border border-gray-200 p-5 rounded-divine shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-2 bg-blue-100 rounded-full text-blue-900">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-gray-500 text-sm font-semibold mb-1 uppercase tracking-wider" data-i18n="dashboard.occupancy" data-i18n="dashboard.occupancy">Ocupación Actual</h3>
+                    <div class="flex items-baseline gap-2">
+                        <span id="stat-ocupacion-percent" class="text-2xl font-extrabold text-gray-900">0%</span>
+                        <span class="text-blue-500 text-[10px] font-bold leading-tight">47 de 60 <br />espacios
+                            ocupados</span>
+                    </div>
+                </div>
+                <!-- Card: Reservas -->
+                <div
+                    class="bg-white border border-gray-200 p-5 rounded-divine shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-2 bg-purple-100 rounded-full text-purple-600">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-gray-500 text-sm font-semibold mb-1 uppercase tracking-wider" data-i18n="dashboard.reservations" data-i18n="dashboard.reservations">Reservas Activas</h3>
+                    <div class="flex items-baseline gap-2">
+                        <span id="stat-reservas" class="text-2xl font-extrabold text-gray-900">0</span>
+                        <span class="text-purple-500 text-[10px] font-bold leading-tight">Para las <br />próximas
+                            24H</span>
+                    </div>
+                </div>
+                <!-- Card: Estado -->
+                <div
+                    class="bg-white border border-gray-200 p-5 rounded-divine shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="p-2 bg-cyan-100 rounded-full text-cyan-600">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-gray-500 text-sm font-semibold mb-1 uppercase tracking-wider">Estado del Sistema
+                    </h3>
+                    <div class="flex items-baseline gap-2">
+                        <span id="stat-estado" class="text-2xl font-extrabold text-gray-900 uppercase">Cargando</span>
+                        <span class="text-cyan-500 text-[10px] font-bold leading-tight">Todos los <br />servicios
+                            activos</span>
+                    </div>
+                </div>
+            </section>
+            <!-- END: Summary Cards -->
+            <!-- BEGIN: Real-time Map -->
+            <section class="bg-white border border-gray-200 p-6 rounded-divine" data-purpose="parking-map">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-bold text-gray-800">Mapa de Cupos - Vista en Tiempo Real</h2>
+                    <!-- Legend -->
+                    <div class="flex items-center gap-4 text-[10px] font-bold uppercase tracking-tight text-gray-500">
+                        <div class="flex items-center gap-1"><span class="w-3 h-3 bg-occupied rounded-sm"></span>
+                            Ocupado</div>
+                        <div class="flex items-center gap-1"><span class="w-3 h-3 bg-available rounded-sm"></span>
+                            Disponible</div>
+                        <div class="flex items-center gap-1"><span class="w-3 h-3 bg-reserved rounded-sm"></span>
+                            Reservado</div>
+                        <div class="flex items-center gap-1"><span class="w-3 h-3 bg-maintenance rounded-sm"></span>
+                            Mantenimiento</div>
+                    </div>
+                </div>
+                <!-- Parking Grid Layout -->
+                <div class="grid grid-cols-15 gap-2" data-purpose="spots-grid" id="parking-grid"></div></section>
+            <!-- END: Real-time Map -->
+            <!-- BEGIN: Recent Activity Table -->
+            <section class="bg-white border border-gray-200 rounded-divine mb-8" data-purpose="recent-activity">
+                <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <h2 class="text-lg font-bold text-gray-800" data-i18n="dashboard.recent_activity">Actividad Reciente</h2>
+                    <button id="btn-open-history" class="text-xs font-bold text-divine-blue hover:underline">Ver Histórico de Actividad Reciente</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr
+                                class="bg-gray-50 border-b border-gray-200 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                                <th class="px-6 py-3">Fecha / Hora</th>
+                                <th class="px-6 py-3">Placa</th>
+                                <th class="px-6 py-3">Tipo</th>
+                                <th class="px-6 py-3">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-activity-body" class="divide-y divide-gray-100 text-sm"></tbody>
+                    </table>
+                </div>
+            </section>
+            <!-- END: Recent Activity Table -->
+        </div>
+    </main>
+
+    <!-- BEGIN: Modal Histórico de Actividad -->
+    <div id="history-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-11/12 max-w-4xl max-h-[90vh] flex flex-col p-8 transform scale-95 transition-transform duration-300 relative" id="history-modal-content">
+            
+            <!-- Close Button (Not in image but necessary for UX, absolute top right) -->
+            <button id="btn-close-history" class="absolute top-4 right-4 z-50 w-8 h-8 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-800 transition-colors flex items-center justify-center cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <!-- Empty div for flex balance -->
+                <div class="w-24"></div>
+                
+                <h2 class="text-2xl font-extrabold text-slate-900 text-center flex-1">Histórico de Actividad Reciente</h2>
+                
+                <div class="flex items-center gap-3 text-sm w-32 justify-end">
+                    <button id="history-btn-prev" class="font-bold text-slate-300 hover:text-slate-500 transition-colors disabled:opacity-50">Anterior</button>
+                    <button id="history-btn-next" class="font-bold text-slate-900 hover:text-blue-800 transition-colors disabled:opacity-50">Siguiente</button>
+                </div>
+            </div>
+            
+            <!-- Table -->
+            <div class="overflow-y-auto flex-1 custom-scrollbar pr-2">
+                <table class="w-full text-left border-separate" style="border-spacing: 0 12px;">
+                    <thead class="sticky top-0 bg-white z-10">
+                        <tr>
+                            <th class="pb-2 px-2 text-lg font-bold text-slate-400">Fecha/Hora</th>
+                            <th class="pb-2 px-2 text-lg font-bold text-slate-400 text-center">Placa</th>
+                            <th class="pb-2 px-2 text-lg font-bold text-slate-400 text-center">Tipo</th>
+                            <th class="pb-2 px-2 text-lg font-bold text-slate-400 text-center">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-modal-tbody" class="text-[15px]">
+                        <!-- Dynamic rows will go here -->
+                        <tr><td colspan="4" class="py-10 text-center text-slate-400">Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Footer Inputs -->
+            <div class="mt-8 flex justify-between items-center px-4">
+                <button class="px-6 py-2 border border-slate-300 rounded-full text-sm font-bold text-slate-500 hover:bg-slate-50 transition-colors">22/Oct/2026</button>
+                <button class="px-6 py-2 border border-slate-300 rounded-full text-sm font-bold text-slate-500 hover:bg-slate-50 transition-colors">21:30 / 22:10</button>
+                <button class="px-6 py-2 border border-slate-300 rounded-full text-sm font-bold text-slate-500 hover:bg-slate-50 transition-colors">Entrada/Salida</button>
+            </div>
+        </div>
+    </div>
+    <!-- END: Modal Histórico de Actividad -->
+
+    <!-- BEGIN: Modal Desactivar Cupo -->
+    <div id="spot-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-11/12 max-w-md flex flex-col p-8 transform scale-95 transition-transform duration-300 relative" id="spot-modal-content">
+            
+            <h2 id="spot-modal-title" class="text-2xl font-extrabold text-slate-900 mb-6">Desactivar Cupo</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-900 mb-2">Espacio Seleccionado</label>
+                    <input type="hidden" id="spot-modal-id">
+                    <input type="text" id="spot-modal-name" readonly class="w-full border border-slate-300 rounded-lg px-4 py-2 text-slate-700 bg-slate-50 focus:outline-none" value="C-15">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-900 mb-2">Motivo del Mantenimiento</label>
+                    <textarea id="spot-modal-reason" rows="3" class="w-full border border-slate-300 rounded-lg px-4 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none" placeholder="Escribe el motivo..."></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-900 mb-2">Duración (Motivo del Mantenimiento)</label>
+                    <div class="relative">
+                        <select id="spot-modal-duration" class="w-full border border-slate-300 rounded-lg px-4 py-2 text-slate-700 appearance-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option>Indefinido</option>
+                            <option>1 Hora</option>
+                            <option>1 Día</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 flex gap-4">
+                <button id="btn-spot-confirm" class="flex-1 bg-[#001A8E] text-white font-bold py-3 px-4 rounded-full hover:bg-blue-900 transition-colors">Guardar</button>
+                <button id="btn-spot-cancel" class="flex-1 bg-white text-slate-900 font-bold py-3 px-4 rounded-full border border-slate-300 hover:bg-slate-50 transition-colors">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <!-- END: Modal Desactivar Cupo -->
+
+<script src="js/api.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script src="js/admin-dashboard.js"></script>
+</body>
+
+</html>
+
+
+
+
+

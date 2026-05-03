@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Divine Park - Modo de Operación de Emergencia</title>
+    <!-- Tailwind CSS v3 CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Google Fonts: Manrope, Inter -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-primary-container": "#7c8cfb",
+                        "surface-container-highest": "#e1e3e4",
+                        "secondary-fixed-dim": "#3cd7ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#e1e3e4",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-primary": "#ffffff",
+                        "background": "#f8f9fa",
+                        "surface-container": "#edeeef",
+                        "secondary": "#00677e",
+                        "on-background": "#191c1d",
+                        "tertiary-fixed": "#ffdad3",
+                        "primary-fixed": "#dfe0ff",
+                        "on-tertiary-container": "#ed7058",
+                        "on-secondary-fixed": "#001f27",
+                        "tertiary-fixed-dim": "#ffb4a6",
+                        "surface-bright": "#f8f9fa",
+                        "tertiary-container": "#610800",
+                        "on-secondary-fixed-variant": "#004e5f",
+                        "on-surface-variant": "#454653",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f8f9fa",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#005669",
+                        "surface-container-high": "#e7e8e9",
+                        "inverse-surface": "#2e3132",
+                        "on-tertiary-fixed-variant": "#852313",
+                        "on-tertiary-fixed": "#3f0300",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#c5c5d5",
+                        "outline": "#757684",
+                        "surface-tint": "#4354bf",
+                        "on-surface": "#191c1d",
+                        "on-primary-fixed-variant": "#283aa6",
+                        "inverse-primary": "#bbc3ff",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#d9dadb",
+                        "secondary-container": "#00d2fd",
+                        "primary-fixed-dim": "#bbc3ff",
+                        "surface-container-low": "#f3f4f5",
+                        "on-primary-fixed": "#000e5e",
+                        "secondary-fixed": "#b4ebff",
+                        "error": "#ba1a1a",
+                        "primary-container": "#001a8e",
+                        "tertiary": "#3b0300",
+                        "primary": "#000c58",
+                        "on-error-container": "#93000a",
+                        'divine-blue': '#001A8E',
+                        'divine-cyan': '#00F0FF',
+                        'divine-red': '#FF0000',
+                        'divine-dark-blue': '#001472',
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                        h2: ["Manrope"],
+                        h1: ["Manrope"],
+                        display: ["Manrope"],
+                        'body-lg': ["Inter"],
+                        'body-md': ["Inter"],
+                        'label-bold': ["Inter"],
+                        'label-sm': ["Inter"]
+                    },
+                }
+            }
+        }
+    </script>
+    <style data-purpose="custom-styling">
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden bg-background">
+    <!-- BEGIN: Sidebar -->
+    <aside class="hidden lg:flex w-72 bg-divine-blue text-white flex-col flex-shrink-0" data-purpose="sidebar">
+        <div class="p-6 flex items-center gap-3">
+            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border border-white/20"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKtVU1zr93LlzqN8EKkWxJPQE_yVchM3lmahsYNgOsze-M6myA7g6GZBkzMO2hrPNNzASiqB3u9agTBLQHfWFskSJPSNlNLxbPCBh7gwOfc4d244xWKlaMP8M-fqJW1jekWr6MOiw9ouPWFwK-EQMlZRN0_e7fkcIFpXvY4voevSCGO8D-JyAnSFpAHR18BQ3N5x1WG2R3hb_raUr3ztvOCtqFWurtrbpEC2Pji3CaY32hiUxG31Q9E6g-4Ic7x2DQxGJAHjgWFvaL" />
+            <span class="text-2xl font-extrabold tracking-tight">Divine Park</span>
+        </div>
+        <nav class="mt-8 flex-1 px-4 space-y-2 sidebar-scroll overflow-y-auto">
+            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="dashboard-admin.html">
+                <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
+                    <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"></path>
+                </svg>
+                <span class="font-semibold text-lg">Tablero Principal</span>
+            </a>
+            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="admin-User-Management.html">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+                    <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span class="font-semibold text-lg">Gestión de Usuarios</span>
+            </a>
+            <!-- Active Link -->
+            <a class="flex items-center gap-4 px-4 py-3 rounded-lg bg-divine-cyan text-divine-blue shadow-lg" href="Monitoring-and-Sensors.html">
+                <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span class="font-bold text-lg">Monitoreo y Sensores</span>
+            </a>
+            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="admin-Payments-and-Billing.html">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+                    <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span class="font-semibold text-lg">Pagos y Facturación</span>
+            </a>
+            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="reports-of-time-admin.html">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span class="font-semibold text-lg">Reportes</span>
+            </a>
+            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="settings-admin.html">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+                    <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span class="font-semibold text-lg">Configuración</span>
+            </a>
+        </nav>
+        <div class="p-6 mt-auto">
+            <button id="logout-btn" class="flex items-center gap-4 px-4 py-3 w-full rounded-lg hover:bg-white/10 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span class="font-bold text-lg text-white">Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+    <!-- END: Sidebar -->
+    <!-- BEGIN: Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <!-- BEGIN: Emergency Banner (Sticky) -->
+        <header class="flex-shrink-0 bg-divine-red p-4 flex items-center justify-center gap-4 md:gap-8 shadow-xl z-20"
+            data-purpose="emergency-header">
+            <div class="flex-shrink-0">
+                <svg class="w-10 h-10 md:w-14 md:h-14 text-white" fill="currentColor" viewbox="0 0 24 24">
+                    <path d="M12 2L1 21h22L12 2zm1 14h-2v-2h2v2zm0-4h-2V8h2v4z"></path>
+                </svg>
+            </div>
+            <h1
+                class="text-white text-xl md:text-3xl lg:text-4xl font-extrabold tracking-tighter leading-tight text-center uppercase">
+                ALERTA DE EMERGENCIA : PROTOCOLO DE EVACUACIÓN ACTIVO
+            </h1>
+        </header>
+        <!-- END: Emergency Banner -->
+        <!-- Scrollable Content Container -->
+        <div class="flex-1 overflow-y-auto bg-background">
+            <div class="p-4 md:p-8 space-y-6 md:space-y-8 max-w-[content_max_width] mx-auto">
+                <!-- Titles -->
+                <header data-purpose="section-title">
+                    <h2 class="text-2xl md:text-4xl font-bold text-gray-900">Modo de Operación de Emergencia</h2>
+                    <p class="text-sm md:text-lg font-semibold text-gray-400 mt-1 uppercase tracking-wide">Control de
+                        seguridad Crítica para instalaciones de Divine Park</p>
+                </header>
+                <!-- BEGIN: System Status Card -->
+                <article
+                    class="bg-white border-2 border-gray-200 rounded-3xl p-6 md:p-8 flex flex-col lg:flex-row gap-8 items-center shadow-sm"
+                    data-purpose="status-card">
+                    <!-- Visual Indicator -->
+                    <div
+                        class="w-full lg:w-1/2 bg-black rounded-3xl overflow-hidden flex items-center justify-center relative aspect-video shadow-inner flex-shrink-0">
+                        <div class="relative flex items-center justify-center">
+                            <div class="absolute w-24 h-24 bg-red-600 rounded-full blur-3xl opacity-50"></div>
+                            <svg class="w-24 h-24 md:w-32 md:h-32 text-red-600 drop-shadow-[0_0_15px_rgba(255,0,0,0.8)]"
+                                fill="currentColor" viewbox="0 0 24 24">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- Controls -->
+                    <div class="w-full lg:w-1/2 flex flex-col space-y-6">
+                        <div>
+                            <h3 class="text-lg md:text-xl font-bold text-gray-800">Estado del Sistema</h3>
+                            <p class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 mt-2">
+                                Barreras: <span id="barrier-status-text" class="text-divine-red">Cargando...</span>
+                            </p>
+                            <p id="barrier-status-sub" class="text-sm font-semibold text-gray-500 italic mt-1">(Consultando estado al servidor...)</p>
+                        </div>
+                        <div class="flex flex-col gap-4">
+                            <!-- Button Abrir Barrera -->
+                            <button id="btn-abrir-barrera"
+                                class="bg-divine-red hover:bg-red-700 text-white py-4 px-6 rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg transition-all active:scale-95 text-base md:text-lg">
+                                Abrir Barrera
+                                <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
+                                    <path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM8.9 6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9V6z"></path>
+                                </svg>
+                            </button>
+                            <!-- Button Cerrar Barreras -->
+                            <button id="btn-cerrar-barrera"
+                                class="bg-divine-blue hover:bg-divine-dark-blue text-white py-4 px-6 rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg transition-all active:scale-95 text-base md:text-lg">
+                                Cerrar Barreras
+                                <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
+                                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+                <!-- END: System Status Card -->
+                <!-- BEGIN: Protocol Description -->
+                <section class="border-2 border-gray-200 bg-white rounded-3xl p-6 md:p-8 shadow-sm"
+                    data-purpose="protocol-description">
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-6">Protocolo de Evacuación y Seguridad
+                    </h3>
+                    <div class="space-y-4 text-gray-600 font-medium leading-relaxed md:text-lg">
+                        <p>
+                            En cumplimiento estricto con las normativas internacionales de seguridad y prevención de
+                            incendios, este sistema garantiza que ante cualquier situación de evacuación o siniestro
+                            detectado, las barreras de Divine Park se abren de forma automática e inmediata.
+                        </p>
+                        <p>
+                            Este modo anula el sistema de cobro y validación de tickets para evitar cualquier
+                            obstrucción, permitiendo que todos los vehículos e individuos abandonen el recinto sin
+                            demoras, priorizando la vida humana por encima de cualquier otra consideración operativa.
+                        </p>
+                    </div>
+                </section>
+                <!-- END: Protocol Description -->
+                <!-- BEGIN: Bottom Status Grid -->
+                <footer class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12"
+                    data-purpose="sensor-status-grid">
+                    <!-- Detector Humo Card -->
+                    <div
+                        class="bg-white border-2 border-gray-200 p-6 rounded-3xl flex justify-between items-start shadow-sm transition-transform hover:-translate-y-1">
+                        <div class="flex flex-col h-full">
+                            <span class="text-gray-900 font-extrabold text-xl mb-6">Detectores de humo</span>
+                            <div class="mt-auto">
+                                <span
+                                    class="bg-green-500 text-white text-xs font-black px-4 py-2 rounded-lg uppercase tracking-wider">Activo</span>
+                            </div>
+                        </div>
+                        <div class="text-gray-800 bg-gray-100 p-3 rounded-2xl">
+                            <svg class="w-10 h-10" fill="currentColor" viewbox="0 0 24 24">
+                                <path
+                                    d="M12 3c-4.97 0-9 4.03-9 9h3c0-3.31 2.69-6 6-6s6 2.69 6 6h3c0-4.97-4.03-9-9-9zm0 6c-1.66 0-3 1.34-3 3h1.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5h1.5c0-1.66-1.34-3-3-3zm0 6c-1.1 0-2 .9-2 2h4c0-1.1-.9-2-2-2zM3 18h18v2H3v-2zm3 3h12v1H6v-1z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- Luces Emergencia Card -->
+                    <div
+                        class="bg-white border-2 border-gray-200 p-6 rounded-3xl flex justify-between items-start shadow-sm transition-transform hover:-translate-y-1">
+                        <div class="flex flex-col h-full">
+                            <span class="text-gray-900 font-extrabold text-xl mb-6">Luces de Emergencia</span>
+                            <div class="mt-auto">
+                                <span
+                                    class="bg-green-500 text-white text-xs font-black px-4 py-2 rounded-lg uppercase tracking-wider">Activo</span>
+                            </div>
+                        </div>
+                        <div class="text-gray-800 bg-gray-100 p-3 rounded-2xl">
+                            <svg class="w-10 h-10" fill="currentColor" viewbox="0 0 24 24">
+                                <path
+                                    d="M7 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06c-4.17.46-7.48 3.77-7.94 7.94H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- Intercom Card -->
+                    <div
+                        class="bg-white border-2 border-gray-200 p-6 rounded-3xl flex justify-between items-start shadow-sm transition-transform hover:-translate-y-1">
+                        <div class="flex flex-col h-full">
+                            <span class="text-gray-900 font-extrabold text-xl mb-6">Intercomunicadores</span>
+                            <div class="mt-auto">
+                                <span
+                                    class="bg-gray-200 text-gray-500 text-xs font-black px-4 py-2 rounded-lg uppercase tracking-wider">Inactivo</span>
+                            </div>
+                        </div>
+                        <div class="text-gray-800 bg-gray-100 p-3 rounded-2xl">
+                            <svg class="w-10 h-10" fill="currentColor" viewbox="0 0 24 24">
+                                <path
+                                    d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                </footer>
+                <!-- END: Bottom Status Grid -->
+            </div>
+        </div>
+    </main>
+    <!-- END: Main Content Area -->
+    <script src="js/api.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script src="js/admin-emergency.js"></script>
+</body>
+
+</html>

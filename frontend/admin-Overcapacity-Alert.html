@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Divine Park - Tablero Principal</title>
+    <!-- Tailwind CSS CDN with plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Font Import: Manrope -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <style data-purpose="typography">
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+    <style data-purpose="layout-colors">
+        /* Brand specific colors */
+        .bg-brand-blue {
+            background-color: #001A8E;
+        }
+
+        .text-brand-blue {
+            color: #001A8E;
+        }
+
+        .bg-sidebar-active {
+            background-image: linear-gradient(to right, #00D2FF, #3a7bd5);
+        }
+
+        .text-gray-sub {
+            color: #A0A0A0;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'divine-blue': '#001A8E',
+                        'divine-cyan': '#00D2FF',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 flex min-h-screen">
+    <!-- BEGIN: Sidebar -->
+    <aside class="w-64 bg-brand-blue text-white flex flex-col flex-shrink-0" data-purpose="sidebar-navigation">
+        <div class="p-6 flex items-center space-x-3">
+            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border border-white/20"
+                src="https://lh3.googleusercontent.com/aida/ADBb0ugHfLUKxC-HIFP5I0n7wnN6_eHVH80YD5TF8XDyXjUUMnIUeH_taW3mhySIxI745gXK1VaTEAL-aUGg66ShBznfIi4EyXK5j6eovfY3br7MP5BTJbe2NUYXkl3cpbcGBNWc-p93VV_lL3_zCbZw4GW0nokPvFAurm1b9pUNMr0GgX3HjRxhIuYHXA_I1DSluN_e4yDeLK2Z1dWOxBGSOz-p7z44iRLwwOgkK7FE-rrJHJWDb3O25r8uIy6V434cUhoqtdu3UhAs3-4" />
+            <span class="text-xl font-bold tracking-tight">Divine Park</span>
+        </div>
+        <nav class="mt-4 flex-1 px-4 space-y-1">
+            <!-- Active Item -->
+            <a class="flex items-center px-4 py-3 bg-sidebar-active rounded-lg font-bold text-white shadow-lg"
+                data-purpose="nav-item-active" href="dashboard-admin.html">
+                <svg class="w-6 h-6 mr-3" fill="currentColor" viewbox="0 0 20 20">
+                    <path
+                        d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                    </path>
+                </svg>
+                <span data-i18n="nav.dashboard">Tablero Principal</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-white/10 rounded-lg transition-colors font-medium" href="admin-User-Management.html">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.users">Gestión de Usuarios</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-white/10 rounded-lg transition-colors font-medium" href="admin-Overcapacity-Alert.html">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.monitoring" data-i18n="monitoring.title">Monitoreo y Sensores</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-white/10 rounded-lg transition-colors font-medium" href="admin-Payments-and-Billing.html">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.payments">Pagos y Facturación</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-white/10 rounded-lg transition-colors font-medium" href="reports-of-time-admin.html">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.reports">Reportes</span>
+            </a>
+            <a class="flex items-center px-4 py-3 hover:bg-white/10 rounded-lg transition-colors font-medium" href="settings-admin.html">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.settings">Configuración</span>
+            </a>
+        </nav>
+        <div class="p-6">
+            <a class="flex items-center text-white/80 hover:text-white transition-colors" href="#">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.logout">Cerrar Sesión</span>
+            </a>
+        </div>
+    </aside>
+    <!-- END: Sidebar -->
+    <!-- BEGIN: Main Content -->
+    <main class="flex-1 overflow-y-auto p-8" data-purpose="dashboard-main">
+        <!-- BEGIN: Header -->
+        <header class="mb-8">
+            <h1 class="text-4xl font-extrabold text-black">Tablero Principal</h1>
+            <p class="text-gray-400 font-medium mt-1">Monitoreo en tiempo real del sistema Divine Park</p>
+        </header>
+        <!-- END: Header -->
+        <!-- BEGIN: Summary Cards -->
+        <div class="grid grid-cols-4 gap-6 mb-8" data-purpose="summary-stats">
+            <!-- Total Income -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <span class="text-green-600 font-bold text-xl">$</span>
+                    </div>
+                    <h3 class="text-gray-400 font-bold text-sm" data-i18n="dashboard.income">Ingresos Totales</h3>
+                    <p id="stat-ingresos" class="text-2xl font-extrabold text-black mt-1">Cargando...</p>
+                </div>
+                <p id="stat-ingresos-trend" class="text-green-500 text-sm font-bold mt-2">--</p>
+            </div>
+            <!-- Current Occupancy -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-divine-blue" fill="currentColor" viewbox="0 0 20 20">
+                            <path
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-gray-400 font-bold text-sm" data-i18n="dashboard.occupancy">Ocupación Actual</h3>
+                    <div class="flex items-baseline space-x-2 mt-1">
+                        <span id="stat-ocupacion-percent" class="text-2xl font-extrabold text-black">--%</span>
+                        <span id="stat-ocupacion-detalle" class="text-xs text-blue-800 font-semibold leading-tight">-- espacios ocupados</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Active Reservations -->
+            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                            <path
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-gray-400 font-bold text-sm" data-i18n="dashboard.reservations">Reservas Activas</h3>
+                    <div class="flex items-baseline space-x-2 mt-1">
+                        <span id="stat-reservas" class="text-2xl font-extrabold text-black">--</span>
+                        <span class="text-xs text-purple-800 font-semibold leading-tight">Para las próximas 24H</span>
+                    </div>
+                </div>
+            </div>
+            <!-- System Status (Critical) -->
+            <div class="bg-red-600 p-6 rounded-2xl shadow-lg flex flex-col justify-between text-white"
+                data-purpose="critical-status">
+                <h3 class="text-white/80 font-bold text-sm" data-i18n="dashboard.hardware_status">Estado del Sistema</h3>
+                <p id="stat-estado" class="text-3xl font-extrabold mt-1">Bloqueado</p>
+                <div class="flex items-center mt-2">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewbox="0 0 20 20">
+                        <path clip-rule="evenodd"
+                            d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                            fill-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-sm font-bold uppercase tracking-wider">Capacidad MÃ¡xima</span>
+                </div>
+            </div>
+        </div>
+        <!-- END: Summary Cards -->
+        <!-- BEGIN: Map Container -->
+        <section class="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm mb-8"
+            data-purpose="slot-map-container">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-extrabold text-black">Mapa de Cupos - Vista en Tiempo Real</h2>
+                <!-- Legend -->
+                <div class="flex space-x-4 text-xs font-bold text-gray-500">
+                    <div class="flex items-center"><span class="w-5 h-3 bg-red-600 rounded-sm mr-1"></span> Ocupado
+                    </div>
+                    <div class="flex items-center"><span class="w-5 h-3 bg-green-500 rounded-sm mr-1"></span> Disponible
+                    </div>
+                    <div class="flex items-center"><span class="w-5 h-3 bg-yellow-300 rounded-sm mr-1"></span> Reservado
+                    </div>
+                    <div class="flex items-center"><span class="w-5 h-3 bg-gray-300 rounded-sm mr-1"></span>
+                        Mantenimiento</div>
+                </div>
+            </div>
+            <!-- Slot Grid -->
+            <div id="slots-grid" class="grid grid-cols-15 gap-2" data-purpose="slots-grid"
+                style="display: grid; grid-template-columns: repeat(15, minmax(0, 1fr)); min-height: 200px;">
+                <!-- Dynamically populated by JS -->
+                <div class="col-span-15 text-center text-gray-500 font-semibold py-10" data-i18n="status.loading">Cargando datos...</div>
+            </div>
+        </section>
+        <!-- END: Map Container -->
+        <!-- BEGIN: Overcapacity Alert Banner -->
+        <article id="alert-banner"
+            class="hidden bg-red-600 rounded-[40px] p-10 justify-between items-center text-white relative overflow-hidden"
+            data-purpose="major-alert-banner">
+            <div class="max-w-2xl z-10">
+                <h2 class="text-5xl font-extrabold mb-4">Alerta de Sobrecapacidad</h2>
+                <p class="text-xl font-bold leading-tight text-white/90">
+                    Parqueadero lleno. El ingreso de nuevos vehículos ha sido bloqueado automáticamente siguiendo el
+                    protocolo de seguridad
+                </p>
+            </div>
+            <!-- Barrier Icon Graphic -->
+            <div class="flex-shrink-0 z-10 mr-10">
+                <div class="relative w-40 h-32 flex flex-col justify-end items-center">
+                    <!-- Diagonal stripes pattern (simplified representation of the barrier in screenshot) -->
+                    <div class="w-full h-16 bg-white flex overflow-hidden rounded shadow-xl">
+                        <div class="h-full w-8 bg-red-600 -skew-x-12 ml-4"></div>
+                        <div class="h-full w-8 bg-red-600 -skew-x-12 ml-4"></div>
+                        <div class="h-full w-8 bg-red-600 -skew-x-12 ml-4"></div>
+                        <div class="h-full w-8 bg-red-600 -skew-x-12 ml-4"></div>
+                    </div>
+                    <!-- Barrier legs -->
+                    <div class="flex space-x-16 mt-2">
+                        <div class="w-3 h-10 bg-white"></div>
+                        <div class="w-3 h-10 bg-white"></div>
+                    </div>
+                </div>
+            </div>
+        </article>
+        <!-- END: Overcapacity Alert Banner -->
+    </main>
+    <!-- END: Main Content -->
+    <script src="js/api.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script src="js/admin-monitoring.js"></script>
+</body>
+</html>

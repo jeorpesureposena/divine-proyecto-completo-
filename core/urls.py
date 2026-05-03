@@ -33,6 +33,7 @@ router.register(r'barreras', views.BarreraViewSet)
 router.register(r'notificaciones', views.NotificacionViewSet)
 router.register(r'reportes', views.ReporteViewSet)
 router.register(r'estadisticas', views.EstadisticasViewSet, basename='estadisticas')
+router.register(r'usuarios', views.UsuarioViewSet, basename='usuarios')
 
 urlpatterns += [
     path('', include(router.urls)),
