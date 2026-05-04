@@ -17,7 +17,7 @@
                 extend: {
                     colors: {
                         'divine-blue': '#001A8E',
-                        'divine-cyan': '#00D4FF',
+                        'divine-cyan': '#00F0FF',
                         'divine-bg': '#F8F9FC',
                     },
                     fontFamily: {
@@ -34,7 +34,7 @@
         }
 
         .sidebar-active {
-            background-color: #00D4FF;
+            background-color: #00F0FF;
             color: #001A8E;
         }
 
@@ -61,71 +61,86 @@
 
 <body class="flex h-screen overflow-hidden">
     <!-- BEGIN: Sidebar -->
-    <aside class="w-64 bg-divine-blue text-white flex flex-col flex-shrink-0" data-purpose="navigation-sidebar">
+    <aside class="w-64 bg-divine-blue text-white flex flex-col flex-shrink-0 h-full" data-purpose="main-navigation">
+        <!-- Brand Logo -->
         <div class="p-6 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-white overflow-hidden">
-                <img alt="Divine Park Logo" class="w-full h-full object-cover"
-                    src="https://lh3.googleusercontent.com/aida/ADBb0uj81EMJzkVahdzm2j55w_ly7Emv773Dm_GldwHnud0x23andciQiy_tKVXVz0rtIaOWXC0z9YO57q9kyfrhzzKfFK3WAt7YbnsaKhNBHJuJrvOzASYCmzRjJ9Eme7Sb5gVbxkyskduuet3i2k-aABabXvWsDsVIUUbZbyzmYYgBERiJCMffDAt-5HZL3q2zcId8njB6k4Iy4spROleE9IEKJ214DMvDdYMqNnSKveSERTxsoSCQyVrGO1r_JToeiCeANjAPZgf6pg" />
-            </div>
+            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+                src="https://lh3.googleusercontent.com/aida/ADBb0uivJ-MMYS6AUwo_1n4gdeQx5hADWTNzNieHQHmm1oaqgweyhx2Gdh3QNM-xJnVpXs3fIujoDXvd_ocTGEHnPXdRmgKVyezK4fph1tixvBNHHeDtvurHWJ5VvQK0tvnaBRsCvRndYzvFE9DvIQXlK_YbovpitS896uFho2H016ZnSdMchhEt976Tvya4ABpMbwclxRrcqlmx6Hwh4FexXWwaG78VsWYaIFkEPldn5AcTnK-e5Tl3zf6__0Xm1BGgINEpKlMNkvoMEhI" />
             <span class="text-xl font-extrabold tracking-tight">Divine Park</span>
         </div>
-        <nav class="mt-6 flex-1 px-4 space-y-2">
-            <a class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800 transition-colors" href="dashboard-admin.html">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <!-- Navigation Links -->
+        <nav class="flex-grow px-4 space-y-2 mt-4">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="dashboard-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold">Tablero Principal</span>
+                <span data-i18n="nav.dashboard" data-i18n="dashboard.title">Tablero Principal</span>
             </a>
-            <a class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800 transition-colors" href="admin-User-Management.html">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-User-Management.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold">Gestión de Usuarios</span>
+                <span data-i18n="nav.users">Gestión de Usuarios</span>
             </a>
-            <a class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800 transition-colors" href="Monitoring-and-Sensors.html">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="Monitoring-and-Sensors.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
                         stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold">Monitoreo y Sensores</span>
+                <span data-i18n="nav.monitoring">Monitoreo y Sensores</span>
             </a>
-            <a class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800 transition-colors" href="admin-Payments-and-Billing.html">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-                    <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-Payments-and-Billing.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold">Pagos y Facturación</span>
+                <span data-i18n="nav.payments">Pagos y Facturación</span>
             </a>
-            <a class="flex items-center gap-3 p-3 rounded-lg sidebar-active shadow-lg shadow-cyan-500/20" href="#">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <a class="sidebar-active flex items-center gap-3 px-4 py-3 rounded-divine font-bold transition-colors"
+                href="reports-of-time-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-bold" data-i18n="reports.title">Reportes</span>
+                <span data-i18n="nav.reports">Reportes</span>
             </a>
-            <a class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-800 transition-colors" href="settings-admin.html">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="settings-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                     <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
                         stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold">Configuración</span>
+                <span data-i18n="nav.settings">Configuración</span>
             </a>
         </nav>
-        <div class="p-6">
-            <button class="flex items-center gap-3 text-white/70 hover:text-white transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <!-- Logout -->
+        <div class="p-6 mt-auto">
+            <button id="logout-btn"
+                class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white transition-colors w-full text-left font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-bold">Cerrar Sesión</span>
+                <span data-i18n="nav.logout">Cerrar Sesión</span>
             </button>
         </div>
     </aside>
@@ -135,7 +150,7 @@
         <!-- BEGIN: Header Section -->
         <header class="mb-8" data-purpose="content-header">
             <h1 class="text-3xl font-extrabold text-slate-800" data-i18n="reports.title">Reportes</h1>
-            <p class="text-gray-400 font-medium">Análisis detallado de ingresos y actividad operativa</p>
+            <p class="text-gray-400 font-medium" data-i18n="reports.subtitle">Análisis detallado de ingresos y actividad operativa</p>
         </header>
         <!-- END: Header Section -->
         <!-- BEGIN: Tabs Navigation -->
@@ -150,7 +165,7 @@
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
                 <h3 class="text-gray-400 text-xs font-extrabold uppercase mb-2" data-i18n="reports.sales_kpi1">Ventas Totales del Mes</h3>
                 <div id="kpi-ventas" class="text-2xl font-extrabold text-slate-800">--</div>
-                <div id="kpi-ventas-tendencia" class="text-[10px] font-bold text-green-500 mt-1">calculando...</div>
+                <div id="kpi-ventas-tendencia" class="text-[10px] font-bold text-green-500 mt-1" data-i18n="status.calculating">calculando...</div>
                 <div class="w-full h-1 bg-green-100 rounded-full mt-3">
                     <div class="w-3/4 h-full bg-green-400 rounded-full"></div>
                 </div>
@@ -159,7 +174,7 @@
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
                 <h3 class="text-gray-400 text-xs font-extrabold uppercase mb-2" data-i18n="reports.sales_kpi2">Facturas Generadas</h3>
                 <div id="kpi-facturas" class="text-2xl font-extrabold text-slate-800">--</div>
-                <div class="text-[10px] font-bold text-purple-500 mt-1">del mes actual</div>
+                <div class="text-[10px] font-bold text-purple-500 mt-1" data-i18n="reports.current_month">del mes actual</div>
                 <div class="w-full h-1 bg-purple-100 rounded-full mt-3">
                     <div class="w-2/3 h-full bg-purple-400 rounded-full"></div>
                 </div>
@@ -168,7 +183,7 @@
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
                 <h3 class="text-gray-400 text-xs font-extrabold uppercase mb-2" data-i18n="reports.sales_kpi3">Promedio de Facturas</h3>
                 <div id="kpi-promedio" class="text-2xl font-extrabold text-slate-800">--</div>
-                <div class="text-[10px] font-bold text-slate-400 mt-1">por transacción</div>
+                <div class="text-[10px] font-bold text-slate-400 mt-1" data-i18n="reports.per_transaction">por transacción</div>
                 <div class="w-full h-1 bg-red-100 rounded-full mt-3">
                     <div class="w-1/2 h-full bg-red-400 rounded-full"></div>
                 </div>
@@ -177,7 +192,7 @@
             <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
                 <h3 class="text-gray-400 text-xs font-extrabold uppercase mb-2" data-i18n="reports.sales_kpi4">Ocupación Máxima</h3>
                 <div id="kpi-ocupacion" class="text-2xl font-extrabold text-slate-800">--</div>
-                <div class="inline-block mt-1 px-2 py-0.5 bg-cyan-100 text-cyan-600 rounded text-[10px] font-bold">Tiempo real</div>
+                <div class="inline-block mt-1 px-2 py-0.5 bg-cyan-100 text-cyan-600 rounded text-[10px] font-bold" data-i18n="reports.real_time">Tiempo real</div>
                 <div class="w-full h-1 bg-gray-100 rounded-full mt-3">
                     <div id="bar-ocupacion" class="h-full bg-divine-cyan rounded-full" style="width:0%"></div>
                 </div>
@@ -187,12 +202,12 @@
         <!-- BEGIN: Chart Section -->
         <section class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm mb-8" data-purpose="sales-chart">
             <div class="flex justify-between items-center mb-10">
-                <h2 class="text-xl font-extrabold text-slate-800">Ingresos Diarios de Ventas</h2>
+                <h2 class="text-xl font-extrabold text-slate-800" data-i18n="reports.daily_sales_revenue">Ingresos Diarios de Ventas</h2>
                 <div class="relative">
                     <select
                         class="appearance-none bg-white border border-gray-200 rounded-lg px-4 py-2 pr-8 text-sm font-bold text-gray-500 focus:outline-none focus:ring-2 focus:ring-divine-blue">
-                        <option>Últimos 7 días</option>
-                        <option>Último mes</option>
+                        <option data-i18n="filter.last_7_days">Últimos 7 días</option>
+                        <option data-i18n="filter.last_month">Último mes</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
@@ -212,22 +227,22 @@
         <section class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden"
             data-purpose="recent-sales-table">
             <div class="p-6 flex justify-between items-center">
-                <h2 class="text-xl font-extrabold text-slate-800">Detalle de ventas recientes</h2>
-                <a class="text-divine-blue text-xs font-bold hover:underline" href="#">Ver Histórico de Ventas</a>
+                <h2 class="text-xl font-extrabold text-slate-800" data-i18n="reports.recent_sales_details">Detalle de ventas recientes</h2>
+                <a class="text-divine-blue text-xs font-bold hover:underline" href="#" data-i18n="button.view_sales_history">Ver Histórico de Ventas</a>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
                     <thead>
                         <tr class="bg-gray-50 text-gray-400 text-[10px] font-extrabold uppercase">
-                            <th class="px-6 py-4">Fecha/Hora</th>
-                            <th class="px-6 py-4">Ticket ID</th>
+                            <th class="px-6 py-4" data-i18n="table.datetime">Fecha/Hora</th>
+                            <th class="px-6 py-4" data-i18n="table.ticket_id">Ticket ID</th>
                             <th class="px-6 py-4" data-i18n="table.payment_method">Método de Pago</th>
                             <th class="px-6 py-4" data-i18n="table.status">Estado</th>
                             <th class="px-6 py-4 text-right" data-i18n="table.total">Total</th>
                         </tr>
                     </thead>
                     <tbody id="sell-table-body" class="divide-y divide-gray-100">
-                        <tr><td colspan="5" class="py-10 text-center text-gray-400">Cargando...</td></tr>
+                        <tr><td colspan="5" class="py-10 text-center text-gray-400" data-i18n="status.loading">Cargando...</td></tr>
                     </tbody>
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4 text-sm font-semibold text-slate-700">24 Oct 2026</td>

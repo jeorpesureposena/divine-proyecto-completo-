@@ -47,7 +47,7 @@ input {
 input:focus {
   outline: none;
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
 }
 
 .input-hint {
@@ -132,7 +132,7 @@ input:focus {
 .lock-icon {
   width: 60px;
   height: 60px;
-  background-color: rgba(0, 32, 138, 0.1);
+  background-color: rgba(0, 26, 142, 0.1);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -161,13 +161,13 @@ input:focus {
 .verification-icon {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, rgba(0, 32, 138, 0.1) 0%, rgba(0, 32, 138, 0.2) 100%);
+  background: linear-gradient(135deg, rgba(0, 26, 142, 0.1) 0%, rgba(0, 26, 142, 0.2) 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.5rem;
-  border: 2px solid rgba(0, 32, 138, 0.3);
+  border: 2px solid rgba(0, 26, 142, 0.3);
 }
 
 .verification-icon i {
@@ -197,7 +197,7 @@ input:focus {
 .code-input:focus {
   outline: none;
   border-color: var(--primary-blue);
-  box-shadow: 0 0 0 3px rgba(0, 32, 138, 0.1);
+  box-shadow: 0 0 0 3px rgba(0, 26, 142, 0.1);
 }
 
 .code-input:valid {
@@ -268,7 +268,7 @@ input:focus {
 
 .password-toggle:hover {
   color: var(--primary-blue);
-  background-color: rgba(0, 32, 138, 0.1);
+  background-color: rgba(0, 26, 142, 0.1);
 }
 
 .password-toggle i {

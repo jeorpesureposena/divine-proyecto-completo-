@@ -20,7 +20,7 @@
                     },
                     colors: {
                         'divine-blue': '#001A8E',
-                        'divine-cyan': '#00E5FF',
+                        'divine-cyan': '#00F0FF',
                         'divine-bg': '#F8F9FA',
                     },
                     borderRadius: {
@@ -39,6 +39,11 @@
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
+        .sidebar-active {
+            background-color: #00F0FF;
+            color: #001A8E;
+        }
+
         /* Custom scrollbar for sidebar if needed */
         .sidebar-scroll::-webkit-scrollbar {
             width: 4px;
@@ -53,69 +58,86 @@
 
 <body class="font-manrope bg-white text-slate-800 antialiased h-screen overflow-hidden flex">
     <!-- BEGIN: Sidebar -->
-    <aside class="w-72 bg-divine-blue text-white flex flex-col h-full flex-shrink-0" data-purpose="main-navigation">
-        <div class="p-8 flex items-center space-x-4">
-            <!-- Logo/Brand Section -->
-            <img alt="Divine Park Logo" class="w-12 h-12 rounded-full object-cover border-2 border-white/20"
-                src="https://lh3.googleusercontent.com/aida/ADBb0uirVSX_f3bbpQEHdPO1fRffNknWELcfT-YY4SRF4iAzlLIG8KAMy0K6bWG9f2z882t8wCoBGXzSo0UCPJzaktIrSj-jd_ZLQlabk0VZ7ndpr922WXcMOVigavgUppJAjR_wpXRrPe_Eo94uxVta8xALCg1D05vy2cVCKxjNLCt5NJUnf5YXz607pOKfe4miBEkgh2tljHALNB1GP3UztQDfRyWNW46usvM7vUXIO5rrwqL97Cyjo_Hrcstx4VtGEPgwkqV2ubQutKE" />
-            <h1 class="text-2xl font-extrabold tracking-tight">Divine Park</h1>
+    <aside class="w-64 bg-divine-blue text-white flex flex-col flex-shrink-0 h-full" data-purpose="main-navigation">
+        <!-- Brand Logo -->
+        <div class="p-6 flex items-center gap-3">
+            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+                src="https://lh3.googleusercontent.com/aida/ADBb0uivJ-MMYS6AUwo_1n4gdeQx5hADWTNzNieHQHmm1oaqgweyhx2Gdh3QNM-xJnVpXs3fIujoDXvd_ocTGEHnPXdRmgKVyezK4fph1tixvBNHHeDtvurHWJ5VvQK0tvnaBRsCvRndYzvFE9DvIQXlK_YbovpitS896uFho2H016ZnSdMchhEt976Tvya4ABpMbwclxRrcqlmx6Hwh4FexXWwaG78VsWYaIFkEPldn5AcTnK-e5Tl3zf6__0Xm1BGgINEpKlMNkvoMEhI" />
+            <span class="text-xl font-extrabold tracking-tight">Divine Park</span>
         </div>
-        <nav class="flex-1 px-4 mt-8 space-y-2 overflow-y-auto sidebar-scroll">
-            <a class="flex items-center space-x-4 px-4 py-3 rounded-xl hover:bg-white/10 transition-colors" href="dashboard-admin.html">
-                <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
-                    <path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zM13 3h8v8h-8V3zm0 10h8v8h-8v-8z"></path>
+        <!-- Navigation Links -->
+        <nav class="flex-grow px-4 space-y-2 mt-4">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="dashboard-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-bold">Tablero Principal</span>
+                <span data-i18n="nav.dashboard" data-i18n="dashboard.title">Tablero Principal</span>
             </a>
-            <a class="flex items-center space-x-4 px-4 py-3 rounded-xl hover:bg-white/10 transition-colors" href="admin-User-Management.html">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-User-Management.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-bold">Gestión de Usuarios</span>
+                <span data-i18n="nav.users">Gestión de Usuarios</span>
             </a>
-            <a class="flex items-center space-x-4 px-4 py-3 rounded-xl hover:bg-white/10 transition-colors" href="Monitoring-and-Sensors.html">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
-                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="Monitoring-and-Sensors.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
                 </svg>
-                <span class="font-bold">Monitoreo y Sensores</span>
+                <span data-i18n="nav.monitoring">Monitoreo y Sensores</span>
             </a>
-            <a class="flex items-center space-x-4 px-4 py-3 rounded-xl hover:bg-white/10 transition-colors" href="admin-Payments-and-Billing.html">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-Payments-and-Billing.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-bold">Pagos y Facturación</span>
+                <span data-i18n="nav.payments">Pagos y Facturación</span>
             </a>
-            <a class="flex items-center space-x-4 px-4 py-3 rounded-xl hover:bg-white/10 transition-colors" href="reports-of-time-admin.html">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="reports-of-time-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-bold">Reportes</span>
+                <span data-i18n="nav.reports">Reportes</span>
             </a>
-            <!-- Active Link -->
-            <a class="flex items-center space-x-4 px-4 py-3 rounded-xl bg-divine-cyan text-divine-blue font-bold shadow-lg"
-                data-purpose="active-nav-item" href="settings-admin.html">
-                <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
-                    <path d="M12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"></path>
-                    <path clip-rule="evenodd"
-                        d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"
-                        fill-rule="evenodd"></path>
+            <a class="sidebar-active flex items-center gap-3 px-4 py-3 rounded-divine font-bold transition-colors"
+                href="settings-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
                 </svg>
-                <span>Configuración</span>
+                <span data-i18n="nav.settings">Configuración</span>
             </a>
         </nav>
-        <!-- Sidebar Footer -->
-        <div class="p-8 border-t border-white/10 mt-auto">
-            <button class="flex items-center space-x-4 text-white hover:text-divine-cyan transition-colors font-bold">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+        <!-- Logout -->
+        <div class="p-6 mt-auto">
+            <button id="logout-btn"
+                class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white transition-colors w-full text-left font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span>Cerrar Sesión</span>
+                <span data-i18n="nav.logout">Cerrar Sesión</span>
             </button>
         </div>
     </aside>
@@ -138,7 +160,7 @@
                     <div id="tarifa-banner" class="bg-cyan-50 border border-cyan-100 rounded-2xl p-6 mb-8 text-center"
                         data-purpose="current-rates-banner">
                         <h4 class="text-divine-blue text-xl font-extrabold" data-i18n="settings.active_rates">Tarifa actual del sistema</h4>
-                        <p id="tarifa-updated" class="text-blue-500/80 text-xs font-bold mt-1">Cargando...</p>
+                        <p id="tarifa-updated" class="text-blue-500/80 text-xs font-bold mt-1" data-i18n="status.loading_short">Cargando...</p>
                     </div>
                     <!-- Form Fields -->
                     <form id="tarifa-form" class="space-y-6 flex-1">
@@ -146,25 +168,25 @@
                             <label class="block text-slate-400 font-bold mb-2 ml-1" data-i18n="settings.per_minute">Valor por minuto</label>
                             <input id="tarifa-minuto"
                                 class="w-full bg-white border border-slate-200 rounded-xl p-4 font-bold text-slate-800 input-shadow focus:ring-2 focus:ring-divine-blue focus:border-transparent outline-none"
-                                type="number" placeholder="Ej: 350" />
+                                type="number" placeholder="Ej: 350" data-i18n="settings.ex_350" />
                         </div>
                         <div data-purpose="input-group">
                             <label class="block text-slate-400 font-bold mb-2 ml-1" data-i18n="settings.per_hour">Valor por Hora</label>
                             <input id="tarifa-hora"
                                 class="w-full bg-white border border-slate-200 rounded-xl p-4 font-bold text-slate-800 input-shadow focus:ring-2 focus:ring-divine-blue focus:border-transparent outline-none"
-                                type="number" placeholder="Ej: 10000" />
+                                type="number" placeholder="Ej: 10000" data-i18n="settings.ex_10000" />
                         </div>
                         <div data-purpose="input-group">
                             <label class="block text-slate-400 font-bold mb-2 ml-1" data-i18n="settings.per_day">Tarifa por día</label>
                             <input id="tarifa-dia"
                                 class="w-full bg-white border border-slate-200 rounded-xl p-4 font-bold text-slate-800 input-shadow focus:ring-2 focus:ring-divine-blue focus:border-transparent outline-none"
-                                type="number" placeholder="Ej: 80000" />
+                                type="number" placeholder="Ej: 80000" data-i18n="settings.ex_80000" />
                         </div>
                         <div data-purpose="input-group">
                             <label class="block text-slate-400 font-bold mb-2 ml-1" data-i18n="settings.excess">Tarifa por exceso de tiempo</label>
                             <input id="tarifa-exceso"
                                 class="w-full bg-white border border-slate-200 rounded-xl p-4 font-bold text-slate-800 input-shadow focus:ring-2 focus:ring-divine-blue focus:border-transparent outline-none"
-                                type="number" placeholder="Ej: 10000" />
+                                type="number" placeholder="Ej: 10000" data-i18n="settings.ex_10000" />
                         </div>
                     </form>
                     <!-- Submit Button -->
@@ -189,7 +211,7 @@
                             <div class="flex items-center space-x-4">
                                 <img alt="Español" class="w-10 h-10 rounded-full object-cover shadow-sm"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuApuGtf512XDuN0OBwAZuShiD5U1A2sN4OWNvD4-Z-4mhZSHObL9LEAY_lhep1_n52XEdJU9_bHTNk5nUJ7dT3cG-A8J-h8F9ELB1LUytgjRXiSUpfVi21Qb40PGUay9AjwF4P29DUfqgQH_9dYTC7-cfy_kDBu1ZqG9G7bX8BFbbgG92b5TRGvEKSYor626DnL4NY5YrqBAkg0lMbUuaMM6nyb65WHylGsHLs4co81uMxPcs-2T4DrOS7lg_AZ1gKn0dx9CywUTQhV" />
-                                <span class="font-bold text-slate-700">Español</span>
+                                <span class="font-bold text-slate-700" data-i18n="settings.lang_es">Español</span>
                             </div>
                             <div class="lang-check w-7 h-7 bg-divine-blue rounded-full flex items-center justify-center">
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24">
@@ -201,7 +223,7 @@
                             <div class="flex items-center space-x-4">
                                 <img alt="Alemania" class="w-10 h-10 rounded-full object-cover shadow-sm"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe2K-kng0pE7bMNzdK_W3T2PEKEKCd0VKdVzopLbGxx0uMnFfoG9dtwZQPaIa8iCGe4S7gJqYsWN3zQJkq9otRpiiGi2uQzFexGNICUse-AuYmIC4XRU-VsGockR1WYJscoe-HiWAsyey8q1sFNgaWARI_-0bDzJyeF3Sn7Y00RUlBhsweueHF6IgTY5Mz6gPeODz_7lOTkkiwb2ORzZiL2PbyxYLPws9bXy9_6-OD40B0f0Z5jAb6CyIO0GaBT3_azGfz-Whsz5ip" />
-                                <span class="font-bold text-slate-700">Alemania</span>
+                                <span class="font-bold text-slate-700" data-i18n="settings.lang_de">Alemania</span>
                             </div>
                             <div class="lang-check w-7 h-7 border-2 border-slate-200 rounded-full"></div>
                         </div>
@@ -209,7 +231,7 @@
                             <div class="flex items-center space-x-4">
                                 <img alt="Estados Unidos" class="w-10 h-10 rounded-full object-cover shadow-sm"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxgbSkV9XQ-TeGSWErgntb5QmEj9JD9WLITeF1ovftddwjjvgdib50LYfM65K4mcjUAxcNtsMe2polW_LXwCkQnCW7oOKTovgdyd7LTpNtfUCDJyXk_wIyNWQh0DLPM9xyyharQaqIBYwS16iNrNvFeJgP8PrymFOlpPUPm7i0AxttfGFRs-SSKemkDdFff9w0XFuzhs1kzt5i48c2pZ9iQsujgnxCiONtE1ir8vLxPRLWlA-Gc0jcUcTZXQVEUT97cQYipDSvN9G3" />
-                                <span class="font-bold text-slate-700">Estados Unidos</span>
+                                <span class="font-bold text-slate-700" data-i18n="settings.lang_en">Estados Unidos</span>
                             </div>
                             <div class="lang-check w-7 h-7 border-2 border-slate-200 rounded-full"></div>
                         </div>
@@ -217,7 +239,7 @@
                             <div class="flex items-center space-x-4">
                                 <img alt="Frances" class="w-10 h-10 rounded-full object-cover shadow-sm"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUvB0Bcbu5W4Svfn5jXYahVK7ltQd2PdGYWK-dOCsVdbxjyFqpzPn_cLQTYbjCdm7SQ-eV-LW50hgtkug54gQoGPZ7iWZTuCWZIdztOp32W_RZeMwRUXNNQOeyEZ3YD6pxSbtjDgF-hl8LGKPfmhEjK7HkyPh_uFGaxpFcu2p9aaRR-NRaBO1eSINuCZb4P1TIgdTeXQdLKQ7m7dGboFvi9xZ3rTA4oPMcsFhTj5JBXRSIVRSpPWGh8RLb6xIgwGgSr7cocYFMO3OB" />
-                                <span class="font-bold text-slate-700">Frances</span>
+                                <span class="font-bold text-slate-700" data-i18n="settings.lang_fr">Frances</span>
                             </div>
                             <div class="lang-check w-7 h-7 border-2 border-slate-200 rounded-full"></div>
                         </div>
@@ -225,7 +247,7 @@
                             <div class="flex items-center space-x-4">
                                 <img alt="Portugués" class="w-10 h-10 rounded-full object-cover shadow-sm"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWfSOdNiiFP331aaw8rRbB8P2gr5fHcJprrpqrSuU-VU_iSTBFzhQNLKJ7_pL-YKDa93CPzTyq1PfRXLsueH-IROCjBsB5fCGwrANXDhZqjt9oCrf8NOCKX_NcC9CxEgiv2umJSuBpb0ZPtwTQz6kzQAtLaLSMSnH3dPL5gNgnPsgp2qUONi7DlgypLj40-k2EryP2xUh9_dk8ANzbRJnsYzjXEGPmaZmq88u0hNVfC-o4EJwjL3gEkwBqIUGNobJQecEKB7Ppx8wU" />
-                                <span class="font-bold text-slate-700">Portugués</span>
+                                <span class="font-bold text-slate-700" data-i18n="settings.lang_pt">Portugués</span>
                             </div>
                             <div class="lang-check w-7 h-7 border-2 border-slate-200 rounded-full"></div>
                         </div>

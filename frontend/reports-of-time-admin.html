@@ -16,10 +16,25 @@
             font-family: 'Manrope', sans-serif;
         }
     </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'divine-blue': '#001A8E',
+                        'divine-cyan': '#00F0FF',
+                    },
+                    borderRadius: {
+                        'divine': '12px',
+                    }
+                }
+            }
+        }
+    </script>
     <style data-purpose="custom-styling">
         .sidebar-active {
-            background-color: #00D1FF;
-            color: #000000;
+            background-color: #00F0FF;
+            color: #001A8E;
         }
 
         .custom-shadow {
@@ -38,80 +53,89 @@
     </style>
 </head>
 
-<body class="bg-[#F8F9FA] min-h-screen flex">
+<body class="bg-[#F8F9FA] h-screen overflow-hidden flex">
     <!-- BEGIN: Sidebar -->
-    <aside class="w-72 bg-[#001D8F] text-white flex flex-col min-h-screen sticky top-0" data-purpose="main-sidebar">
+    <aside class="w-64 bg-divine-blue text-white flex flex-col flex-shrink-0 h-full" data-purpose="main-navigation">
+        <!-- Brand Logo -->
         <div class="p-6 flex items-center gap-3">
-            <img alt="Divine Park Logo" class="w-10 h-10 rounded-lg object-cover"
-                src="https://lh3.googleusercontent.com/aida/ADBb0ujo5cxw7PV_UBnAgsR9CBO-aNMvo3tSilwEBB9IoNuVqdWdnl9JHAPZBafkBrWh4wqaRcKrAQVFy-k-V9eIaEJrz2EKpWIuW9Rosaq0D9_xy1xsLnDG_Sg4FaUpn4ELmXf1qUPqgABCuKMZAx1LM_uJqIGPNrucyRI-jLA1fv96PHhRXjnsidPDz-cNkeRqNn2S9tkv0lD0Pvz5m3eGgdxC5NaJwwgXRhhmw49tdGyesaUdAA0IyIvpd-Y7zhMNpBqydyYd-R1XvL0" />
-            <h1 class="text-2xl font-extrabold tracking-tight">Divine Park</h1>
+            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+                src="https://lh3.googleusercontent.com/aida/ADBb0uivJ-MMYS6AUwo_1n4gdeQx5hADWTNzNieHQHmm1oaqgweyhx2Gdh3QNM-xJnVpXs3fIujoDXvd_ocTGEHnPXdRmgKVyezK4fph1tixvBNHHeDtvurHWJ5VvQK0tvnaBRsCvRndYzvFE9DvIQXlK_YbovpitS896uFho2H016ZnSdMchhEt976Tvya4ABpMbwclxRrcqlmx6Hwh4FexXWwaG78VsWYaIFkEPldn5AcTnK-e5Tl3zf6__0Xm1BGgINEpKlMNkvoMEhI" />
+            <span class="text-xl font-extrabold tracking-tight">Divine Park</span>
         </div>
-        <nav class="mt-6 flex-grow px-4 space-y-2">
-            <!-- Nav Item: Tablero Principal -->
-            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-blue-800 transition-colors" href="dashboard-admin.html">
-                <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zM13 3h8v8h-8V3zm0 10h8v8h-8v-8z"></path>
+        <!-- Navigation Links -->
+        <nav class="flex-grow px-4 space-y-2 mt-4">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="dashboard-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold text-lg">Tablero Principal</span>
+                <span data-i18n="nav.dashboard" data-i18n="dashboard.title">Tablero Principal</span>
             </a>
-            <!-- Nav Item: Gestión de Usuarios -->
-            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-blue-800 transition-colors" href="admin-User-Management.html">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-User-Management.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold text-lg">Gestión de Usuarios</span>
+                <span data-i18n="nav.users">Gestión de Usuarios</span>
             </a>
-            <!-- Nav Item: Monitoreo y Sensores -->
-            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-blue-800 transition-colors" href="Monitoring-and-Sensors.html">
-                <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="Monitoring-and-Sensors.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold text-lg">Monitoreo y Sensores</span>
+                <span data-i18n="nav.monitoring">Monitoreo y Sensores</span>
             </a>
-            <!-- Nav Item: Pagos y Facturación -->
-            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-blue-800 transition-colors" href="admin-Payments-and-Billing.html">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-Payments-and-Billing.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold text-lg">Pagos y Facturación</span>
+                <span data-i18n="nav.payments">Pagos y Facturación</span>
             </a>
-            <!-- Nav Item: Reportes (Active) -->
-            <a class="sidebar-active flex items-center gap-4 px-4 py-3 rounded-lg transition-colors" href="#">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"
+            <a class="sidebar-active flex items-center gap-3 px-4 py-3 rounded-divine font-bold transition-colors"
+                href="reports-of-time-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-bold text-lg" data-i18n="reports.title">Reportes</span>
+                <span data-i18n="nav.reports">Reportes</span>
             </a>
-            <!-- Nav Item: Configuración -->
-            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-blue-800 transition-colors" href="settings-admin.html">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="settings-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
-                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold text-lg">Configuración</span>
+                <span data-i18n="nav.settings">Configuración</span>
             </a>
         </nav>
-        <!-- Logout Section -->
-        <div class="p-6 mt-auto border-t border-blue-900">
-            <a class="flex items-center gap-4 px-4 py-2 hover:text-red-300 transition-colors" href="#">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"
+        <!-- Logout -->
+        <div class="p-6 mt-auto">
+            <button id="logout-btn"
+                class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white transition-colors w-full text-left font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-bold text-lg">Cerrar Sesión</span>
-            </a>
+                <span data-i18n="nav.logout">Cerrar Sesión</span>
+            </button>
         </div>
     </aside>
     <!-- END: Sidebar -->
@@ -120,7 +144,7 @@
         <!-- BEGIN: Page Header -->
         <header class="mb-8">
             <h2 class="text-4xl font-extrabold text-[#2D2D2D]" data-i18n="reports.title">Reportes</h2>
-            <p class="text-[#B0B0B0] font-medium mt-1">Análisis histórico de vehículos con estancia Excedida</p>
+            <p class="text-[#B0B0B0] font-medium mt-1" data-i18n="reports.time_subtitle">Análisis histórico de vehículos con estancia Excedida</p>
         </header>
         <!-- END: Page Header -->
         <!-- BEGIN: Tabs -->
@@ -134,7 +158,7 @@
             <div class="relative">
                 <button
                     class="flex items-center justify-between px-4 py-2 bg-white border border-[#E0E0E0] rounded-full text-[#B0B0B0] min-w-[160px]">
-                    <span>Rango de Fecha</span>
+                    <span data-i18n="filter.date_range">Rango de Fecha</span>
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
                         <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                     </svg>
@@ -143,7 +167,7 @@
             <div class="relative">
                 <button
                     class="flex items-center justify-between px-4 py-2 bg-white border border-[#E0E0E0] rounded-full text-[#B0B0B0] min-w-[120px]">
-                    <span>Zona</span>
+                    <span data-i18n="filter.zone">Zona</span>
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
                         <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                     </svg>
@@ -199,7 +223,7 @@
                         </tr>
                     </thead>
                     <tbody id="time-table-body" class="text-[#2D2D2D] font-semibold">
-                        <tr><td colspan="6" class="py-10 text-center text-gray-400">Cargando...</td></tr>
+                        <tr><td colspan="6" class="py-10 text-center text-gray-400" data-i18n="status.loading_short">Cargando...</td></tr>
                     </tbody>
                         <!-- Row 1 -->
                         <tr class="border-b border-gray-50">
@@ -208,7 +232,7 @@
                             <td class="py-6 px-4 text-center">Zona B - Cúcuta</td>
                             <td class="py-6 px-4 text-center">1h 40 min</td>
                             <td class="py-6 px-4 text-center">
-                                <span class="status-badge-red px-3 py-1 rounded text-xs font-bold uppercase">En
+                                <span class="status-badge-red px-3 py-1 rounded text-xs font-bold uppercase" data-i18n="status.in_process">En
                                     Proceso</span>
                             </td>
                             <td class="py-6 px-4 text-right">
@@ -332,11 +356,11 @@
                 </div>
                 <div
                     class="flex-1 bg-white border border-[#E0E0E0] rounded-2xl p-4 text-[#B0B0B0] font-medium text-center">
-                    Zonas: Todas
+                    <span data-i18n="filter.zones_all">Zonas: Todas</span>
                 </div>
                 <div
                     class="flex-1 bg-white border border-[#E0E0E0] rounded-2xl p-4 text-[#B0B0B0] font-medium text-center">
-                    Estado: Todos
+                    <span data-i18n="filter.status_all">Estado: Todos</span>
                 </div>
             </div>
             <!-- END: Footer Filters -->

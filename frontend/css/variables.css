@@ -3,11 +3,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-    /* Paleta principal (Basada en Imagen) */
-    --primary-color: #001f66; /* Azul marino profundo */
-    --primary-dark: #072a8a;
-    --accent-color: #072a8a; /* Cian para items activos */
-    --accent-hover: #072a8a;
+    /* Paleta principal (Unificada con Admin) */
+    --primary-color: #001a8e; /* Divine Blue */
+    --primary-dark: #001472; /* Divine Dark Blue */
+    --primary-blue: var(--primary-color); /* Alias por retrocompatibilidad */
+    --dark-blue: var(--primary-dark); /* Alias por retrocompatibilidad */
+    
+    --accent-color: #00f0ff; /* Divine Cyan */
+    --accent-hover: #00d2fd;
     
     /* Estados y Badges */
     --success-color: #2e7d32;
@@ -22,29 +25,54 @@
     --badge-complete-text: #6b7280;
 
     /* Superficies y Fondos */
-    --bg-color: #f5f7fa; /* Gris muy claro para el fondo */
+    --bg-color: #f8f9fa; /* Gris muy claro unificado */
+    --bg-light: var(--bg-color);
     --surface-color: #ffffff;
     --surface-hover: #f0f4f8;
+    --white: #ffffff;
 
     /* Texto */
     --text-primary: #1e293b;
+    --text-main: var(--text-primary);
     --text-secondary: #64748b;
+    --text-muted: var(--text-secondary);
     --text-light: #ffffff;
+
+    /* Espaciado (Spacing) */
+    --space-xs: 0.25rem;  /* 4px */
+    --space-sm: 0.5rem;   /* 8px */
+    --space-md: 1rem;     /* 16px */
+    --space-lg: 1.5rem;   /* 24px */
+    --space-xl: 2rem;     /* 32px */
+    --space-2xl: 3rem;    /* 48px */
+
+    /* Tipografía (Typography) */
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
 
     /* Bordes y Sombras */
     --border-color: #e2e8f0;
     --border-radius-sm: 4px;
     --border-radius-md: 8px;
-    --border-radius-lg: 16px;
-    --border-radius-xl: 24px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --border-radius-full: 9999px;
+    --radius: var(--border-radius-lg);
     
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
     --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+    --shadow: var(--shadow-md);
 
     /* Transiciones */
     --transition-fast: 0.2s ease-in-out;
     --transition-normal: 0.3s ease-in-out;
+    --transition: var(--transition-normal);
 }
 
 * {

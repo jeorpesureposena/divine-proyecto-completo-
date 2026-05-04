@@ -18,6 +18,8 @@
             theme: {
                 extend: {
                     colors: {
+                        "divine-blue": "#001A8E",
+                        "divine-cyan": "#00F0FF",
                         "on-primary-container": "#7c8cfb",
                         "surface-container-highest": "#e1e3e4",
                         "secondary-fixed-dim": "#3cd7ff",
@@ -103,63 +105,96 @@
         .sidebar-scroll::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.2);
         }
+
+        .sidebar-active {
+            background-color: #00F0FF;
+            color: #001A8E;
+        }
     </style>
 </head>
 
 <body class="flex h-screen overflow-hidden bg-background">
     <!-- BEGIN: Sidebar -->
-    <aside class="hidden lg:flex w-72 bg-divine-blue text-white flex-col flex-shrink-0" data-purpose="sidebar">
+    <aside class="w-64 bg-divine-blue text-white flex flex-col flex-shrink-0 h-full" data-purpose="main-navigation">
+        <!-- Brand Logo -->
         <div class="p-6 flex items-center gap-3">
-            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border border-white/20"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKtVU1zr93LlzqN8EKkWxJPQE_yVchM3lmahsYNgOsze-M6myA7g6GZBkzMO2hrPNNzASiqB3u9agTBLQHfWFskSJPSNlNLxbPCBh7gwOfc4d244xWKlaMP8M-fqJW1jekWr6MOiw9ouPWFwK-EQMlZRN0_e7fkcIFpXvY4voevSCGO8D-JyAnSFpAHR18BQ3N5x1WG2R3hb_raUr3ztvOCtqFWurtrbpEC2Pji3CaY32hiUxG31Q9E6g-4Ic7x2DQxGJAHjgWFvaL" />
-            <span class="text-2xl font-extrabold tracking-tight">Divine Park</span>
+            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+                src="https://lh3.googleusercontent.com/aida/ADBb0uivJ-MMYS6AUwo_1n4gdeQx5hADWTNzNieHQHmm1oaqgweyhx2Gdh3QNM-xJnVpXs3fIujoDXvd_ocTGEHnPXdRmgKVyezK4fph1tixvBNHHeDtvurHWJ5VvQK0tvnaBRsCvRndYzvFE9DvIQXlK_YbovpitS896uFho2H016ZnSdMchhEt976Tvya4ABpMbwclxRrcqlmx6Hwh4FexXWwaG78VsWYaIFkEPldn5AcTnK-e5Tl3zf6__0Xm1BGgINEpKlMNkvoMEhI" />
+            <span class="text-xl font-extrabold tracking-tight">Divine Park</span>
         </div>
-        <nav class="mt-8 flex-1 px-4 space-y-2 sidebar-scroll overflow-y-auto">
-            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="dashboard-admin.html">
-                <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
-                    <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"></path>
+        <!-- Navigation Links -->
+        <nav class="flex-grow px-4 space-y-2 mt-4">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="dashboard-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold text-lg">Tablero Principal</span>
+                <span data-i18n="nav.dashboard" data-i18n="dashboard.title">Tablero Principal</span>
             </a>
-            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="admin-User-Management.html">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
-                    <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-User-Management.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold text-lg">Gestión de Usuarios</span>
+                <span data-i18n="nav.users">Gestión de Usuarios</span>
             </a>
-            <!-- Active Link -->
-            <a class="flex items-center gap-4 px-4 py-3 rounded-lg bg-divine-cyan text-divine-blue shadow-lg" href="Monitoring-and-Sensors.html">
-                <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
-                    <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            <a class="sidebar-active flex items-center gap-3 px-4 py-3 rounded-divine font-bold transition-colors"
+                href="Monitoring-and-Sensors.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
                 </svg>
-                <span class="font-bold text-lg">Monitoreo y Sensores</span>
+                <span data-i18n="nav.monitoring">Monitoreo y Sensores</span>
             </a>
-            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="admin-Payments-and-Billing.html">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
-                    <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round"></path>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-Payments-and-Billing.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold text-lg">Pagos y Facturación</span>
+                <span data-i18n="nav.payments">Pagos y Facturación</span>
             </a>
-            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="reports-of-time-admin.html">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
-                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="reports-of-time-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold text-lg">Reportes</span>
+                <span data-i18n="nav.reports">Reportes</span>
             </a>
-            <a class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="settings-admin.html">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
-                    <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round"></path>
-                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="settings-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
                 </svg>
-                <span class="font-semibold text-lg">Configuración</span>
+                <span data-i18n="nav.settings">Configuración</span>
             </a>
         </nav>
+        <!-- Logout -->
         <div class="p-6 mt-auto">
-            <button id="logout-btn" class="flex items-center gap-4 px-4 py-3 w-full rounded-lg hover:bg-white/10 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
-                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"></path>
+            <button id="logout-btn"
+                class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white transition-colors w-full text-left font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="font-bold text-lg text-white">Cerrar Sesión</span>
+                <span data-i18n="nav.logout">Cerrar Sesión</span>
             </button>
         </div>
     </aside>
@@ -175,7 +210,7 @@
                 </svg>
             </div>
             <h1
-                class="text-white text-xl md:text-3xl lg:text-4xl font-extrabold tracking-tighter leading-tight text-center uppercase">
+                class="text-white text-xl md:text-3xl lg:text-4xl font-extrabold tracking-tighter leading-tight text-center uppercase" data-i18n="emergency.banner">
                 ALERTA DE EMERGENCIA : PROTOCOLO DE EVACUACIÓN ACTIVO
             </h1>
         </header>
@@ -185,8 +220,8 @@
             <div class="p-4 md:p-8 space-y-6 md:space-y-8 max-w-[content_max_width] mx-auto">
                 <!-- Titles -->
                 <header data-purpose="section-title">
-                    <h2 class="text-2xl md:text-4xl font-bold text-gray-900">Modo de Operación de Emergencia</h2>
-                    <p class="text-sm md:text-lg font-semibold text-gray-400 mt-1 uppercase tracking-wide">Control de
+                    <h2 class="text-2xl md:text-4xl font-bold text-gray-900" data-i18n="emergency.title">Modo de Operación de Emergencia</h2>
+                    <p class="text-sm md:text-lg font-semibold text-gray-400 mt-1 uppercase tracking-wide" data-i18n="emergency.subtitle">Control de
                         seguridad Crítica para instalaciones de Divine Park</p>
                 </header>
                 <!-- BEGIN: System Status Card -->
@@ -209,27 +244,32 @@
                     <!-- Controls -->
                     <div class="w-full lg:w-1/2 flex flex-col space-y-6">
                         <div>
-                            <h3 class="text-lg md:text-xl font-bold text-gray-800">Estado del Sistema</h3>
+                            <h3 class="text-lg md:text-xl font-bold text-gray-800" data-i18n="emergency.system_status">Estado del Sistema</h3>
                             <p class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 mt-2">
-                                Barreras: <span id="barrier-status-text" class="text-divine-red">Cargando...</span>
+                                <span data-i18n="emergency.barriers">Barreras: </span><span id="barrier-status-text" class="text-divine-red">Cargando...</span>
                             </p>
-                            <p id="barrier-status-sub" class="text-sm font-semibold text-gray-500 italic mt-1">(Consultando estado al servidor...)</p>
+                            <p id="barrier-status-sub" class="text-sm font-semibold text-gray-500 italic mt-1" data-i18n="emergency.querying_status">
+                                (Consultando estado al servidor...)</p>
                         </div>
                         <div class="flex flex-col gap-4">
                             <!-- Button Abrir Barrera -->
                             <button id="btn-abrir-barrera"
                                 class="bg-divine-red hover:bg-red-700 text-white py-4 px-6 rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg transition-all active:scale-95 text-base md:text-lg">
-                                Abrir Barrera
+                                <span data-i18n="button.open_barrier">Abrir Barrera</span>
                                 <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
-                                    <path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM8.9 6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9V6z"></path>
+                                    <path
+                                        d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM8.9 6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9V6z">
+                                    </path>
                                 </svg>
                             </button>
                             <!-- Button Cerrar Barreras -->
                             <button id="btn-cerrar-barrera"
                                 class="bg-divine-blue hover:bg-divine-dark-blue text-white py-4 px-6 rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg transition-all active:scale-95 text-base md:text-lg">
-                                Cerrar Barreras
+                                <span data-i18n="button.close_barriers">Cerrar Barreras</span>
                                 <svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
-                                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"></path>
+                                    <path
+                                        d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z">
+                                    </path>
                                 </svg>
                             </button>
                         </div>
@@ -239,15 +279,15 @@
                 <!-- BEGIN: Protocol Description -->
                 <section class="border-2 border-gray-200 bg-white rounded-3xl p-6 md:p-8 shadow-sm"
                     data-purpose="protocol-description">
-                    <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-6">Protocolo de Evacuación y Seguridad
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-6" data-i18n="emergency.protocol_title">Protocolo de Evacuación y Seguridad
                     </h3>
                     <div class="space-y-4 text-gray-600 font-medium leading-relaxed md:text-lg">
-                        <p>
+                        <p data-i18n="emergency.protocol_desc1">
                             En cumplimiento estricto con las normativas internacionales de seguridad y prevención de
                             incendios, este sistema garantiza que ante cualquier situación de evacuación o siniestro
                             detectado, las barreras de Divine Park se abren de forma automática e inmediata.
                         </p>
-                        <p>
+                        <p data-i18n="emergency.protocol_desc2">
                             Este modo anula el sistema de cobro y validación de tickets para evitar cualquier
                             obstrucción, permitiendo que todos los vehículos e individuos abandonen el recinto sin
                             demoras, priorizando la vida humana por encima de cualquier otra consideración operativa.
@@ -262,10 +302,10 @@
                     <div
                         class="bg-white border-2 border-gray-200 p-6 rounded-3xl flex justify-between items-start shadow-sm transition-transform hover:-translate-y-1">
                         <div class="flex flex-col h-full">
-                            <span class="text-gray-900 font-extrabold text-xl mb-6">Detectores de humo</span>
+                            <span class="text-gray-900 font-extrabold text-xl mb-6" data-i18n="emergency.smoke_detectors">Detectores de humo</span>
                             <div class="mt-auto">
                                 <span
-                                    class="bg-green-500 text-white text-xs font-black px-4 py-2 rounded-lg uppercase tracking-wider">Activo</span>
+                                    class="bg-green-500 text-white text-xs font-black px-4 py-2 rounded-lg uppercase tracking-wider" data-i18n="status.active">Activo</span>
                             </div>
                         </div>
                         <div class="text-gray-800 bg-gray-100 p-3 rounded-2xl">
@@ -280,10 +320,10 @@
                     <div
                         class="bg-white border-2 border-gray-200 p-6 rounded-3xl flex justify-between items-start shadow-sm transition-transform hover:-translate-y-1">
                         <div class="flex flex-col h-full">
-                            <span class="text-gray-900 font-extrabold text-xl mb-6">Luces de Emergencia</span>
+                            <span class="text-gray-900 font-extrabold text-xl mb-6" data-i18n="emergency.emergency_lights">Luces de Emergencia</span>
                             <div class="mt-auto">
                                 <span
-                                    class="bg-green-500 text-white text-xs font-black px-4 py-2 rounded-lg uppercase tracking-wider">Activo</span>
+                                    class="bg-green-500 text-white text-xs font-black px-4 py-2 rounded-lg uppercase tracking-wider" data-i18n="status.active">Activo</span>
                             </div>
                         </div>
                         <div class="text-gray-800 bg-gray-100 p-3 rounded-2xl">
@@ -298,10 +338,10 @@
                     <div
                         class="bg-white border-2 border-gray-200 p-6 rounded-3xl flex justify-between items-start shadow-sm transition-transform hover:-translate-y-1">
                         <div class="flex flex-col h-full">
-                            <span class="text-gray-900 font-extrabold text-xl mb-6">Intercomunicadores</span>
+                            <span class="text-gray-900 font-extrabold text-xl mb-6" data-i18n="emergency.intercoms">Intercomunicadores</span>
                             <div class="mt-auto">
                                 <span
-                                    class="bg-gray-200 text-gray-500 text-xs font-black px-4 py-2 rounded-lg uppercase tracking-wider">Inactivo</span>
+                                    class="bg-gray-200 text-gray-500 text-xs font-black px-4 py-2 rounded-lg uppercase tracking-wider" data-i18n="status.inactive">Inactivo</span>
                             </div>
                         </div>
                         <div class="text-gray-800 bg-gray-100 p-3 rounded-2xl">

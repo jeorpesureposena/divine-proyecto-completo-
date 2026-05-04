@@ -4,22 +4,14 @@
 :root {
   --sidebar-width: 260px;
   --topbar-height: 70px;
-  --primary-blue: var(--primary-color);
-  --primary-hover: #00154d;
-  --secondary-bg: #f5f7fa;
-  --white: #ffffff;
-  --text-dark: #1e293b;
-  --text-muted: #64748b;
-  --success-color: #2e7d32;
-  --error-color: #d32f2f;
-  --radius: 12px;
+  --primary-hover: var(--primary-dark);
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', 'Roboto', sans-serif;
-  background-color: var(--secondary-bg);
-  color: var(--text-dark);
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
 }
 
 .dashboard-layout {
@@ -146,7 +138,7 @@ body {
 .page-header h1 {
   margin: 0 0 5px 0;
   font-size: 1.8rem;
-  color: var(--text-dark);
+  color: var(--text-primary);
 }
 
 /* --- CARDS & GRID --- */
@@ -194,7 +186,7 @@ body {
 .stat-details .value {
   font-size: 1.8rem;
   font-weight: bold;
-  color: var(--text-dark);
+  color: var(--text-primary);
 }
 
 /* --- ACCIONES RAPIDAS --- */
@@ -333,7 +325,7 @@ body {
 
 .toast {
   background: var(--white);
-  color: var(--text-dark);
+  color: var(--text-primary);
   padding: 12px 20px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);

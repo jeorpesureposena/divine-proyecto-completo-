@@ -70,7 +70,7 @@ function renderPage() {
     const pageUsers = filteredUsers.slice(start, start + PAGE_SIZE);
 
     if (pageUsers.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-10 text-center text-gray-400">No se encontraron usuarios.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="py-10 text-center text-gray-500 font-semibold" data-i18n="table.no_users">No hay usuarios para mostrar.</td></tr>`;
     } else {
         pageUsers.forEach(u => tbody.appendChild(buildRow(u)));
         attachRowHandlers();
@@ -80,11 +80,12 @@ function renderPage() {
         tableInfo.textContent = `Mostrando ${start + 1}–${Math.min(start + PAGE_SIZE, filteredUsers.length)} de ${filteredUsers.length} usuarios`;
     }
 
-    // Pagination buttons
     const btnPrev = document.getElementById('btn-prev');
     const btnNext = document.getElementById('btn-next');
     if (btnPrev) btnPrev.disabled = currentPage <= 1;
     if (btnNext) btnNext.disabled = start + PAGE_SIZE >= filteredUsers.length;
+    
+    if (window.i18n) window.i18n.applyLanguage();
 }
 
 // ─── Cargar usuarios desde el backend ────────────────────────────
@@ -99,7 +100,7 @@ async function loadUsers() {
         const el = document.getElementById('stat-usuarios-activos');
         if (el) el.textContent = activos;
         const trend = document.getElementById('stat-usuarios-trend');
-        if (trend) trend.textContent = `${allUsers.length} registrados en total`;
+        if (trend) trend.innerHTML = `<span data-i18n="users.total_registered_prefix"></span>${allUsers.length} <span data-i18n="users.total_registered_suffix">registrados en total</span>`;
 
         // Sesiones activas (from stats endpoint if available)
         try {

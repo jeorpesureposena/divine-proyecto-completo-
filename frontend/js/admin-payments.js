@@ -70,7 +70,7 @@ function renderPage() {
     const page  = filteredPayments.slice(start, start + PAGE_SIZE);
 
     if (page.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="py-10 text-center text-slate-400">No hay pagos para mostrar.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="py-10 text-center text-slate-400" data-i18n="table.no_payments">No hay pagos para mostrar.</td></tr>`;
     } else {
         page.forEach(p => tbody.appendChild(buildRow(p)));
         attachRowHandlers();
@@ -82,6 +82,8 @@ function renderPage() {
     const next = document.getElementById('btn-next');
     if (prev) prev.disabled = currentPage <= 1;
     if (next) next.disabled = start + PAGE_SIZE >= filteredPayments.length;
+
+    if (window.i18n) window.i18n.applyLanguage();
 }
 
 // ─── Cargar pagos ─────────────────────────────────────────────────

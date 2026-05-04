@@ -43,101 +43,110 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
-        .sidebar-item-active {
-            background: linear-gradient(90deg, #00E5FF 0%, #00B8D4 100%);
+        .card-shadow {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-active {
+            background-color: #00F0FF;
             color: #001A8E;
         }
     </style>
 </head>
 
-<body class="bg-gray-50 font-sans text-gray-800 antialiased">
-    <div class="flex min-h-screen">
+<body class="bg-gray-50 font-sans text-gray-800 antialiased h-screen overflow-hidden">
+    <div class="flex h-screen">
         <!-- BEGIN: Sidebar -->
-        <aside class="w-64 bg-divine-blue text-white flex flex-col shrink-0" data-purpose="sidebar">
-            <!-- Logo Section -->
-            <div class="p-6 flex items-center gap-3">
-                <img alt="Divine Park Logo" class="w-10 h-10 rounded-lg object-cover"
-                    src="https://lh3.googleusercontent.com/aida/ADBb0ugz4H7pe8RkJAe06ptIpILHFM1VzCXWV-elAhzijBp-k9a-hOXGCPw3Rhq8GeT3ppY8QmdlRPq_OkoZ6WjxGGyZWZUUKZAbwx0PA4jmz_97BMBj9TLX-Gm0Awm9w00mhJm7b8Q53zHrdKdrb3vdgsrRz-qICgHUngUH3z5XhwsBbvngNY0vJuCnk4NT-8b4lHL9e3xfUwMNig3oIRNF_W5CSPJXRp7cBRg1AxGrBUK3Lny5ZzWQ255XK5c8tOEXpkikKkovYtoaw9c"
-                    style="object-position: 0 0; width: 40px; height: 40px;" />
-                <span class="text-xl font-bold tracking-tight">Divine Park</span>
-            </div>
-            <!-- Navigation Menu -->
-            <nav class="flex-1 px-4 mt-4 space-y-2" data-purpose="main-navigation">
-                <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="dashboard-admin.html">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                    <span class="font-medium">Tablero Principal</span>
-                </a>
-                <a class="sidebar-item-active flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg" href="admin-User-Management.html">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                    <span class="font-bold" data-i18n="users.title">Gestión de Usuarios</span>
-                </a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="Monitoring-and-Sensors.html">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2"></path>
-                    </svg>
-                    <span class="font-medium">Monitoreo y Sensores</span>
-                </a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="admin-Payments-and-Billing.html">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                    <span class="font-medium">Pagos y Facturación</span>
-                </a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="reports-of-time-admin.html">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                    <span class="font-medium">Reportes</span>
-                </a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors" href="settings-admin.html">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2"></path>
-                    </svg>
-                    <span class="font-medium">Configuración</span>
-                </a>
-            </nav>
-            <!-- Logout Section -->
-            <div class="p-6 border-t border-white/10">
-                <button class="flex items-center gap-3 w-full px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                    <span class="font-medium text-lg">Cerrar Sesión</span>
-                </button>
-            </div>
-        </aside>
+        <aside class="w-64 bg-divine-blue text-white flex flex-col flex-shrink-0 h-full" data-purpose="main-navigation">
+        <!-- Brand Logo -->
+        <div class="p-6 flex items-center gap-3">
+            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+                src="https://lh3.googleusercontent.com/aida/ADBb0uivJ-MMYS6AUwo_1n4gdeQx5hADWTNzNieHQHmm1oaqgweyhx2Gdh3QNM-xJnVpXs3fIujoDXvd_ocTGEHnPXdRmgKVyezK4fph1tixvBNHHeDtvurHWJ5VvQK0tvnaBRsCvRndYzvFE9DvIQXlK_YbovpitS896uFho2H016ZnSdMchhEt976Tvya4ABpMbwclxRrcqlmx6Hwh4FexXWwaG78VsWYaIFkEPldn5AcTnK-e5Tl3zf6__0Xm1BGgINEpKlMNkvoMEhI" />
+            <span class="text-xl font-extrabold tracking-tight">Divine Park</span>
+        </div>
+        <!-- Navigation Links -->
+        <nav class="flex-grow px-4 space-y-2 mt-4">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="dashboard-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.dashboard" data-i18n="dashboard.title">Tablero Principal</span>
+            </a>
+            <a class="sidebar-active flex items-center gap-3 px-4 py-3 rounded-divine font-bold transition-colors"
+                href="admin-User-Management.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.users">Gestión de Usuarios</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="Monitoring-and-Sensors.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.monitoring">Monitoreo y Sensores</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-Payments-and-Billing.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.payments">Pagos y Facturación</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="reports-of-time-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.reports">Reportes</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="settings-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.settings">Configuración</span>
+            </a>
+        </nav>
+        <!-- Logout -->
+        <div class="p-6 mt-auto">
+            <button id="logout-btn"
+                class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white transition-colors w-full text-left font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.logout">Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
         <!-- END: Sidebar -->
         <!-- BEGIN: Main Content -->
         <main class="flex-1 overflow-y-auto p-8" data-purpose="main-content">
             <!-- Header Section -->
             <header class="mb-8">
                 <h1 class="text-3xl font-bold text-gray-900" data-i18n="users.title">Gestión de Usuarios</h1>
-                <p class="text-gray-400 mt-1">Administración de perfiles, roles y accesos del sistema</p>
+                <p class="text-gray-400 mt-1" data-i18n="users.subtitle">Administración de roles y accesos al sistema</p>
             </header>
             <!-- BEGIN: Metric Cards Section -->
             <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" data-purpose="metrics-row">
@@ -152,7 +161,7 @@
                                 stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                         </svg>
                     </div>
-                    <h3 class="text-gray-400 font-medium">Usuarios Activos</h3>
+                    <h3 class="text-gray-400 font-medium" data-i18n="users.active_users">Usuarios Activos</h3>
                     <p id="stat-usuarios-activos" class="text-3xl font-bold text-gray-900 my-1">--</p>
                     <span id="stat-usuarios-trend" class="text-green-500 text-sm font-medium">Cargando...</span>
                 </div>
@@ -167,10 +176,10 @@
                                 stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                         </svg>
                     </div>
-                    <h3 class="text-gray-400 font-medium">Nuevos Hoy</h3>
+                    <h3 class="text-gray-400 font-medium" data-i18n="users.new_today">Nuevos Hoy</h3>
                     <div class="flex items-center justify-center gap-3 my-1">
                         <p id="stat-nuevos-hoy" class="text-3xl font-bold text-gray-900">--</p>
-                        <div class="text-left text-xs text-purple-400 leading-tight">
+                        <div class="text-left text-xs text-purple-400 leading-tight" data-i18n="users.recent_registrations">
                             Registros<br />Recientes
                         </div>
                     </div>
@@ -183,10 +192,10 @@
                             <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-gray-400 font-medium">Sesiones Activas</h3>
+                    <h3 class="text-gray-400 font-medium" data-i18n="users.active_sessions">Sesiones Activas</h3>
                     <div class="flex items-center justify-center gap-3 my-1">
                         <p id="stat-sesiones-activas" class="text-3xl font-bold text-gray-900">--</p>
-                        <span class="text-blue-400 text-xs">Tiempo real</span>
+                        <span class="text-blue-400 text-xs" data-i18n="users.real_time">Tiempo real</span>
                     </div>
                 </div>
             </section>
@@ -203,11 +212,11 @@
                     </div>
                     <input id="search-input"
                         class="block w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-divine-blue focus:border-divine-blue text-sm card-shadow"
-                        placeholder="Buscar por Nombre, correo o ID..." type="text" />
+                        placeholder="Buscar por Nombre, correo o ID..." data-i18n="users.search_placeholder" type="text" />
                 </div>
                 <button
                     class="bg-white border border-gray-200 px-6 py-3 rounded-xl text-gray-500 text-sm font-medium flex items-center gap-2 card-shadow hover:bg-gray-50 transition-colors">
-                    <span>Rol : Todos</span>
+                    <span data-i18n="users.role_all">Rol : Todos</span>
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
@@ -221,13 +230,13 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-gray-100">
-                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider">Nombre
+                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.id">ID</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.fullname">Nombre
                                 Completo</th>
-                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider">Correo
+                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.email">Correo
                                 Electrónico</th>
                             <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.role">Rol</th>
-                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider">Ultima
+                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.last_connection">Ultima
                                 Conexión</th>
                             <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.status">Estado</th>
                             <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.actions">Acciones</th>
@@ -239,7 +248,7 @@
                 </table>
                 <!-- Table Pagination Footer -->
                 <div class="px-6 py-4 bg-white border-t border-gray-100 flex items-center justify-between">
-                    <p id="table-info" class="text-sm text-gray-400">Cargando usuarios...</p>
+                    <p id="table-info" class="text-sm text-gray-400" data-i18n="status.loading">Cargando usuarios...</p>
                     <div class="flex items-center gap-4">
                         <button id="btn-prev" class="text-sm font-medium text-gray-400 hover:text-gray-600" data-i18n="pagination.prev">Anterior</button>
                         <button id="btn-next" class="text-sm font-bold text-divine-blue" data-i18n="pagination.next">Siguiente</button>
@@ -257,7 +266,7 @@
         <div id="modal-backdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
         <!-- Panel -->
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 z-10 p-8">
-            <h2 class="text-xl font-bold text-gray-900 mb-6">Editar Usuario</h2>
+            <h2 class="text-xl font-bold text-gray-900 mb-6" data-i18n="modal.edit_user">Editar Usuario</h2>
             <form id="edit-form" class="space-y-4">
                 <input type="hidden" id="edit-user-id" />
                 <!-- Nombre -->
@@ -269,7 +278,7 @@
                 </div>
                 <!-- Correo -->
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" for="edit-correo">Correo Electrónico</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" for="edit-correo" data-i18n="table.email">Correo Electrónico</label>
                     <input id="edit-correo" type="email"
                         class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
                         placeholder="correo@ejemplo.com" />
@@ -286,9 +295,9 @@
                 <!-- Botones -->
                 <div class="flex justify-end gap-3 pt-2">
                     <button type="button" id="modal-cancel"
-                        class="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-500 border border-gray-200 hover:bg-gray-50 transition">Cancelar</button>
+                        class="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-500 border border-gray-200 hover:bg-gray-50 transition" data-i18n="button.cancel">Cancelar</button>
                     <button type="submit"
-                        class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-divine-blue hover:bg-blue-900 transition">Guardar Cambios</button>
+                        class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-divine-blue hover:bg-blue-900 transition" data-i18n="modal.save_changes">Guardar Cambios</button>
                 </div>
             </form>
         </div>

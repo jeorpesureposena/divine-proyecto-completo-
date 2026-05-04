@@ -18,7 +18,13 @@ async function loadTarifa() {
             ? tarifas.find(t => t.activa) || tarifas[0]
             : null;
 
-        if (!activa) return;
+        if (!activa) {
+            const updated = document.getElementById('tarifa-updated');
+            if (updated) {
+                updated.textContent = 'No hay tarifas configuradas';
+            }
+            return;
+        }
 
         tarifaActivaId = activa.id;
 
@@ -44,6 +50,10 @@ async function loadTarifa() {
 
     } catch (err) {
         console.error('Error cargando tarifas:', err);
+        const updated = document.getElementById('tarifa-updated');
+        if (updated) {
+            updated.textContent = 'Error al cargar la tarifa';
+        }
     }
 }
 

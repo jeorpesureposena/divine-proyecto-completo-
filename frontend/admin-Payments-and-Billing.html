@@ -21,6 +21,8 @@
                 extend: {
                     colors: {
                         primary: '#001A8E',
+                        'divine-blue': '#001A8E',
+                        'divine-cyan': '#00F0FF',
                         'surface-light': '#f8f9fa',
                         'surface-dim': '#d9dadb',
                         success: '#4ADE80',
@@ -37,6 +39,11 @@
         }
     </script>
     <style data-purpose="custom-scrollbar">
+        .sidebar-active {
+            background-color: #00F0FF;
+            color: #001A8E;
+        }
+
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -54,46 +61,86 @@
 
 <body class="font-manrope bg-surface-light text-slate-800 antialiased h-screen flex overflow-hidden">
     <!-- BEGIN: Sidebar -->
-    <aside class="w-72 bg-primary text-white flex flex-col flex-shrink-0">
+    <aside class="w-64 bg-divine-blue text-white flex flex-col flex-shrink-0 h-full" data-purpose="main-navigation">
+        <!-- Brand Logo -->
         <div class="p-6 flex items-center gap-3">
-            <img alt="Divine Park Logo" class="w-12 h-12 rounded-full object-cover border-2 border-white/20"
-                data-purpose="app-logo"
-                src="https://lh3.googleusercontent.com/aida/ADBb0uiGVCuZDpIGjnwRvm4t1oSpCMHfxcVIq8xtWUE_sToTXdMMjKpwhOm8aWcYMxR5vD_jDMWQ7jaHoDla_t2MPr_i0xDbLzlvCFw3WnZCoIYzSdlGFzK7lHnt-3AMAM9kNK-9cKkzI89x0lvX_v-3XlfxmUDS0QXsvDl2XE55QQufD0z_D8_3QHwNVjepmGd_CVJQDx85ko6L4Pi64TDc4TR7YllFMazfqmTHxuBsnQ49mCyEMpOuQ2XHuBga7gsTq08fjn_FcpWnedg" />
-            <h1 class="text-2xl font-extrabold tracking-tight">Divine Park</h1>
+            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+                src="https://lh3.googleusercontent.com/aida/ADBb0uivJ-MMYS6AUwo_1n4gdeQx5hADWTNzNieHQHmm1oaqgweyhx2Gdh3QNM-xJnVpXs3fIujoDXvd_ocTGEHnPXdRmgKVyezK4fph1tixvBNHHeDtvurHWJ5VvQK0tvnaBRsCvRndYzvFE9DvIQXlK_YbovpitS896uFho2H016ZnSdMchhEt976Tvya4ABpMbwclxRrcqlmx6Hwh4FexXWwaG78VsWYaIFkEPldn5AcTnK-e5Tl3zf6__0Xm1BGgINEpKlMNkvoMEhI" />
+            <span class="text-xl font-extrabold tracking-tight">Divine Park</span>
         </div>
-        <nav class="mt-4 flex-1 px-4 space-y-1 overflow-y-auto">
-            <a class="flex items-center gap-3 px-4 py-3 rounded-custom hover:bg-white/10 transition-colors" href="dashboard-admin.html">
-                <i class="fa-solid fa-table-cells-large w-6 text-center"></i>
-                <span class="font-semibold">Tablero Principal</span>
+        <!-- Navigation Links -->
+        <nav class="flex-grow px-4 space-y-2 mt-4">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="dashboard-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.dashboard" data-i18n="dashboard.title">Tablero Principal</span>
             </a>
-            <a class="flex items-center gap-3 px-4 py-3 rounded-custom hover:bg-white/10 transition-colors" href="admin-User-Management.html">
-                <i class="fa-solid fa-users-gear w-6 text-center"></i>
-                <span class="font-semibold">Gestión de Usuarios</span>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-User-Management.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.users">Gestión de Usuarios</span>
             </a>
-            <a class="flex items-center gap-3 px-4 py-3 rounded-custom hover:bg-white/10 transition-colors" href="Monitoring-and-Sensors.html">
-                <i class="fa-solid fa-bolt w-6 text-center"></i>
-                <span class="font-semibold">Monitoreo y Sensores</span>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="Monitoring-and-Sensors.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.monitoring">Monitoreo y Sensores</span>
             </a>
-            <!-- Active Link -->
-            <a aria-current="page"
-                class="flex items-center gap-3 px-4 py-3 rounded-custom bg-cyan-400 text-primary shadow-lg shadow-cyan-400/20"
+            <a class="sidebar-active flex items-center gap-3 px-4 py-3 rounded-divine font-bold transition-colors"
                 href="admin-Payments-and-Billing.html">
-                <i class="fa-solid fa-credit-card w-6 text-center"></i>
-                <span class="font-bold" data-i18n="payments.title">Pagos y Facturación</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.payments">Pagos y Facturación</span>
             </a>
-            <a class="flex items-center gap-3 px-4 py-3 rounded-custom hover:bg-white/10 transition-colors" href="reports-of-time-admin.html">
-                <i class="fa-solid fa-file-lines w-6 text-center"></i>
-                <span class="font-semibold">Reportes</span>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="reports-of-time-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.reports">Reportes</span>
             </a>
-            <a class="flex items-center gap-3 px-4 py-3 rounded-custom hover:bg-white/10 transition-colors" href="settings-admin.html">
-                <i class="fa-solid fa-gear w-6 text-center"></i>
-                <span class="font-semibold">Configuración</span>
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="settings-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.settings">Configuración</span>
             </a>
         </nav>
-        <div class="p-4 mt-auto border-t border-white/10">
-            <button id="btn-logout" class="flex items-center gap-3 px-4 py-3 rounded-custom hover:bg-white/10 transition-colors text-white/80 w-full">
-                <i class="fa-solid fa-right-from-bracket w-6 text-center"></i>
-                <span class="font-semibold">Cerrar Sesión</span>
+        <!-- Logout -->
+        <div class="p-6 mt-auto">
+            <button id="logout-btn"
+                class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white transition-colors w-full text-left font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span data-i18n="nav.logout">Cerrar Sesión</span>
             </button>
         </div>
     </aside>
@@ -103,7 +150,7 @@
         <!-- BEGIN: Header Section -->
         <header class="p-8 pb-4">
             <h2 class="text-3xl font-extrabold text-slate-900" data-i18n="payments.title">Pagos y Facturación</h2>
-            <p class="text-slate-400 font-medium mt-1">Gestión de pagos, facturas y transacciones del parqueadero</p>
+            <p class="text-slate-400 font-medium mt-1" data-i18n="payments.subtitle">Gestión de pagos, facturas y transacciones del parqueadero</p>
         </header>
         <!-- END: Header Section -->
         <!-- BEGIN: Stats Dashboard -->
@@ -113,7 +160,7 @@
                 <div class="w-10 h-10 bg-green-100 flex items-center justify-center rounded-lg text-green-600">
                     <i class="fa-solid fa-dollar-sign text-xl"></i>
                 </div>
-                <h3 class="text-slate-500 font-semibold text-sm mt-2">Recaudado Hoy</h3>
+                <h3 class="text-slate-500 font-semibold text-sm mt-2" data-i18n="payments.collected_today">Recaudado Hoy</h3>
                 <div class="flex items-baseline gap-2">
                     <span id="stat-recaudado" class="text-2xl font-extrabold">-- <span
                             class="text-lg font-bold uppercase">cop</span></span>
@@ -125,11 +172,11 @@
                 <div class="w-10 h-10 bg-purple-100 flex items-center justify-center rounded-lg text-purple-600">
                     <i class="fa-solid fa-calendar-days text-xl"></i>
                 </div>
-                <h3 class="text-slate-500 font-semibold text-sm mt-2">Pagos del Mes</h3>
+                <h3 class="text-slate-500 font-semibold text-sm mt-2" data-i18n="payments.payments_month">Pagos del Mes</h3>
                 <div class="flex items-center gap-3">
                     <span id="stat-pagos-mes" class="text-3xl font-extrabold">--</span>
                     <span
-                        class="text-xs text-purple-400 font-bold leading-tight uppercase">Transacciones<br />Procesadas</span>
+                        class="text-xs text-purple-400 font-bold leading-tight uppercase" data-i18n="payments.processed_transactions">Transacciones<br />Procesadas</span>
                 </div>
             </article>
             <!-- Facturas Emitidas -->
@@ -137,11 +184,11 @@
                 <div class="w-10 h-10 bg-blue-100 flex items-center justify-center rounded-lg text-blue-700">
                     <i class="fa-solid fa-file-invoice text-xl"></i>
                 </div>
-                <h3 class="text-slate-500 font-semibold text-sm mt-2">Facturas Emitidas</h3>
+                <h3 class="text-slate-500 font-semibold text-sm mt-2" data-i18n="payments.issued_invoices">Facturas Emitidas</h3>
                 <div class="flex items-center gap-3">
                     <span id="stat-facturas" class="text-3xl font-extrabold">--</span>
                     <span
-                        class="text-xs text-blue-400 font-bold leading-tight uppercase">Documentos<br />Fiscales</span>
+                        class="text-xs text-blue-400 font-bold leading-tight uppercase" data-i18n="payments.fiscal_documents">Documentos<br />Fiscales</span>
                 </div>
             </article>
         </section>
@@ -154,22 +201,22 @@
                 </span>
                 <input
                     class="block w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-primary focus:border-primary text-sm"
-                    id="search-transactions" name="search" placeholder="Buscar por placa o usuario..." type="text" />
+                    id="search-transactions" name="search" placeholder="Buscar por placa o usuario..." type="text" data-i18n="payments.search_placeholder" />
             </div>
             <div class="flex flex-wrap items-center gap-2">
                 <button
                     class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 flex items-center gap-2">
-                    Fecha : <span class="text-slate-900 font-bold">hoy</span>
+                    <span data-i18n="filter.date">Fecha : </span> <span class="text-slate-900 font-bold" data-i18n="filter.today">hoy</span>
                 </button>
                 <button
                     class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 flex items-center gap-2">
-                    Estado : <span class="text-slate-900 font-bold">Todos</span>
+                    <span data-i18n="filter.status">Estado : </span> <span class="text-slate-900 font-bold" data-i18n="filter.all_f">Todos</span>
                 </button>
                 <button
                     class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-50 flex items-center gap-2">
-                    Métodos : <span class="text-slate-900 font-bold">Todos</span>
+                    <span data-i18n="filter.methods">Métodos : </span> <span class="text-slate-900 font-bold" data-i18n="filter.all_m">Todos</span>
                 </button>
-                <button class="text-primary text-sm font-bold ml-2 hover:underline">Limpiar Filtros</button>
+                <button class="text-primary text-sm font-bold ml-2 hover:underline" data-i18n="button.clear_filters">Limpiar Filtros</button>
             </div>
         </section>
         <!-- END: Filters & Actions -->
@@ -179,14 +226,14 @@
                 <table class="w-full text-left" id="transactions-table">
                     <thead class="border-b border-slate-200">
                         <tr>
-                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase">Id Pago</th>
-                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase">Placa</th>
-                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase">Usuario</th>
-                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase">Fecha y Hora</th>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase" data-i18n="table.payment_id">Id Pago</th>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase" data-i18n="table.plate">Placa</th>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase" data-i18n="table.user">Usuario</th>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase" data-i18n="table.date_time">Fecha y Hora</th>
                             <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase" data-i18n="table.method">Método</th>
                             <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase text-right" data-i18n="table.amount">Monto</th>
                             <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase text-center" data-i18n="table.status">Estado</th>
-                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase text-center">Acciones</th>
+                            <th class="py-4 px-2 text-xs font-extrabold text-slate-950 uppercase text-center" data-i18n="table.actions">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="payments-tbody" class="divide-y divide-slate-100">
@@ -198,7 +245,7 @@
         <!-- END: Transaction Table -->
         <!-- BEGIN: Pagination -->
         <footer class="px-8 py-4 bg-white border-t border-slate-100 flex justify-between items-center">
-            <span id="pagos-info" class="text-sm text-slate-400">Cargando...</span>
+            <span id="pagos-info" class="text-sm text-slate-400" data-i18n="status.loading_short">Cargando...</span>
             <div class="flex gap-6">
                 <button id="btn-prev" class="text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors" data-i18n="pagination.prev">Anterior</button>
                 <button id="btn-next" class="text-sm font-bold text-primary hover:text-blue-800 transition-colors" data-i18n="pagination.next">Siguiente</button>
