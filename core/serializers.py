@@ -3,7 +3,8 @@ from django.contrib.auth.password_validation import validate_password
 from .models import (
     Usuario, Vehiculo, EspacioParqueo, Sensor, Tarifa, Reserva,
     SesionParqueo, Pago, EventoAcceso, AutorizacionExcepcional,
-    CamaraOCR, LecturaOCR, Barrera, Notificacion, Reporte
+    CamaraOCR, LecturaOCR, Barrera, Notificacion, Reporte,
+    Billetera, Recarga
 )
 
 
@@ -55,6 +56,7 @@ class VehiculoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehiculo
         fields = '__all__'
+        read_only_fields = ['usuario']
 
 
 class EspacioParqueoSerializer(serializers.ModelSerializer):
@@ -83,10 +85,21 @@ class ReservaSerializer(serializers.ModelSerializer):
     usuario_nombre = serializers.CharField(source='usuario.nombre', read_only=True)
     vehiculo_placa = serializers.CharField(source='vehiculo.placa', read_only=True)
     espacio_numero = serializers.IntegerField(source='espacio.numero', read_only=True)
+    espacio_zona   = serializers.CharField(source='espacio.zona', read_only=True)
+    monto_total    = serializers.SerializerMethodField()
+    metodo_pago    = serializers.SerializerMethodField()
 
     class Meta:
         model = Reserva
         fields = '__all__'
+
+    def get_monto_total(self, obj):
+        pago = obj.pagos.first()
+        return pago.monto if pago else 0
+
+    def get_metodo_pago(self, obj):
+        pago = obj.pagos.first()
+        return pago.metodo if pago else 'N/A'
 
 
 class SesionParqueoSerializer(serializers.ModelSerializer):
@@ -150,3 +163,27 @@ class ReporteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reporte
         fields = '__all__'
+
+
+# ─── BILLETERA ────────────────────────────────────────────────────
+class BilleteraSerializer(serializers.ModelSerializer):
+    usuario_nombre = serializers.CharField(source='usuario.nombre', read_only=True)
+
+    class Meta:
+        model = Billetera
+        fields = ['id', 'usuario', 'usuario_nombre', 'saldo', 'actualizado']
+        read_only_fields = ['usuario', 'actualizado']
+
+
+# ─── RECARGA ──────────────────────────────────────────────────────
+class RecargaSerializer(serializers.ModelSerializer):
+    billetera_id    = serializers.IntegerField(source='billetera.id', read_only=True)
+    usuario_nombre  = serializers.CharField(source='billetera.usuario.nombre', read_only=True)
+    metodo_display  = serializers.CharField(source='get_metodo_display', read_only=True)
+    estado_display  = serializers.CharField(source='get_estado_display', read_only=True)
+
+    class Meta:
+        model = Recarga
+        fields = ['id', 'billetera_id', 'usuario_nombre', 'monto', 'metodo',
+                  'metodo_display', 'estado', 'estado_display', 'fecha']
+        read_only_fields = ['fecha']

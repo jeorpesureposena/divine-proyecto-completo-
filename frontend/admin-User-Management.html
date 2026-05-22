@@ -58,95 +58,97 @@
     <div class="flex h-screen">
         <!-- BEGIN: Sidebar -->
         <aside class="w-64 bg-divine-blue text-white flex flex-col flex-shrink-0 h-full" data-purpose="main-navigation">
-        <!-- Brand Logo -->
-        <div class="p-6 flex items-center gap-3">
-            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border-2 border-white/20"
-                src="https://lh3.googleusercontent.com/aida/ADBb0uivJ-MMYS6AUwo_1n4gdeQx5hADWTNzNieHQHmm1oaqgweyhx2Gdh3QNM-xJnVpXs3fIujoDXvd_ocTGEHnPXdRmgKVyezK4fph1tixvBNHHeDtvurHWJ5VvQK0tvnaBRsCvRndYzvFE9DvIQXlK_YbovpitS896uFho2H016ZnSdMchhEt976Tvya4ABpMbwclxRrcqlmx6Hwh4FexXWwaG78VsWYaIFkEPldn5AcTnK-e5Tl3zf6__0Xm1BGgINEpKlMNkvoMEhI" />
-            <span class="text-xl font-extrabold tracking-tight">Divine Park</span>
-        </div>
-        <!-- Navigation Links -->
-        <nav class="flex-grow px-4 space-y-2 mt-4">
-            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
-                href="dashboard-admin.html">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                </svg>
-                <span data-i18n="nav.dashboard" data-i18n="dashboard.title">Tablero Principal</span>
-            </a>
-            <a class="sidebar-active flex items-center gap-3 px-4 py-3 rounded-divine font-bold transition-colors"
-                href="admin-User-Management.html">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                </svg>
-                <span data-i18n="nav.users">Gestión de Usuarios</span>
-            </a>
-            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
-                href="Monitoring-and-Sensors.html">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
-                        stroke-width="2"></path>
-                </svg>
-                <span data-i18n="nav.monitoring">Monitoreo y Sensores</span>
-            </a>
-            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
-                href="admin-Payments-and-Billing.html">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                </svg>
-                <span data-i18n="nav.payments">Pagos y Facturación</span>
-            </a>
-            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
-                href="reports-of-time-admin.html">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                </svg>
-                <span data-i18n="nav.reports">Reportes</span>
-            </a>
-            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
-                href="settings-admin.html">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
-                        stroke-width="2"></path>
-                </svg>
-                <span data-i18n="nav.settings">Configuración</span>
-            </a>
-        </nav>
-        <!-- Logout -->
-        <div class="p-6 mt-auto">
-            <button id="logout-btn"
-                class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white transition-colors w-full text-left font-semibold">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                </svg>
-                <span data-i18n="nav.logout">Cerrar Sesión</span>
-            </button>
-        </div>
-    </aside>
+            <!-- Brand Logo -->
+            <div class="p-6 flex items-center gap-3">
+                <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+                    src="https://lh3.googleusercontent.com/aida/ADBb0uivJ-MMYS6AUwo_1n4gdeQx5hADWTNzNieHQHmm1oaqgweyhx2Gdh3QNM-xJnVpXs3fIujoDXvd_ocTGEHnPXdRmgKVyezK4fph1tixvBNHHeDtvurHWJ5VvQK0tvnaBRsCvRndYzvFE9DvIQXlK_YbovpitS896uFho2H016ZnSdMchhEt976Tvya4ABpMbwclxRrcqlmx6Hwh4FexXWwaG78VsWYaIFkEPldn5AcTnK-e5Tl3zf6__0Xm1BGgINEpKlMNkvoMEhI" />
+                <span class="text-xl font-extrabold tracking-tight">Divine Park</span>
+            </div>
+            <!-- Navigation Links -->
+            <nav class="flex-grow px-4 space-y-2 mt-4">
+                <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl font-semibold transition-colors"
+                    href="dashboard-admin.html">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    <span data-i18n="nav.dashboard" data-i18n="dashboard.title">Tablero Principal</span>
+                </a>
+                <a class="sidebar-active flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors"
+                    href="admin-User-Management.html">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    <span data-i18n="nav.users">Gestión de Usuarios</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl font-semibold transition-colors"
+                    href="Monitoring-and-Sensors.html">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"></path>
+                    </svg>
+                    <span data-i18n="nav.monitoring">Monitoreo y Sensores</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl font-semibold transition-colors"
+                    href="admin-Payments-and-Billing.html">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    <span data-i18n="nav.payments">Pagos y Facturación</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl font-semibold transition-colors"
+                    href="reports-of-time-admin.html">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    <span data-i18n="nav.reports">Reportes</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-xl font-semibold transition-colors"
+                    href="settings-admin.html">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"></path>
+                    </svg>
+                    <span data-i18n="nav.settings">Configuración</span>
+                </a>
+            </nav>
+            <!-- Logout -->
+            <div class="p-6 mt-auto">
+                <button id="logout-btn"
+                    class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white transition-colors w-full text-left font-semibold">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                    <span data-i18n="nav.logout">Cerrar Sesión</span>
+                </button>
+            </div>
+        </aside>
         <!-- END: Sidebar -->
         <!-- BEGIN: Main Content -->
         <main class="flex-1 overflow-y-auto p-8" data-purpose="main-content">
             <!-- Header Section -->
             <header class="mb-8">
                 <h1 class="text-3xl font-bold text-gray-900" data-i18n="users.title">Gestión de Usuarios</h1>
-                <p class="text-gray-400 mt-1" data-i18n="users.subtitle">Administración de roles y accesos al sistema</p>
+                <p class="text-gray-400 mt-1" data-i18n="users.subtitle">Administración de roles y accesos al sistema
+                </p>
             </header>
             <!-- BEGIN: Metric Cards Section -->
             <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" data-purpose="metrics-row">
@@ -179,7 +181,8 @@
                     <h3 class="text-gray-400 font-medium" data-i18n="users.new_today">Nuevos Hoy</h3>
                     <div class="flex items-center justify-center gap-3 my-1">
                         <p id="stat-nuevos-hoy" class="text-3xl font-bold text-gray-900">--</p>
-                        <div class="text-left text-xs text-purple-400 leading-tight" data-i18n="users.recent_registrations">
+                        <div class="text-left text-xs text-purple-400 leading-tight"
+                            data-i18n="users.recent_registrations">
                             Registros<br />Recientes
                         </div>
                     </div>
@@ -212,7 +215,8 @@
                     </div>
                     <input id="search-input"
                         class="block w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-divine-blue focus:border-divine-blue text-sm card-shadow"
-                        placeholder="Buscar por Nombre, correo o ID..." data-i18n="users.search_placeholder" type="text" />
+                        placeholder="Buscar por Nombre, correo o ID..." data-i18n="users.search_placeholder"
+                        type="text" />
                 </div>
                 <button
                     class="bg-white border border-gray-200 px-6 py-3 rounded-xl text-gray-500 text-sm font-medium flex items-center gap-2 card-shadow hover:bg-gray-50 transition-colors">
@@ -230,16 +234,23 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-gray-100">
-                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.id">ID</th>
-                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.fullname">Nombre
+                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider"
+                                data-i18n="table.id">ID</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider"
+                                data-i18n="table.fullname">Nombre
                                 Completo</th>
-                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.email">Correo
+                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider"
+                                data-i18n="table.email">Correo
                                 Electrónico</th>
-                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.role">Rol</th>
-                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.last_connection">Ultima
+                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider"
+                                data-i18n="table.role">Rol</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider"
+                                data-i18n="table.last_connection">Ultima
                                 Conexión</th>
-                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.status">Estado</th>
-                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider" data-i18n="table.actions">Acciones</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider"
+                                data-i18n="table.status">Estado</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-900 uppercase tracking-wider"
+                                data-i18n="table.actions">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="users-tbody" class="divide-y divide-gray-50">
@@ -250,8 +261,10 @@
                 <div class="px-6 py-4 bg-white border-t border-gray-100 flex items-center justify-between">
                     <p id="table-info" class="text-sm text-gray-400" data-i18n="status.loading">Cargando usuarios...</p>
                     <div class="flex items-center gap-4">
-                        <button id="btn-prev" class="text-sm font-medium text-gray-400 hover:text-gray-600" data-i18n="pagination.prev">Anterior</button>
-                        <button id="btn-next" class="text-sm font-bold text-divine-blue" data-i18n="pagination.next">Siguiente</button>
+                        <button id="btn-prev" class="text-sm font-medium text-gray-400 hover:text-gray-600"
+                            data-i18n="pagination.prev">Anterior</button>
+                        <button id="btn-next" class="text-sm font-bold text-divine-blue"
+                            data-i18n="pagination.next">Siguiente</button>
                     </div>
                 </div>
             </section>
@@ -271,21 +284,24 @@
                 <input type="hidden" id="edit-user-id" />
                 <!-- Nombre -->
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" for="edit-nombre" data-i18n="table.fullname">Nombre Completo</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" for="edit-nombre"
+                        data-i18n="table.fullname">Nombre Completo</label>
                     <input id="edit-nombre" type="text"
                         class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
                         placeholder="Nombre completo" />
                 </div>
                 <!-- Correo -->
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" for="edit-correo" data-i18n="table.email">Correo Electrónico</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" for="edit-correo"
+                        data-i18n="table.email">Correo Electrónico</label>
                     <input id="edit-correo" type="email"
                         class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
                         placeholder="correo@ejemplo.com" />
                 </div>
                 <!-- Rol -->
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" for="edit-rol" data-i18n="table.role">Rol</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1" for="edit-rol"
+                        data-i18n="table.role">Rol</label>
                     <select id="edit-rol"
                         class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900">
                         <option value="operador">Operador</option>
@@ -295,9 +311,11 @@
                 <!-- Botones -->
                 <div class="flex justify-end gap-3 pt-2">
                     <button type="button" id="modal-cancel"
-                        class="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-500 border border-gray-200 hover:bg-gray-50 transition" data-i18n="button.cancel">Cancelar</button>
+                        class="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-500 border border-gray-200 hover:bg-gray-50 transition"
+                        data-i18n="button.cancel">Cancelar</button>
                     <button type="submit"
-                        class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-divine-blue hover:bg-blue-900 transition" data-i18n="modal.save_changes">Guardar Cambios</button>
+                        class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-divine-blue hover:bg-blue-900 transition"
+                        data-i18n="modal.save_changes">Guardar Cambios</button>
                 </div>
             </form>
         </div>
@@ -307,7 +325,8 @@
 </body>
 
 <script src="js/api.js"></script>
-    <script src="js/i18n.js"></script>
+<script src="js/i18n.js"></script>
 <script src="js/auth-guard.js"></script>
 <script src="js/admin-user-management.js"></script>
+
 </html>

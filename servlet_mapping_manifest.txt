@@ -1,0 +1,128 @@
+================================================================================
+  DIVINE PARK — SERVLET MAPPING MANIFEST
+  Documento de Equivalencia Arquitectónica: Django REST Framework ↔ Java Servlets
+  Formato: Arial 10pt | Interlineado 1.5
+================================================================================
+
+  DESCRIPCIÓN
+  -----------
+  Este manifiesto documenta el mapeo técnico entre las rutas URL del proyecto
+  DivinePark (implementado en Django) y sus equivalentes en la especificación
+  Java Servlet (javax.servlet.http.HttpServlet).
+
+  Principio Arquitectónico:
+    El URLconf Dispatcher de Django (urls.py) cumple la misma función que el
+    archivo web.xml de un Servlet Container (Apache Tomcat / JBoss), resolviendo
+    la ruta de la petición HTTP y despachando la ejecución al controlador
+    correspondiente (Servlet de Servicio).
+
+================================================================================
+  TABLA DE SERVLETS DE SERVICIO — MÓDULO: AUTH (Autenticación y Sesión)
+================================================================================
+
+  URL                                         | CLASE / FUNCIÓN        | SERVLET DE SERVICIO               | HTTP | EQUIVALENTE JAVA
+  ------------------------------------------- | ---------------------- | ---------------------------------- | ---- | -------------------------------
+  api/auth/registro/                          | views.registro         | RegistroServlet                   | POST | doPost(req, resp)
+  api/auth/login/                             | views.login            | LoginGeneralServlet               | POST | doPost(req, resp)
+  api/auth/operador-login/                    | views.operador_login   | OperadorLoginServlet              | POST | doPost(req, resp)
+  api/auth/login-admin/                       | views.login_admin      | AdminLoginServlet                 | POST | doPost(req, resp)
+  api/auth/perfil/                            | views.perfil           | PerfilServlet                     | GET  | doGet(req, resp)
+  api/auth/cambiar-password/                  | views.cambiar_password | CambiarPasswordServlet            | POST | doPost(req, resp)
+  api/auth/recuperar-password/enviar-codigo/  | views.enviar_codigo... | EnviarCodigoRecuperacionServlet   | POST | doPost(req, resp)
+  api/auth/recuperar-password/verificar-.../ | views.verificar_codigo | VerificarCodigoServlet            | POST | doPost(req, resp)
+  api/auth/recuperar-password/restablecer/   | views.restablecer_...  | RestablecerPasswordServlet        | POST | doPost(req, resp)
+  api/auth/logout/                            | views.logout           | LogoutServlet                     | POST | doPost → session.invalidate()
+  api/auth/refresh/                           | TokenRefreshView       | TokenRefreshServlet               | POST | doPost(req, resp)
+
+================================================================================
+  TABLA DE SERVLETS DE SERVICIO — MÓDULO: CORE (Recursos REST — CRUD)
+================================================================================
+
+  URL PATRÓN                  | VIEWSET (CLASE)                | SERVLET DE SERVICIO               | HTTP          | EQUIVALENTE JAVA
+  --------------------------- | ------------------------------ | ---------------------------------- | ------------- | --------------------------------
+  api/vehiculos/              | VehiculoViewSet                | VehiculoServlet                   | GET/POST      | doGet / doPost
+  api/vehiculos/{id}/         | VehiculoViewSet                | VehiculoServlet                   | GET/PUT/DELETE| doGet / doPut / doDelete
+  api/espacios/               | EspacioParqueoViewSet          | EspacioParqueoServlet             | GET/POST      | doGet / doPost
+  api/espacios/{id}/          | EspacioParqueoViewSet          | EspacioParqueoServlet             | GET/PUT/DELETE| doGet / doPut / doDelete
+  api/sensores/               | SensorViewSet                  | SensorServlet                     | GET/POST      | doGet / doPost
+  api/sensores/{id}/          | SensorViewSet                  | SensorServlet                     | GET/PUT/DELETE| doGet / doPut / doDelete
+  api/tarifas/                | TarifaViewSet                  | TarifaServlet                     | GET/POST      | doGet / doPost
+  api/tarifas/{id}/           | TarifaViewSet                  | TarifaServlet                     | GET/PUT/DELETE| doGet / doPut / doDelete
+  api/reservas/               | ReservaViewSet                 | ReservaServlet                    | GET/POST      | doGet / doPost
+  api/reservas/{id}/          | ReservaViewSet                 | ReservaServlet                    | GET/PUT/DELETE| doGet / doPut / doDelete
+  api/sesiones/               | SesionParqueoViewSet           | SesionParqueoServlet              | GET/POST      | doGet / doPost
+  api/sesiones/{id}/          | SesionParqueoViewSet           | SesionParqueoServlet              | GET/PUT/DELETE| doGet / doPut / doDelete
+  api/sesiones/entrada-manual/| SesionParqueoViewSet           | EntradaManualServlet              | POST          | doPost → INSERT + EventoAcceso
+  api/sesiones/{id}/salida-m/ | SesionParqueoViewSet           | SalidaManualServlet               | POST          | doPost → UPDATE + Pago
+  api/pagos/                  | PagoViewSet                    | PagoServlet                       | GET/POST      | doGet / doPost
+  api/pagos/{id}/             | PagoViewSet                    | PagoServlet                       | GET/PUT/DELETE| doGet / doPut / doDelete
+  api/eventos/                | EventoAccesoViewSet            | EventoAccesoServlet               | GET           | doGet (read-only)
+  api/autorizaciones/         | AutorizacionExcepcionalViewSet | AutorizacionExcepcionalServlet    | GET/POST      | doGet / doPost
+  api/camaras/                | CamaraOCRViewSet               | CamaraOCRServlet                  | GET/POST      | doGet / doPost
+  api/lecturas/               | LecturaOCRViewSet              | LecturaOCRServlet                 | GET           | doGet (read-only)
+  api/barreras/               | BarreraViewSet                 | BarreraServlet                    | GET/POST/PUT  | doGet / doPost / doPut
+  api/notificaciones/         | NotificacionViewSet            | NotificacionServlet               | GET/POST      | doGet / doPost
+  api/reportes/               | ReporteViewSet                 | ReporteServlet                    | GET/POST      | doGet / doPost
+  api/usuarios/               | UsuarioViewSet                 | UsuarioServlet                    | GET/POST      | doGet / doPost
+  api/usuarios/{id}/activar/  | UsuarioViewSet.activar         | ActivarUsuarioServlet             | POST          | doPost → UPDATE estado=TRUE
+  api/usuarios/{id}/desactivar| UsuarioViewSet.desactivar      | DesactivarUsuarioServlet          | POST          | doPost → UPDATE estado=FALSE
+
+================================================================================
+  TABLA DE SERVLETS DE SERVICIO — MÓDULO: ESTADÍSTICAS (Dashboard Analítico)
+================================================================================
+
+  URL                              | VIEWSET / ACCIÓN                     | SERVLET DE SERVICIO          | HTTP | EQUIVALENTE JAVA
+  -------------------------------- | ------------------------------------ | ----------------------------- | ---- | ----------------------
+  api/estadisticas/tablero/        | EstadisticasViewSet.tablero          | TableroServlet               | GET  | doGet (KPIs tiempo real)
+  api/estadisticas/ventas/         | EstadisticasViewSet.ventas           | VentasServlet                | GET  | doGet (métricas mes)
+  api/estadisticas/alertas_tiempo/ | EstadisticasViewSet.alertas_tiempo   | AlertasTiempoServlet         | GET  | doGet (infracciones)
+
+================================================================================
+  MAPEO DE COMPONENTES ARQUITECTÓNICOS (Django ↔ Java EE)
+================================================================================
+
+  COMPONENTE JAVA EE                  | COMPONENTE DJANGO / DRF
+  ----------------------------------- | -----------------------------------------------
+  javax.servlet.http.HttpServlet      | rest_framework.views.APIView / @api_view
+  javax.servlet.http.HttpServletReq.  | rest_framework.request.Request (request)
+  javax.servlet.http.HttpServletResp. | rest_framework.response.Response
+  web.xml <servlet-mapping>           | urls.py (URLconf + DefaultRouter)
+  doGet(req, resp)                    | def get(self, request) / @api_view(['GET'])
+  doPost(req, resp)                   | def post(self, request) / @api_view(['POST'])
+  doPut(req, resp)                    | def put(self, request) / @api_view(['PUT'])
+  doDelete(req, resp)                 | def delete(self, request) / @api_view(['DELETE'])
+  req.getParameter("x")              | request.data.get('x') / request.query_params['x']
+  req.getUserPrincipal()             | request.user (JWT-authenticated)
+  HttpSession / session.setAttribute  | JWT Token (refresh + access) — stateless
+  session.invalidate()               | RefreshToken.blacklist()
+  resp.setStatus(200)                 | Response(status=status.HTTP_200_OK)
+  resp.getWriter().write(json)        | Response(data_dict)
+  javax.persistence.EntityManager    | Django ORM (models.py — QuerySet API)
+  @WebServlet("/path")               | path('url/', view, name='name') en urls.py
+  ServletContext                      | Django settings.py + AppConfig
+  FilterChain                         | Django Middleware (settings.MIDDLEWARE)
+  init() / destroy()                  | AppConfig.ready() / signal handlers
+
+================================================================================
+  NOTA TÉCNICA SOBRE EL CICLO DE VIDA
+================================================================================
+
+  En Java Servlets:
+    1. El contenedor (Tomcat) instancia el Servlet (init).
+    2. Por cada petición HTTP crea objetos HttpServletRequest/Response.
+    3. Llama a service() → que despacha a doGet/doPost según el método HTTP.
+    4. Al apagar el servidor llama destroy().
+
+  En Django REST Framework (equivalente):
+    1. El servidor WSGI (Gunicorn/uWSGI) carga la aplicación Django (init).
+    2. Por cada petición HTTP crea un objeto Request (wrapping de WSGIRequest).
+    3. El URLconf despacha al ViewSet/view correspondiente.
+    4. Se ejecuta el método correspondiente al verbo HTTP (get/post/put/delete).
+    5. Se retorna un objeto Response serializado en JSON.
+
+  Este ciclo es FUNCIONALMENTE IDÉNTICO al ciclo de vida de un Servlet Java.
+
+================================================================================
+  Generado para: Proyecto DivinePark
+  Autor:         Jesús Orlando Pérez Suescun - Jose Jorge Zabaleta
+================================================================================

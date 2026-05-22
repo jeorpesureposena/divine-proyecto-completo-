@@ -17,30 +17,24 @@
         }
     </style>
     <style data-purpose="layout-colors">
-        /* Brand specific colors */
-        .bg-brand-blue {
-            background-color: #001A8E;
-        }
-
-        .text-brand-blue {
+        .sidebar-active {
+            background-color: #00F0FF;
             color: #001A8E;
-        }
-
-        .bg-sidebar-active {
-            background-image: linear-gradient(to right, #00D2FF, #3a7bd5);
-        }
-
-        .text-gray-sub {
-            color: #A0A0A0;
         }
     </style>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        manrope: ['Manrope', 'sans-serif'],
+                    },
                     colors: {
                         'divine-blue': '#001A8E',
-                        'divine-cyan': '#00D2FF',
+                        'divine-cyan': '#00F0FF',
+                    },
+                    borderRadius: {
+                        'divine': '1.5rem',
                     }
                 }
             }
@@ -50,75 +44,78 @@
 
 <body class="bg-gray-50 flex min-h-screen">
     <!-- BEGIN: Sidebar -->
-    <aside class="w-64 bg-brand-blue text-white flex flex-col flex-shrink-0" data-purpose="sidebar-navigation">
-        <div class="p-6 flex items-center space-x-3">
-            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border border-white/20"
+    <aside class="w-64 bg-divine-blue text-white flex flex-col flex-shrink-0 h-screen" data-purpose="sidebar-navigation">
+        <!-- Brand Logo -->
+        <div class="p-6 flex items-center gap-3">
+            <img alt="Divine Park Logo" class="w-10 h-10 rounded-full object-cover border-2 border-white/20"
                 src="https://lh3.googleusercontent.com/aida/ADBb0ugHfLUKxC-HIFP5I0n7wnN6_eHVH80YD5TF8XDyXjUUMnIUeH_taW3mhySIxI745gXK1VaTEAL-aUGg66ShBznfIi4EyXK5j6eovfY3br7MP5BTJbe2NUYXkl3cpbcGBNWc-p93VV_lL3_zCbZw4GW0nokPvFAurm1b9pUNMr0GgX3HjRxhIuYHXA_I1DSluN_e4yDeLK2Z1dWOxBGSOz-p7z44iRLwwOgkK7FE-rrJHJWDb3O25r8uIy6V434cUhoqtdu3UhAs3-4" />
-            <span class="text-xl font-bold tracking-tight">Divine Park</span>
+            <span class="text-xl font-extrabold tracking-tight">Divine Park</span>
         </div>
-        <nav class="mt-4 flex-1 px-4 space-y-1">
-            <!-- Active Item -->
-            <a class="flex items-center px-4 py-3 bg-sidebar-active rounded-lg font-bold text-white shadow-lg"
-                data-purpose="nav-item-active" href="dashboard-admin.html">
-                <svg class="w-6 h-6 mr-3" fill="currentColor" viewbox="0 0 20 20">
-                    <path
-                        d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
-                    </path>
+        <!-- Navigation Links -->
+        <nav class="flex-grow px-4 space-y-2 mt-4">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="dashboard-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
                 <span data-i18n="nav.dashboard">Tablero Principal</span>
             </a>
-            <a class="flex items-center px-4 py-3 hover:bg-white/10 rounded-lg transition-colors font-medium" href="admin-User-Management.html">
-                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-                    <path
-                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-User-Management.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
                 <span data-i18n="nav.users">Gestión de Usuarios</span>
             </a>
-            <a class="flex items-center px-4 py-3 hover:bg-white/10 rounded-lg transition-colors font-medium" href="admin-Overcapacity-Alert.html">
-                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"
-                        stroke-width="2"></path>
+            <a class="sidebar-active flex items-center gap-3 px-4 py-3 rounded-divine font-bold transition-colors"
+                href="admin-Overcapacity-Alert.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span data-i18n="nav.monitoring" data-i18n="monitoring.title">Monitoreo y Sensores</span>
+                <span data-i18n="nav.monitoring">Monitoreo y Sensores</span>
             </a>
-            <a class="flex items-center px-4 py-3 hover:bg-white/10 rounded-lg transition-colors font-medium" href="admin-Payments-and-Billing.html">
-                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="admin-Payments-and-Billing.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
                 <span data-i18n="nav.payments">Pagos y Facturación</span>
             </a>
-            <a class="flex items-center px-4 py-3 hover:bg-white/10 rounded-lg transition-colors font-medium" href="reports-of-time-admin.html">
-                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-                    <path
-                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="reports-of-time-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
                 <span data-i18n="nav.reports">Reportes</span>
             </a>
-            <a class="flex items-center px-4 py-3 hover:bg-white/10 rounded-lg transition-colors font-medium" href="settings-admin.html">
-                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-                    <path
-                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+            <a class="flex items-center gap-3 px-4 py-3 text-white/80 hover:bg-white/10 rounded-divine font-semibold transition-colors"
+                href="settings-admin.html">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"
-                        stroke-width="2"></path>
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
                 <span data-i18n="nav.settings">Configuración</span>
             </a>
         </nav>
-        <div class="p-6">
-            <a class="flex items-center text-white/80 hover:text-white transition-colors" href="#">
-                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <!-- Logout -->
+        <div class="p-6 mt-auto">
+            <button id="logout-btn"
+                class="flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white transition-colors w-full text-left font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
                 <span data-i18n="nav.logout">Cerrar Sesión</span>
-            </a>
+            </button>
         </div>
     </aside>
     <!-- END: Sidebar -->
+
     <!-- BEGIN: Main Content -->
     <main class="flex-1 overflow-y-auto p-8" data-purpose="dashboard-main">
         <!-- BEGIN: Header -->

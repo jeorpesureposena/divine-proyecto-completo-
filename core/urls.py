@@ -34,6 +34,8 @@ router.register(r'notificaciones', views.NotificacionViewSet)
 router.register(r'reportes', views.ReporteViewSet)
 router.register(r'estadisticas', views.EstadisticasViewSet, basename='estadisticas')
 router.register(r'usuarios', views.UsuarioViewSet, basename='usuarios')
+router.register(r'billetera', views.BilleteraViewSet, basename='billetera')
+router.register(r'recargas', views.RecargaViewSet, basename='recargas')
 
 urlpatterns += [
     path('', include(router.urls)),

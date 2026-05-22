@@ -7,8 +7,38 @@ from django.contrib.auth import authenticate
 from .models import Usuario
 from .serializers import RegistroSerializer, UsuarioSerializer, CambiarPasswordSerializer
 
+# =============================================================================
+# DIVINE PARK — CAPA DE CONTROLADORES HTTP (SERVLET-EQUIVALENT ARCHITECTURE)
+# =============================================================================
+# [ARCHITECTURE_MAPPING]: Django REST Framework como contenedor de Servlets
+#
+# Equivalencia de Componentes:
+#   Java EE  (Servlet Container)     ←→  Django (WSGI/ASGI Application Server)
+#   HttpServlet (clase base)         ←→  APIView / @api_view decorator
+#   HttpServletRequest               ←→  rest_framework.request.Request (request)
+#   HttpServletResponse              ←→  rest_framework.response.Response
+#   web.xml / servlet-mapping        ←→  urls.py (URLconf Dispatcher)
+#   doGet(req, resp)                 ←→  def get(self, request) / @api_view(['GET'])
+#   doPost(req, resp)                ←→  def post(self, request) / @api_view(['POST'])
+#   ServletContext (application)     ←→  Django settings + AppConfig
+#   HttpSession                      ←→  JWT Token (refresh + access)
+#   init() / destroy()               ←→  AppConfig.ready() / signal handlers
+#
+# Nota: El objeto `request` de Django REST Framework encapsula todos los datos
+# de la petición HTTP entrante (método, headers, body, parámetros) de forma
+# análoga al objeto HttpServletRequest en Java EE.
+# =============================================================================
+
 
 # ─── REGISTRO ─────────────────────────────────────────────────────
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — Servlet de Registro de Usuario
+# Lifecycle Management: Manejo de peticiones síncronas mediante método de instancia.
+# Equivalencia: doPost(HttpServletRequest req, HttpServletResponse resp)
+#   → El objeto `request` actúa como HttpServletRequest:
+#     request.data       ≡ req.getParameter() / req.getInputStream()
+#     request.method     ≡ req.getMethod()
+#     Response(...)      ≡ resp.getWriter().write() + resp.setStatus()
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def registro(request):
@@ -28,6 +58,11 @@ def registro(request):
 
 
 # ─── LOGIN ────────────────────────────────────────────────────────
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — Servlet de Autenticación General
+# Lifecycle Management: Manejo de peticiones síncronas mediante método de instancia.
+# doPost → Recibe credenciales via request.data (≡ req.getParameter()),
+#          autentica y retorna JWT (≡ HttpSession + setAttribute).
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login(request):
@@ -56,6 +91,11 @@ def login(request):
     })
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — Servlet de Login de Operador
+# Lifecycle Management: Petición POST síncrona con validación de rol.
+# doPost → request.data.get('correo') ≡ req.getParameter("correo")
+#          Verifica rol antes de emitir token (≡ session.setAttribute("rol", ...)).
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def operador_login(request):
@@ -91,6 +131,10 @@ def operador_login(request):
     })
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — Servlet de Login de Administrador
+# Lifecycle Management: Petición POST síncrona con validación de rol elevado.
+# doPost → Verifica `rol == 'administrador'` antes de otorgar token JWT.
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_admin(request):
@@ -127,6 +171,11 @@ def login_admin(request):
 
 
 # ─── PERFIL ───────────────────────────────────────────────────────
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — Servlet de Consulta de Perfil
+# Lifecycle Management: Petición GET síncrona (solo lectura).
+# doGet → request.user ≡ req.getUserPrincipal() (usuario autenticado en sesión).
+#         Response(serializer.data) ≡ resp.getWriter().write(json).
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def perfil(request):
@@ -139,6 +188,10 @@ import random
 from django.core.mail import send_mail
 from .models import CodigoRecuperacion
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — Servlet de Envío de Código de Recuperación
+# doPost → request.data.get('email') ≡ req.getParameter("email").
+#          Genera token de recuperación y llama send_mail (≡ JavaMailSender).
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def enviar_codigo_recuperacion(request):
@@ -171,6 +224,9 @@ def enviar_codigo_recuperacion(request):
     return Response({'mensaje': 'Código enviado al correo electrónico'})
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — Servlet de Verificación de Código OTP
+# doPost → Valida token temporal (≡ HttpSession.getAttribute("codigo")).
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def verificar_codigo(request):
@@ -193,6 +249,9 @@ def verificar_codigo(request):
         return Response({'error': 'Código inválido'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — Servlet de Restablecimiento de Contraseña
+# doPost → Valida código + nueva contraseña. Persiste cambio en BD (≡ EntityManager.persist()).
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def restablecer_password(request):
@@ -226,6 +285,9 @@ def restablecer_password(request):
 
 
 # ─── CAMBIAR CONTRASEÑA ───────────────────────────────────────────
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — Servlet de Cambio de Contraseña Autenticado
+# doPost → request.user.check_password() ≡ validación de credencial de sesión activa.
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def cambiar_password(request):
@@ -241,6 +303,9 @@ def cambiar_password(request):
 
 
 # ─── LOGOUT ───────────────────────────────────────────────────────
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — Servlet de Cierre de Sesión
+# doPost → token.blacklist() ≡ session.invalidate() en Java Servlet.
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout(request):
@@ -261,48 +326,97 @@ from django.utils import timezone
 from .models import (
     Vehiculo, EspacioParqueo, Sensor, Tarifa, Reserva,
     SesionParqueo, Pago, EventoAcceso, AutorizacionExcepcional,
-    CamaraOCR, LecturaOCR, Barrera, Notificacion, Reporte
+    CamaraOCR, LecturaOCR, Barrera, Notificacion, Reporte,
+    Billetera, Recarga
 )
 from .serializers import (
     VehiculoSerializer, EspacioParqueoSerializer, SensorSerializer,
     TarifaSerializer, ReservaSerializer, SesionParqueoSerializer,
     PagoSerializer, EventoAccesoSerializer, AutorizacionExcepcionalSerializer,
     CamaraOCRSerializer, LecturaOCRSerializer, BarreraSerializer,
-    NotificacionSerializer, ReporteSerializer
+    NotificacionSerializer, ReporteSerializer,
+    BilleteraSerializer, RecargaSerializer
 )
 from .permissions import IsAdministrador, IsOperador, IsConductor, IsAdministradorOrReadOnly, IsOperadorOrAdministrador
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — VehiculoServlet (CRUD de Vehículos)
+# Lifecycle Management: Peticiones síncronas GET/POST/PUT/DELETE mediante métodos de instancia.
+# doGet  → list() / retrieve()  — Consulta de vehículos (≡ doGet con SELECT)
+# doPost → create()             — Registro de vehículo (≡ doPost con INSERT)
+# doPut  → update()             — Actualización (≡ doPut con UPDATE)
+# doDelete → destroy()          — Eliminación (≡ doDelete con DELETE)
 class VehiculoViewSet(viewsets.ModelViewSet):
     queryset = Vehiculo.objects.all()
     serializer_class = VehiculoSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        # Los administradores y operadores pueden ver todos, conductores solo los suyos
+        user = self.request.user
+        if hasattr(user, 'rol') and user.rol in ['administrador', 'operador']:
+            return Vehiculo.objects.all()
+        return Vehiculo.objects.filter(usuario=user)
 
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user)
+
+
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — EspacioParqueoServlet
+# doGet → Consulta disponibilidad de espacios (≡ doGet con SELECT + filtro de estado).
+# doPost/doPut → Reserva o actualiza estado de espacio (libre/ocupado/mantenimiento).
 class EspacioParqueoViewSet(viewsets.ModelViewSet):
     queryset = EspacioParqueo.objects.all()
     serializer_class = EspacioParqueoSerializer
     permission_classes = [IsAdministradorOrReadOnly]
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — SensorServlet (Gestión de Sensores IoT)
+# doGet  → Lista sensores y estado (≡ doGet + resp.setContentType("application/json")).
+# doPost → Registra nuevo sensor (≡ doPost + INSERT en BD).
 class SensorViewSet(viewsets.ModelViewSet):
     queryset = Sensor.objects.all()
     serializer_class = SensorSerializer
     permission_classes = [IsAdministradorOrReadOnly]
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — TarifaServlet
+# doGet  → Consulta tarifas activas (≡ doGet con SELECT WHERE activa=TRUE).
+# doPost → Crea nueva tarifa por hora (≡ doPost + INSERT).
 class TarifaViewSet(viewsets.ModelViewSet):
     queryset = Tarifa.objects.all()
     serializer_class = TarifaSerializer
     permission_classes = [IsAdministradorOrReadOnly]
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — ReservaServlet
+# doPost → Crea reserva de espacio (≡ doPost + INSERT + session tracking).
+# doGet  → Lista reservas del usuario (≡ doGet filtrado por req.getUserPrincipal()).
 class ReservaViewSet(viewsets.ModelViewSet):
     queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer
     permission_classes = [IsAuthenticated]
 
+    def perform_create(self, serializer):
+        reserva = serializer.save()
+        espacio = reserva.espacio
+        if espacio.estado == 'libre':
+            espacio.estado = 'reservado'
+            espacio.save()
 
+
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — SesionParqueoServlet (Control de Acceso Vehicular)
+# Lifecycle Management: Ciclo de vida completo de sesión de parqueo (apertura → cierre).
+# doPost (entrada-manual) → Registra entrada de vehículo, actualiza espacio y crea EventoAcceso.
+# doPost (salida-manual)  → Cierra sesión, calcula duración y genera Pago pendiente.
+# El objeto `request` transporta placa, espacio_id y token de autorización del operador,
+# equivalente al HttpServletRequest que transporta parámetros de formulario + JSESSIONID.
 class SesionParqueoViewSet(viewsets.ModelViewSet):
     queryset = SesionParqueo.objects.all()
     serializer_class = SesionParqueoSerializer
@@ -403,18 +517,29 @@ class SesionParqueoViewSet(viewsets.ModelViewSet):
         }, status=status.HTTP_200_OK)
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — PagoServlet (Procesamiento de Cobros)
+# doPost → Registra pago (≡ doPost + transacción en BD).
+# doGet  → Historial de pagos (≡ doGet + consulta BD + respuesta JSON).
 class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all()
     serializer_class = PagoSerializer
     permission_classes = [IsAuthenticated]
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — EventoAccesoServlet (Log de Accesos, Solo Lectura)
+# doGet → Lista de eventos de entrada/salida (≡ doGet con SELECT + ORDER BY fecha DESC).
 class EventoAccesoViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = EventoAcceso.objects.all()
     serializer_class = EventoAccesoSerializer
     permission_classes = [IsOperadorOrAdministrador]
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — AutorizacionExcepcionalServlet
+# doPost → perform_create() ≡ doPost que asigna automáticamente operador=request.user
+#           (≡ req.getUserPrincipal() asignado a la entidad antes del INSERT).
 class AutorizacionExcepcionalViewSet(viewsets.ModelViewSet):
     queryset = AutorizacionExcepcional.objects.all()
     serializer_class = AutorizacionExcepcionalSerializer
@@ -424,24 +549,37 @@ class AutorizacionExcepcionalViewSet(viewsets.ModelViewSet):
         serializer.save(operador=self.request.user)
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — CamaraOCRServlet (Gestión de Cámaras IoT)
+# doGet/doPost → Administra configuración y estado de cámaras de reconocimiento de placas.
 class CamaraOCRViewSet(viewsets.ModelViewSet):
     queryset = CamaraOCR.objects.all()
     serializer_class = CamaraOCRSerializer
     permission_classes = [IsOperadorOrAdministrador]
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — LecturaOCRServlet (Solo Lectura)
+# doGet → Devuelve lecturas OCR de placas detectadas por cámaras.
 class LecturaOCRViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = LecturaOCR.objects.all()
     serializer_class = LecturaOCRSerializer
     permission_classes = [IsOperadorOrAdministrador]
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — BarreraServlet (Control de Barreras Físicas)
+# doPost → Cambia estado de barrera (abierta/cerrada) (≡ doPost con comando a dispositivo IoT).
+# doGet  → Consulta estado actual de barreras de entrada/salida.
 class BarreraViewSet(viewsets.ModelViewSet):
     queryset = Barrera.objects.all()
     serializer_class = BarreraSerializer
     permission_classes = [IsOperadorOrAdministrador]
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — NotificacionServlet (Alertas del Sistema)
+# doGet → get_queryset() filtra por rol (≡ doGet con SELECT según req.isUserInRole()).
 class NotificacionViewSet(viewsets.ModelViewSet):
     queryset = Notificacion.objects.all()
     serializer_class = NotificacionSerializer
@@ -455,12 +593,20 @@ class NotificacionViewSet(viewsets.ModelViewSet):
         return Notificacion.objects.filter(usuario=self.request.user).order_by('-fecha')
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — ReporteServlet (Generación de Reportes)
+# doGet  → Descarga de reportes en formato JSON (≡ doGet + resp.setContentType("application/pdf")).
+# doPost → Solicita generación de nuevo reporte (≡ doPost + tarea asíncrona).
 class ReporteViewSet(viewsets.ModelViewSet):
     queryset = Reporte.objects.all()
     serializer_class = ReporteSerializer
     permission_classes = [IsAdministrador]
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — UsuarioServlet (Administración de Usuarios)
+# doGet  → Lista todos los usuarios del sistema (≡ doGet con SELECT *).
+# doPost (activar/desactivar) → Cambia estado de cuenta (≡ doPost con UPDATE estado=TRUE/FALSE).
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
@@ -481,6 +627,13 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         return Response({'status': 'desactivado'})
 
 
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: HttpServlet Controller — EstadisticasServlet (Dashboard Analítico)
+# Lifecycle Management: Servlet de solo lectura (READ-ONLY) que agrega métricas en tiempo real.
+# doGet (tablero)      → KPIs de ocupación, ingresos y estado de hardware.
+# doGet (ventas)       → Estadísticas de ventas del mes con detalle diario.
+# doGet (alertas_tiempo) → Infracciones por sobretiempo en sesiones activas.
+# El ViewSet hereda de ViewSet (≡ HttpServlet) y solo expone acciones GET (≡ doGet).
 class EstadisticasViewSet(viewsets.ViewSet):
     permission_classes = [IsOperadorOrAdministrador]
 
@@ -628,3 +781,105 @@ class EstadisticasViewSet(viewsets.ViewSet):
             'zona_mas_incidencias': zona_max or 'N/A',
             'incidencias': incidencias,
         })
+
+
+# ─── BILLETERA ────────────────────────────────────────────────────
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: BilleteraServlet — Wallet del conductor
+# doGet (mi-billetera) → Retorna o crea la billetera del usuario autenticado.
+class BilleteraViewSet(viewsets.ModelViewSet):
+    serializer_class = BilleteraSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Billetera.objects.filter(usuario=self.request.user)
+
+    @action(detail=False, methods=['get'], url_path='mi-billetera')
+    def mi_billetera(self, request):
+        billetera, _ = Billetera.objects.get_or_create(usuario=request.user)
+        return Response(BilleteraSerializer(billetera).data)
+
+    @action(detail=False, methods=['get'], url_path='mis-facturas')
+    def mis_facturas(self, request):
+        from django.db.models import Q
+        billetera, _ = Billetera.objects.get_or_create(usuario=request.user)
+        
+        # Obtener Recargas
+        recargas = Recarga.objects.filter(billetera=billetera).order_by('-fecha')
+        
+        # Obtener Pagos de Reservas del usuario
+        pagos = Pago.objects.filter(reserva__usuario=request.user).order_by('-fecha')
+        
+        facturas = []
+        for r in recargas:
+            facturas.append({
+                'id': f'R-{r.id}',
+                'fecha': r.fecha.isoformat() if r.fecha else None,
+                'monto': r.monto,
+                'metodo': r.metodo,
+                'metodo_display': dict(Recarga.METODO_CHOICES).get(r.metodo, r.metodo),
+                'estado': r.estado,
+                'estado_display': dict(Recarga.ESTADO_CHOICES).get(r.estado, r.estado),
+                'tipo': 'Recarga de Saldo',
+            })
+            
+        for p in pagos:
+            facturas.append({
+                'id': f'P-{p.id}',
+                'fecha': p.fecha.isoformat() if p.fecha else None,
+                'monto': p.monto,
+                'metodo': p.metodo,
+                'metodo_display': dict(Pago.METODO_CHOICES).get(p.metodo, p.metodo),
+                'estado': p.estado_pago,
+                'estado_display': dict(Pago.ESTADO_CHOICES).get(p.estado_pago, p.estado_pago),
+                'tipo': 'Pago de Reserva',
+            })
+            
+        # Ordenar combinado por fecha descendente
+        facturas.sort(key=lambda x: x['fecha'] or '', reverse=True)
+        return Response(facturas)
+
+
+# ─── RECARGA ──────────────────────────────────────────────────────
+# [ARCHITECTURE_MAPPING]: Servlet-Equivalent
+# Role: RecargaServlet — Recarga de saldo en billetera
+# doGet  → Historial de recargas del usuario.
+# doPost → Crea recarga y suma saldo a la billetera (transacción atómica).
+class RecargaViewSet(viewsets.ModelViewSet):
+    serializer_class = RecargaSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        billetera, _ = Billetera.objects.get_or_create(usuario=self.request.user)
+        return Recarga.objects.filter(billetera=billetera)
+
+    def create(self, request, *args, **kwargs):
+        billetera, _ = Billetera.objects.get_or_create(usuario=request.user)
+        monto  = request.data.get('monto')
+        metodo = request.data.get('metodo', 'otro')
+
+        if not monto:
+            return Response({'error': 'El monto es requerido'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            monto = float(monto)
+            if monto <= 0:
+                raise ValueError
+        except (ValueError, TypeError):
+            return Response({'error': 'Monto inválido'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recarga = Recarga.objects.create(
+            billetera=billetera,
+            monto=monto,
+            metodo=metodo,
+            estado='exitosa'
+        )
+        # Acreditar saldo
+        from decimal import Decimal
+        billetera.saldo += Decimal(str(monto))
+        billetera.save()
+
+        return Response({
+            'mensaje': 'Recarga exitosa',
+            'recarga': RecargaSerializer(recarga).data,
+            'saldo_actual': str(billetera.saldo),
+        }, status=status.HTTP_201_CREATED)
