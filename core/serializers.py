@@ -10,6 +10,9 @@ from .models import (
 
 # ─── REGISTRO ─────────────────────────────────────────────────────
 class RegistroSerializer(serializers.ModelSerializer):
+    """
+    Serializer para el registro de nuevos usuarios en la plataforma.
+    """
     password  = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
@@ -18,11 +21,17 @@ class RegistroSerializer(serializers.ModelSerializer):
         fields = ['nombre', 'correo', 'password', 'password2', 'rol', 'codigo_operador']
 
     def validate(self, attrs):
+        """
+        Valida que ambas contraseñas proporcionadas coincidan.
+        """
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({'password': 'Las contraseñas no coinciden'})
         return attrs
 
     def create(self, validated_data):
+        """
+        Crea un nuevo usuario en la base de datos asegurando que la contraseña se encripte correctamente.
+        """
         validated_data.pop('password2')
         password = validated_data.pop('password')
         usuario  = Usuario(**validated_data)
@@ -33,6 +42,9 @@ class RegistroSerializer(serializers.ModelSerializer):
 
 # ─── PERFIL DE USUARIO ────────────────────────────────────────────
 class UsuarioSerializer(serializers.ModelSerializer):
+    """
+    Serializer para representar el perfil y los detalles de un usuario existente.
+    """
     class Meta:
         model  = Usuario
         fields = ['id', 'nombre', 'correo', 'rol', 'estado', 'codigo_operador', 'fecha_creacion']
@@ -40,11 +52,17 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
 # ─── CAMBIAR CONTRASEÑA ───────────────────────────────────────────
 class CambiarPasswordSerializer(serializers.Serializer):
+    """
+    Serializer para gestionar el cambio de contraseña de un usuario autenticado.
+    """
     password_actual = serializers.CharField(required=True)
     password_nuevo  = serializers.CharField(required=True, validators=[validate_password])
     password_nuevo2 = serializers.CharField(required=True)
 
     def validate(self, attrs):
+        """
+        Verifica que la nueva contraseña y su confirmación sean idénticas.
+        """
         if attrs['password_nuevo'] != attrs['password_nuevo2']:
             raise serializers.ValidationError({'password_nuevo': 'Las contraseñas no coinciden'})
         return attrs
@@ -53,6 +71,9 @@ class CambiarPasswordSerializer(serializers.Serializer):
 # ─── SERIALIZERS DE NEGOCIO ───────────────────────────────────────
 
 class VehiculoSerializer(serializers.ModelSerializer):
+    """
+    Serializer para gestionar los vehículos asociados a un usuario.
+    """
     class Meta:
         model = Vehiculo
         fields = '__all__'
@@ -60,6 +81,9 @@ class VehiculoSerializer(serializers.ModelSerializer):
 
 
 class EspacioParqueoSerializer(serializers.ModelSerializer):
+    """
+    Serializer para los espacios de parqueo, incluyendo la representación legible de su zona.
+    """
     zona_display = serializers.CharField(source='get_zona_display', read_only=True)
 
     class Meta:
@@ -68,6 +92,9 @@ class EspacioParqueoSerializer(serializers.ModelSerializer):
 
 
 class SensorSerializer(serializers.ModelSerializer):
+    """
+    Serializer para la información de los sensores de ocupación de espacios de parqueo.
+    """
     espacio_numero = serializers.IntegerField(source='espacio.numero', read_only=True)
     
     class Meta:
@@ -76,12 +103,18 @@ class SensorSerializer(serializers.ModelSerializer):
 
 
 class TarifaSerializer(serializers.ModelSerializer):
+    """
+    Serializer para la configuración de tarifas del parqueadero.
+    """
     class Meta:
         model = Tarifa
         fields = '__all__'
 
 
 class ReservaSerializer(serializers.ModelSerializer):
+    """
+    Serializer para procesar las reservas de espacios de parqueo realizadas por los usuarios.
+    """
     usuario_nombre = serializers.CharField(source='usuario.nombre', read_only=True)
     vehiculo_placa = serializers.CharField(source='vehiculo.placa', read_only=True)
     espacio_numero = serializers.IntegerField(source='espacio.numero', read_only=True)
@@ -94,15 +127,24 @@ class ReservaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_monto_total(self, obj):
+        """
+        Calcula y obtiene el monto total del pago asociado a la reserva.
+        """
         pago = obj.pagos.first()
         return pago.monto if pago else 0
 
     def get_metodo_pago(self, obj):
+        """
+        Obtiene el método de pago utilizado para la reserva.
+        """
         pago = obj.pagos.first()
         return pago.metodo if pago else 'N/A'
 
 
 class SesionParqueoSerializer(serializers.ModelSerializer):
+    """
+    Serializer para el registro de las sesiones de parqueo activas y finalizadas.
+    """
     vehiculo_placa = serializers.CharField(source='vehiculo.placa', read_only=True)
     espacio_numero = serializers.IntegerField(source='espacio.numero', read_only=True)
 
@@ -112,12 +154,18 @@ class SesionParqueoSerializer(serializers.ModelSerializer):
 
 
 class PagoSerializer(serializers.ModelSerializer):
+    """
+    Serializer para el manejo de los pagos realizados en el sistema.
+    """
     class Meta:
         model = Pago
         fields = '__all__'
 
 
 class EventoAccesoSerializer(serializers.ModelSerializer):
+    """
+    Serializer para los eventos de acceso de vehículos a las instalaciones del parqueadero.
+    """
     vehiculo_placa = serializers.CharField(source='vehiculo.placa', read_only=True)
     espacio_numero = serializers.IntegerField(source='espacio.numero', read_only=True)
     operador_nombre = serializers.CharField(source='operador.nombre', read_only=True)
@@ -128,6 +176,9 @@ class EventoAccesoSerializer(serializers.ModelSerializer):
 
 
 class AutorizacionExcepcionalSerializer(serializers.ModelSerializer):
+    """
+    Serializer para gestionar autorizaciones excepcionales otorgadas por operadores.
+    """
     operador_nombre = serializers.CharField(source='operador.nombre', read_only=True)
 
     class Meta:
@@ -136,30 +187,45 @@ class AutorizacionExcepcionalSerializer(serializers.ModelSerializer):
 
 
 class CamaraOCRSerializer(serializers.ModelSerializer):
+    """
+    Serializer para la configuración de las cámaras OCR del sistema.
+    """
     class Meta:
         model = CamaraOCR
         fields = '__all__'
 
 
 class LecturaOCRSerializer(serializers.ModelSerializer):
+    """
+    Serializer para los registros de las lecturas de placas capturadas por las cámaras OCR.
+    """
     class Meta:
         model = LecturaOCR
         fields = '__all__'
 
 
 class BarreraSerializer(serializers.ModelSerializer):
+    """
+    Serializer para la gestión y estado de las barreras de acceso.
+    """
     class Meta:
         model = Barrera
         fields = '__all__'
 
 
 class NotificacionSerializer(serializers.ModelSerializer):
+    """
+    Serializer para las notificaciones enviadas a los usuarios del sistema.
+    """
     class Meta:
         model = Notificacion
         fields = '__all__'
 
 
 class ReporteSerializer(serializers.ModelSerializer):
+    """
+    Serializer para la generación de reportes operativos y financieros.
+    """
     class Meta:
         model = Reporte
         fields = '__all__'
@@ -167,6 +233,9 @@ class ReporteSerializer(serializers.ModelSerializer):
 
 # ─── BILLETERA ────────────────────────────────────────────────────
 class BilleteraSerializer(serializers.ModelSerializer):
+    """
+    Serializer para administrar el saldo y datos de la billetera virtual del usuario.
+    """
     usuario_nombre = serializers.CharField(source='usuario.nombre', read_only=True)
 
     class Meta:
@@ -177,6 +246,9 @@ class BilleteraSerializer(serializers.ModelSerializer):
 
 # ─── RECARGA ──────────────────────────────────────────────────────
 class RecargaSerializer(serializers.ModelSerializer):
+    """
+    Serializer para gestionar las transacciones de recarga de saldo en la billetera del usuario.
+    """
     billetera_id    = serializers.IntegerField(source='billetera.id', read_only=True)
     usuario_nombre  = serializers.CharField(source='billetera.usuario.nombre', read_only=True)
     metodo_display  = serializers.CharField(source='get_metodo_display', read_only=True)

@@ -4,7 +4,13 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 # ─── MANAGER DE USUARIO ───────────────────────────────────────────
 class UsuarioManager(BaseUserManager):
+    """
+    Gestor personalizado para la creación de usuarios y superusuarios en el sistema.
+    """
     def create_user(self, correo, nombre, password=None, **extra_fields):
+        """
+        Crea y almacena un usuario estándar con correo, nombre y contraseña.
+        """
         if not correo:
             raise ValueError('El correo es obligatorio')
         correo = self.normalize_email(correo)
@@ -14,6 +20,9 @@ class UsuarioManager(BaseUserManager):
         return user
 
     def create_superuser(self, correo, nombre, password=None, **extra_fields):
+        """
+        Crea y almacena un superusuario con rol de administrador y permisos de acceso total.
+        """
         extra_fields.setdefault('rol', 'administrador')
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
@@ -22,6 +31,9 @@ class UsuarioManager(BaseUserManager):
 
 # ─── USUARIO ──────────────────────────────────────────────────────
 class Usuario(AbstractBaseUser, PermissionsMixin):
+    """
+    Modelo que representa a un usuario del sistema, incluyendo su rol y credenciales de acceso.
+    """
     ROL_CHOICES = [
         ('conductor', 'Conductor'),
         ('operador', 'Operador'),
@@ -43,6 +55,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     objects = UsuarioManager()
 
     def __str__(self):
+        """
+        Retorna la representación en cadena del usuario, mostrando su nombre y rol.
+        """
         return f'{self.nombre} ({self.rol})'
 
     class Meta:
@@ -51,6 +66,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
 # ─── VEHÍCULO ─────────────────────────────────────────────────────
 class Vehiculo(models.Model):
+    """
+    Modelo que representa un vehículo registrado por un usuario en el sistema.
+    """
     TIPO_CHOICES = [
         ('carro', 'Carro'),
         ('moto', 'Moto'),
@@ -65,6 +83,9 @@ class Vehiculo(models.Model):
     modelo  = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena del vehículo, indicando su placa y marca.
+        """
         return f'{self.placa} - {self.marca}'
 
     class Meta:
@@ -73,6 +94,9 @@ class Vehiculo(models.Model):
 
 # ─── ESPACIO DE PARQUEO ───────────────────────────────────────────
 class EspacioParqueo(models.Model):
+    """
+    Modelo que representa un espacio de estacionamiento dentro del parqueadero.
+    """
     ESTADO_CHOICES = [
         ('libre', 'Libre'),
         ('ocupado', 'Ocupado'),
@@ -100,6 +124,9 @@ class EspacioParqueo(models.Model):
     duracion_mantenimiento = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena del espacio de parqueo, incluyendo zona, número y estado.
+        """
         return f'Zona {self.zona} - #{self.numero:02d} ({self.estado})'
 
     class Meta:
@@ -109,12 +136,18 @@ class EspacioParqueo(models.Model):
 
 # ─── SENSOR ───────────────────────────────────────────────────────
 class Sensor(models.Model):
+    """
+    Modelo que representa un sensor IoT asociado a un espacio de parqueo para detectar su ocupación.
+    """
     espacio              = models.OneToOneField(EspacioParqueo, on_delete=models.CASCADE, related_name='sensor')
     tipo_sensor          = models.CharField(max_length=50, default='ultrasonico')
     estado_sensor        = models.BooleanField(default=True)
     fecha_ultima_lectura = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena del sensor con el número del espacio asociado.
+        """
         return f'Sensor - Espacio #{self.espacio.numero}'
 
     class Meta:
@@ -123,6 +156,9 @@ class Sensor(models.Model):
 
 # ─── TARIFA ───────────────────────────────────────────────────────
 class Tarifa(models.Model):
+    """
+    Modelo que almacena la información de las tarifas aplicables al parqueo.
+    """
     valor_hora      = models.DecimalField(max_digits=10, decimal_places=2)
     valor_fraccion  = models.DecimalField(max_digits=10, decimal_places=2)
     vigencia_inicio = models.DateTimeField()
@@ -130,6 +166,9 @@ class Tarifa(models.Model):
     activa          = models.BooleanField(default=True)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena de la tarifa mostrando el valor por hora.
+        """
         return f'Tarifa ${self.valor_hora}/hora'
 
     class Meta:
@@ -138,6 +177,9 @@ class Tarifa(models.Model):
 
 # ─── RESERVA ──────────────────────────────────────────────────────
 class Reserva(models.Model):
+    """
+    Modelo que representa una reserva de un espacio de parqueo realizada por un usuario.
+    """
     ESTADO_CHOICES = [
         ('activa', 'Activa'),
         ('cancelada', 'Cancelada'),
@@ -155,6 +197,9 @@ class Reserva(models.Model):
     penalizacion  = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena de la reserva con su ID y nombre del usuario.
+        """
         return f'Reserva #{self.id} - {self.usuario.nombre}'
 
     class Meta:
@@ -163,6 +208,9 @@ class Reserva(models.Model):
 
 # ─── SESIÓN DE PARQUEO ────────────────────────────────────────────
 class SesionParqueo(models.Model):
+    """
+    Modelo que registra una sesión de uso activo de un espacio de parqueo para un vehículo.
+    """
     ESTADO_CHOICES = [
         ('abierta', 'Abierta'),
         ('cerrada', 'Cerrada'),
@@ -178,6 +226,9 @@ class SesionParqueo(models.Model):
     duracion_min  = models.IntegerField(default=0)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena de la sesión de parqueo con su ID y espacio.
+        """
         return f'Sesion #{self.id} - Espacio #{self.espacio.numero}'
 
     class Meta:
@@ -186,6 +237,9 @@ class SesionParqueo(models.Model):
 
 # ─── PAGO ─────────────────────────────────────────────────────────
 class Pago(models.Model):
+    """
+    Modelo que gestiona los registros de pago asociados a reservas o sesiones de parqueo.
+    """
     METODO_CHOICES = [
         ('efectivo', 'Efectivo'),
         ('tarjeta', 'Tarjeta'),
@@ -207,6 +261,9 @@ class Pago(models.Model):
     comprobante = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena del pago con su ID y monto.
+        """
         return f'Pago #{self.id} - ${self.monto}'
 
     class Meta:
@@ -215,6 +272,9 @@ class Pago(models.Model):
 
 # ─── EVENTO DE ACCESO ─────────────────────────────────────────────
 class EventoAcceso(models.Model):
+    """
+    Modelo que almacena el historial de eventos de acceso (entrada/salida) de vehículos.
+    """
     TIPO_CHOICES = [
         ('entrada', 'Entrada'),
         ('salida', 'Salida'),
@@ -230,6 +290,9 @@ class EventoAcceso(models.Model):
     es_manual   = models.BooleanField(default=False)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena del evento de acceso con su tipo, placa y fecha.
+        """
         return f'{self.tipo_evento} - {self.placa_detectada} - {self.fecha_hora}'
 
     class Meta:
@@ -238,6 +301,9 @@ class EventoAcceso(models.Model):
 
 # ─── AUTORIZACIÓN EXCEPCIONAL ─────────────────────────────────────
 class AutorizacionExcepcional(models.Model):
+    """
+    Modelo para registrar accesos manuales o excepcionales autorizados por operadores.
+    """
     TIPO_CHOICES = [
         ('entrada', 'Entrada'),
         ('salida', 'Salida'),
@@ -252,6 +318,9 @@ class AutorizacionExcepcional(models.Model):
     fecha_hora  = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena de la autorización excepcional.
+        """
         return f'Autorizacion {self.tipo} - {self.placa}'
 
     class Meta:
@@ -260,11 +329,17 @@ class AutorizacionExcepcional(models.Model):
 
 # ─── CÁMARA OCR ───────────────────────────────────────────────────
 class CamaraOCR(models.Model):
+    """
+    Modelo que representa una cámara de reconocimiento óptico de caracteres para leer placas.
+    """
     ubicacion      = models.CharField(max_length=100)
     ultima_lectura = models.DateTimeField(blank=True, null=True)
     activa         = models.BooleanField(default=True)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena de la cámara OCR y su ubicación.
+        """
         return f'Camara OCR - {self.ubicacion}'
 
     class Meta:
@@ -273,6 +348,9 @@ class CamaraOCR(models.Model):
 
 # ─── LECTURA OCR ──────────────────────────────────────────────────
 class LecturaOCR(models.Model):
+    """
+    Modelo que registra una lectura de placa detectada por una cámara OCR.
+    """
     camara          = models.ForeignKey(CamaraOCR, on_delete=models.CASCADE, related_name='lecturas')
     vehiculo        = models.ForeignKey(Vehiculo, on_delete=models.SET_NULL, null=True, blank=True, related_name='lecturas')
     placa_detectada = models.CharField(max_length=20)
@@ -280,6 +358,9 @@ class LecturaOCR(models.Model):
     resultado       = models.BooleanField(default=False)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena de la lectura OCR con la placa y la fecha.
+        """
         return f'Lectura {self.placa_detectada} - {self.fecha_hora}'
 
     class Meta:
@@ -288,6 +369,9 @@ class LecturaOCR(models.Model):
 
 # ─── BARRERA ──────────────────────────────────────────────────────
 class Barrera(models.Model):
+    """
+    Modelo que representa una barrera física de control de acceso en el parqueadero.
+    """
     ESTADO_CHOICES = [
         ('abierta', 'Abierta'),
         ('cerrada', 'Cerrada'),
@@ -299,6 +383,9 @@ class Barrera(models.Model):
     ultima_accion = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena de la barrera con su ubicación y estado.
+        """
         return f'Barrera - {self.ubicacion} ({self.estado})'
 
     class Meta:
@@ -307,6 +394,9 @@ class Barrera(models.Model):
 
 # ─── NOTIFICACIÓN ─────────────────────────────────────────────────
 class Notificacion(models.Model):
+    """
+    Modelo que gestiona las notificaciones y alertas enviadas a los usuarios del sistema.
+    """
     TIPO_CHOICES = [
         ('reserva', 'Reserva'),
         ('pago', 'Pago'),
@@ -321,6 +411,9 @@ class Notificacion(models.Model):
     fecha   = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena de la notificación indicando su tipo y usuario.
+        """
         return f'Notificacion {self.tipo} - {self.usuario.nombre}'
 
     class Meta:
@@ -329,6 +422,9 @@ class Notificacion(models.Model):
 
 # ─── REPORTE ──────────────────────────────────────────────────────
 class Reporte(models.Model):
+    """
+    Modelo que almacena el historial de reportes generados en el sistema.
+    """
     FORMATO_CHOICES = [
         ('pdf', 'PDF'),
         ('csv', 'CSV'),
@@ -341,6 +437,9 @@ class Reporte(models.Model):
     formato          = models.CharField(max_length=20, choices=FORMATO_CHOICES)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena del reporte con su tipo y fecha de generación.
+        """
         return f'Reporte {self.tipo_reporte} - {self.fecha_generacion}'
 
     class Meta:
@@ -349,12 +448,18 @@ class Reporte(models.Model):
 
 # ─── CÓDIGO DE RECUPERACIÓN ───────────────────────────────────────
 class CodigoRecuperacion(models.Model):
+    """
+    Modelo que almacena códigos de recuperación temporales para restablecer contraseñas de usuarios.
+    """
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='codigos_recuperacion')
     codigo = models.CharField(max_length=6)
     creado_en = models.DateTimeField(auto_now_add=True)
     usado = models.BooleanField(default=False)
 
     def es_valido(self):
+        """
+        Verifica si el código de recuperación aún es válido (no ha sido usado ni ha expirado).
+        """
         # Válido por 15 minutos
         from django.utils import timezone
         import datetime
@@ -363,6 +468,9 @@ class CodigoRecuperacion(models.Model):
         return not self.usado and ahora <= limite
 
     def __str__(self):
+        """
+        Retorna la representación en cadena del código de recuperación y correo asociado.
+        """
         return f'Codigo {self.codigo} - {self.usuario.correo}'
 
     class Meta:
@@ -371,11 +479,17 @@ class CodigoRecuperacion(models.Model):
 
 # ─── BILLETERA ────────────────────────────────────────────────────
 class Billetera(models.Model):
+    """
+    Modelo que representa una billetera virtual asociada a un usuario para gestionar saldo.
+    """
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='billetera')
     saldo   = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     actualizado = models.DateTimeField(auto_now=True)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena de la billetera con el usuario y saldo.
+        """
         return f'Billetera de {self.usuario.nombre} — ${self.saldo}'
 
     class Meta:
@@ -384,6 +498,9 @@ class Billetera(models.Model):
 
 # ─── RECARGA DE SALDO ─────────────────────────────────────────────
 class Recarga(models.Model):
+    """
+    Modelo para registrar las recargas de saldo efectuadas en la billetera de un usuario.
+    """
     METODO_CHOICES = [
         ('bancolombia', 'Bancolombia'),
         ('nequi',       'Nequi'),
@@ -403,6 +520,9 @@ class Recarga(models.Model):
     fecha     = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        """
+        Retorna la representación en cadena de la recarga con el monto y nombre del usuario.
+        """
         return f'Recarga ${self.monto} — {self.billetera.usuario.nombre}'
 
     class Meta:

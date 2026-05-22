@@ -42,6 +42,9 @@ from .serializers import RegistroSerializer, UsuarioSerializer, CambiarPasswordS
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def registro(request):
+    """
+    Controlador para el registro de nuevos usuarios en el sistema.
+    """
     serializer = RegistroSerializer(data=request.data)
     if serializer.is_valid():
         usuario = serializer.save()
@@ -66,6 +69,9 @@ def registro(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login(request):
+    """
+    Controlador para la autenticación general de usuarios.
+    """
     correo   = request.data.get('correo')
     password = request.data.get('password')
 
@@ -179,6 +185,9 @@ def login_admin(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def perfil(request):
+    """
+    Controlador para consultar el perfil del usuario autenticado.
+    """
     serializer = UsuarioSerializer(request.user)
     return Response(serializer.data)
 
@@ -195,6 +204,9 @@ from .models import CodigoRecuperacion
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def enviar_codigo_recuperacion(request):
+    """
+    Envía un código de recuperación de contraseña al correo del usuario.
+    """
     correo = request.data.get('email') or request.data.get('correo')
     if not correo:
         return Response({'error': 'El correo es requerido'}, status=status.HTTP_400_BAD_REQUEST)
@@ -230,6 +242,9 @@ def enviar_codigo_recuperacion(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def verificar_codigo(request):
+    """
+    Verifica la validez del código de recuperación (OTP) enviado al usuario.
+    """
     correo = request.data.get('email') or request.data.get('correo')
     codigo = request.data.get('code') or request.data.get('codigo')
 
@@ -255,6 +270,9 @@ def verificar_codigo(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def restablecer_password(request):
+    """
+    Restablece la contraseña del usuario utilizando el código de recuperación validado.
+    """
     correo = request.data.get('email') or request.data.get('correo')
     codigo = request.data.get('code') or request.data.get('codigo')
     nuevo_password = request.data.get('newPassword') or request.data.get('password_nuevo')
@@ -291,6 +309,9 @@ def restablecer_password(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def cambiar_password(request):
+    """
+    Permite a un usuario autenticado cambiar su contraseña actual por una nueva.
+    """
     serializer = CambiarPasswordSerializer(data=request.data)
     if serializer.is_valid():
         usuario = request.user
@@ -309,6 +330,9 @@ def cambiar_password(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout(request):
+    """
+    Invalida el token de sesión actual para cerrar la sesión del usuario de forma segura.
+    """
     try:
         refresh_token = request.data.get('refresh')
         token = RefreshToken(refresh_token)
@@ -348,11 +372,17 @@ from .permissions import IsAdministrador, IsOperador, IsConductor, IsAdministrad
 # doPut  → update()             — Actualización (≡ doPut con UPDATE)
 # doDelete → destroy()          — Eliminación (≡ doDelete con DELETE)
 class VehiculoViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para la gestión completa (CRUD) de los vehículos registrados.
+    """
     queryset = Vehiculo.objects.all()
     serializer_class = VehiculoSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        """
+        Retorna el listado de vehículos disponibles dependiendo del rol del usuario.
+        """
         # Los administradores y operadores pueden ver todos, conductores solo los suyos
         user = self.request.user
         if hasattr(user, 'rol') and user.rol in ['administrador', 'operador']:
@@ -360,6 +390,9 @@ class VehiculoViewSet(viewsets.ModelViewSet):
         return Vehiculo.objects.filter(usuario=user)
 
     def perform_create(self, serializer):
+        """
+        Asocia el nuevo vehículo creado al usuario que realiza la petición HTTP.
+        """
         serializer.save(usuario=self.request.user)
 
 
@@ -368,6 +401,9 @@ class VehiculoViewSet(viewsets.ModelViewSet):
 # doGet → Consulta disponibilidad de espacios (≡ doGet con SELECT + filtro de estado).
 # doPost/doPut → Reserva o actualiza estado de espacio (libre/ocupado/mantenimiento).
 class EspacioParqueoViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para consultar y administrar la disponibilidad de los espacios de parqueo.
+    """
     queryset = EspacioParqueo.objects.all()
     serializer_class = EspacioParqueoSerializer
     permission_classes = [IsAdministradorOrReadOnly]
@@ -378,6 +414,9 @@ class EspacioParqueoViewSet(viewsets.ModelViewSet):
 # doGet  → Lista sensores y estado (≡ doGet + resp.setContentType("application/json")).
 # doPost → Registra nuevo sensor (≡ doPost + INSERT en BD).
 class SensorViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para la administración y monitoreo de los sensores IoT instalados.
+    """
     queryset = Sensor.objects.all()
     serializer_class = SensorSerializer
     permission_classes = [IsAdministradorOrReadOnly]
@@ -388,6 +427,9 @@ class SensorViewSet(viewsets.ModelViewSet):
 # doGet  → Consulta tarifas activas (≡ doGet con SELECT WHERE activa=TRUE).
 # doPost → Crea nueva tarifa por hora (≡ doPost + INSERT).
 class TarifaViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para definir y consultar las tarifas aplicables al servicio de parqueo.
+    """
     queryset = Tarifa.objects.all()
     serializer_class = TarifaSerializer
     permission_classes = [IsAdministradorOrReadOnly]
@@ -398,11 +440,17 @@ class TarifaViewSet(viewsets.ModelViewSet):
 # doPost → Crea reserva de espacio (≡ doPost + INSERT + session tracking).
 # doGet  → Lista reservas del usuario (≡ doGet filtrado por req.getUserPrincipal()).
 class ReservaViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para la gestión de reservas de espacios de parqueo por parte de los usuarios.
+    """
     queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
+        """
+        Guarda la reserva y actualiza automáticamente el estado del espacio de parqueo a reservado.
+        """
         reserva = serializer.save()
         espacio = reserva.espacio
         if espacio.estado == 'libre':
@@ -418,12 +466,18 @@ class ReservaViewSet(viewsets.ModelViewSet):
 # El objeto `request` transporta placa, espacio_id y token de autorización del operador,
 # equivalente al HttpServletRequest que transporta parámetros de formulario + JSESSIONID.
 class SesionParqueoViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para administrar las sesiones activas de parqueo de los vehículos en tiempo real.
+    """
     queryset = SesionParqueo.objects.all()
     serializer_class = SesionParqueoSerializer
     permission_classes = [IsOperadorOrAdministrador]
 
     @action(detail=False, methods=['post'], url_path='entrada-manual')
     def entrada_manual(self, request):
+        """
+        Registra de forma manual la entrada de un vehículo al parqueadero.
+        """
         placa = request.data.get('placa')
         tipo = request.data.get('tipo', 'carro')
         espacio_id = request.data.get('espacio_id')
@@ -472,6 +526,9 @@ class SesionParqueoViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], url_path='salida-manual')
     def salida_manual(self, request, pk=None):
+        """
+        Registra de forma manual la salida de un vehículo y genera el cobro correspondiente.
+        """
         sesion = self.get_object()
         if sesion.estado_sesion != 'abierta':
             return Response({'error': 'La sesión ya está cerrada'}, status=status.HTTP_400_BAD_REQUEST)
@@ -522,6 +579,9 @@ class SesionParqueoViewSet(viewsets.ModelViewSet):
 # doPost → Registra pago (≡ doPost + transacción en BD).
 # doGet  → Historial de pagos (≡ doGet + consulta BD + respuesta JSON).
 class PagoViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para la administración del historial de pagos y cobros registrados.
+    """
     queryset = Pago.objects.all()
     serializer_class = PagoSerializer
     permission_classes = [IsAuthenticated]
@@ -531,6 +591,9 @@ class PagoViewSet(viewsets.ModelViewSet):
 # Role: HttpServlet Controller — EventoAccesoServlet (Log de Accesos, Solo Lectura)
 # doGet → Lista de eventos de entrada/salida (≡ doGet con SELECT + ORDER BY fecha DESC).
 class EventoAccesoViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet de solo lectura para visualizar el historial de eventos de acceso (entradas y salidas).
+    """
     queryset = EventoAcceso.objects.all()
     serializer_class = EventoAccesoSerializer
     permission_classes = [IsOperadorOrAdministrador]
@@ -541,11 +604,17 @@ class EventoAccesoViewSet(viewsets.ReadOnlyModelViewSet):
 # doPost → perform_create() ≡ doPost que asigna automáticamente operador=request.user
 #           (≡ req.getUserPrincipal() asignado a la entidad antes del INSERT).
 class AutorizacionExcepcionalViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para la gestión de autorizaciones excepcionales de acceso al parqueadero.
+    """
     queryset = AutorizacionExcepcional.objects.all()
     serializer_class = AutorizacionExcepcionalSerializer
     permission_classes = [IsOperadorOrAdministrador]
 
     def perform_create(self, serializer):
+        """
+        Asocia automáticamente el operador en sesión a la autorización excepcional creada.
+        """
         serializer.save(operador=self.request.user)
 
 
@@ -553,6 +622,9 @@ class AutorizacionExcepcionalViewSet(viewsets.ModelViewSet):
 # Role: HttpServlet Controller — CamaraOCRServlet (Gestión de Cámaras IoT)
 # doGet/doPost → Administra configuración y estado de cámaras de reconocimiento de placas.
 class CamaraOCRViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para configurar y consultar el estado operativo de las cámaras OCR.
+    """
     queryset = CamaraOCR.objects.all()
     serializer_class = CamaraOCRSerializer
     permission_classes = [IsOperadorOrAdministrador]
@@ -562,6 +634,9 @@ class CamaraOCRViewSet(viewsets.ModelViewSet):
 # Role: HttpServlet Controller — LecturaOCRServlet (Solo Lectura)
 # doGet → Devuelve lecturas OCR de placas detectadas por cámaras.
 class LecturaOCRViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet de solo lectura para el registro de placas detectadas por las cámaras.
+    """
     queryset = LecturaOCR.objects.all()
     serializer_class = LecturaOCRSerializer
     permission_classes = [IsOperadorOrAdministrador]
@@ -572,6 +647,9 @@ class LecturaOCRViewSet(viewsets.ReadOnlyModelViewSet):
 # doPost → Cambia estado de barrera (abierta/cerrada) (≡ doPost con comando a dispositivo IoT).
 # doGet  → Consulta estado actual de barreras de entrada/salida.
 class BarreraViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para controlar y monitorizar las barreras de acceso físicas.
+    """
     queryset = Barrera.objects.all()
     serializer_class = BarreraSerializer
     permission_classes = [IsOperadorOrAdministrador]
@@ -581,11 +659,17 @@ class BarreraViewSet(viewsets.ModelViewSet):
 # Role: HttpServlet Controller — NotificacionServlet (Alertas del Sistema)
 # doGet → get_queryset() filtra por rol (≡ doGet con SELECT según req.isUserInRole()).
 class NotificacionViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para la administración y envío de notificaciones o alertas a los usuarios.
+    """
     queryset = Notificacion.objects.all()
     serializer_class = NotificacionSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        """
+        Filtra las notificaciones a mostrar según el rol del usuario autenticado.
+        """
         # Operadores y administradores ven todas las alertas de sistema
         usuario = self.request.user
         if hasattr(usuario, 'rol') and usuario.rol in ['operador', 'administrador']:
@@ -598,6 +682,9 @@ class NotificacionViewSet(viewsets.ModelViewSet):
 # doGet  → Descarga de reportes en formato JSON (≡ doGet + resp.setContentType("application/pdf")).
 # doPost → Solicita generación de nuevo reporte (≡ doPost + tarea asíncrona).
 class ReporteViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para la generación y consulta de reportes del sistema.
+    """
     queryset = Reporte.objects.all()
     serializer_class = ReporteSerializer
     permission_classes = [IsAdministrador]
@@ -608,12 +695,18 @@ class ReporteViewSet(viewsets.ModelViewSet):
 # doGet  → Lista todos los usuarios del sistema (≡ doGet con SELECT *).
 # doPost (activar/desactivar) → Cambia estado de cuenta (≡ doPost con UPDATE estado=TRUE/FALSE).
 class UsuarioViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para la administración centralizada de cuentas de usuario.
+    """
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
     permission_classes = [IsAdministrador]
 
     @action(detail=True, methods=['post'], url_path='activar')
     def activar(self, request, pk=None):
+        """
+        Habilita y activa la cuenta de un usuario en el sistema.
+        """
         user = self.get_object()
         user.estado = True
         user.save()
@@ -621,6 +714,9 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], url_path='desactivar')
     def desactivar(self, request, pk=None):
+        """
+        Deshabilita y restringe el acceso de una cuenta de usuario.
+        """
         user = self.get_object()
         user.estado = False
         user.save()
@@ -635,10 +731,16 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 # doGet (alertas_tiempo) → Infracciones por sobretiempo en sesiones activas.
 # El ViewSet hereda de ViewSet (≡ HttpServlet) y solo expone acciones GET (≡ doGet).
 class EstadisticasViewSet(viewsets.ViewSet):
+    """
+    ViewSet de solo lectura con endpoints para dashboard y reportes analíticos.
+    """
     permission_classes = [IsOperadorOrAdministrador]
 
     @action(detail=False, methods=['get'])
     def tablero(self, request):
+        """
+        Retorna las métricas principales para el tablero de control en tiempo real.
+        """
         total_espacios = EspacioParqueo.objects.count()
         espacios_ocupados = EspacioParqueo.objects.filter(estado='ocupado').count()
         espacios_libres = EspacioParqueo.objects.filter(estado='libre').count()
@@ -674,6 +776,9 @@ class EstadisticasViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['get'])
     def ventas(self, request):
+        """
+        Devuelve las estadísticas y el historial de ventas consolidado del mes actual.
+        """
         from django.db.models import Sum, Count, Avg
         import datetime
 
@@ -729,6 +834,9 @@ class EstadisticasViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['get'])
     def alertas_tiempo(self, request):
+        """
+        Genera reportes de sesiones activas que han superado el límite de tiempo permitido.
+        """
         from django.db.models import Sum, Avg, Count
         import datetime
 
@@ -788,19 +896,31 @@ class EstadisticasViewSet(viewsets.ViewSet):
 # Role: BilleteraServlet — Wallet del conductor
 # doGet (mi-billetera) → Retorna o crea la billetera del usuario autenticado.
 class BilleteraViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para visualizar el estado y transacciones de la billetera del usuario.
+    """
     serializer_class = BilleteraSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        """
+        Retorna la billetera asociada exclusivamente al usuario autenticado.
+        """
         return Billetera.objects.filter(usuario=self.request.user)
 
     @action(detail=False, methods=['get'], url_path='mi-billetera')
     def mi_billetera(self, request):
+        """
+        Obtiene o crea automáticamente la billetera del usuario actual si no existe.
+        """
         billetera, _ = Billetera.objects.get_or_create(usuario=request.user)
         return Response(BilleteraSerializer(billetera).data)
 
     @action(detail=False, methods=['get'], url_path='mis-facturas')
     def mis_facturas(self, request):
+        """
+        Devuelve el historial combinado de recargas y pagos realizados por el usuario.
+        """
         from django.db.models import Q
         billetera, _ = Billetera.objects.get_or_create(usuario=request.user)
         
@@ -846,14 +966,23 @@ class BilleteraViewSet(viewsets.ModelViewSet):
 # doGet  → Historial de recargas del usuario.
 # doPost → Crea recarga y suma saldo a la billetera (transacción atómica).
 class RecargaViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gestionar las operaciones de recarga de saldo en las billeteras.
+    """
     serializer_class = RecargaSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        """
+        Retorna el historial de recargas correspondientes a la billetera del usuario.
+        """
         billetera, _ = Billetera.objects.get_or_create(usuario=self.request.user)
         return Recarga.objects.filter(billetera=billetera)
 
     def create(self, request, *args, **kwargs):
+        """
+        Registra una nueva recarga y actualiza de manera atómica el saldo de la billetera.
+        """
         billetera, _ = Billetera.objects.get_or_create(usuario=request.user)
         monto  = request.data.get('monto')
         metodo = request.data.get('metodo', 'otro')
