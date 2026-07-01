@@ -39,7 +39,7 @@ class RegisterController {
     
     if (response.success) {
       // Redirigir al login para que el usuario inicie sesión manualmente.
-      window.location.href = 'login.html';
+      window.location.href = 'operador-login.html';
     } else {
       // Mostrar error (recomendado: reemplazar alert por notificación UI).
       alert(response.error || 'Error en registro');

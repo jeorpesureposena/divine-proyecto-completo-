@@ -20,6 +20,14 @@ class RegistroSerializer(serializers.ModelSerializer):
         model  = Usuario
         fields = ['nombre', 'correo', 'password', 'password2', 'rol', 'codigo_operador']
 
+    def validate_correo(self, value):
+        """
+        Valida que el correo no esté ya registrado en la base de datos.
+        """
+        if Usuario.objects.filter(correo=value).exists():
+            raise serializers.ValidationError('El correo ya está registrado.')
+        return value
+
     def validate(self, attrs):
         """
         Valida que ambas contraseñas proporcionadas coincidan.
@@ -85,10 +93,68 @@ class EspacioParqueoSerializer(serializers.ModelSerializer):
     Serializer para los espacios de parqueo, incluyendo la representación legible de su zona.
     """
     zona_display = serializers.CharField(source='get_zona_display', read_only=True)
+    estado = serializers.SerializerMethodField()
+    info_reserva = serializers.SerializerMethodField()
 
     class Meta:
         model = EspacioParqueo
         fields = '__all__'
+
+    def to_internal_value(self, data):
+        ret = super().to_internal_value(data)
+        if 'estado' in data:
+            estado_val = data['estado']
+            if estado_val in ['libre', 'ocupado', 'mantenimiento']:
+                ret['estado'] = estado_val
+            else:
+                raise serializers.ValidationError({'estado': 'Estado inválido.'})
+        return ret
+
+    def validate(self, attrs):
+        estado = attrs.get('estado')
+        if estado is None:
+            if self.instance:
+                estado = self.instance.estado
+            else:
+                estado = self.Meta.model._meta.get_field('estado').default
+
+        if estado != 'mantenimiento':
+            attrs['motivo_mantenimiento'] = None
+            attrs['duracion_mantenimiento'] = None
+        return attrs
+
+    def get_estado(self, obj):
+        if obj.estado in ['ocupado', 'mantenimiento']:
+            return obj.estado
+        from django.utils import timezone
+        ahora = timezone.now()
+        reserva_activa = obj.reservas.filter(
+            estado='activa', 
+            fecha_inicio__lte=ahora, 
+            fecha_fin__gte=ahora
+        ).exists()
+        if reserva_activa:
+            return 'reservado'
+        return 'libre'
+
+    def get_info_reserva(self, obj):
+        from django.utils import timezone
+        ahora = timezone.now()
+        reserva = obj.reservas.filter(
+            estado='activa', 
+            fecha_inicio__lte=ahora, 
+            fecha_fin__gte=ahora
+        ).first()
+        if reserva:
+            return {
+                'id': reserva.id,
+                'usuario_nombre': reserva.usuario.nombre,
+                'vehiculo_placa': reserva.vehiculo.placa if reserva.vehiculo else 'N/A',
+                'fecha_inicio': reserva.fecha_inicio.isoformat() if reserva.fecha_inicio else None,
+                'fecha_fin': reserva.fecha_fin.isoformat() if reserva.fecha_fin else None,
+                'estado': reserva.estado
+            }
+        return None
 
 
 class SensorSerializer(serializers.ModelSerializer):
@@ -140,6 +206,43 @@ class ReservaSerializer(serializers.ModelSerializer):
         pago = obj.pagos.first()
         return pago.metodo if pago else 'N/A'
 
+    def validate(self, attrs):
+        espacio = attrs.get('espacio')
+        fecha_inicio = attrs.get('fecha_inicio')
+        fecha_fin = attrs.get('fecha_fin')
+        
+        if fecha_inicio and fecha_fin and espacio:
+            if fecha_inicio >= fecha_fin:
+                raise serializers.ValidationError("La fecha de inicio debe ser anterior a la fecha de fin.")
+            
+            from django.utils import timezone
+            from datetime import timedelta
+            ahora = timezone.now()
+            
+            # Evitar crear reservas en el pasado (margen de 5 minutos)
+            if fecha_inicio < ahora - timedelta(minutes=5):
+                raise serializers.ValidationError({"fecha_inicio": "La fecha y hora de inicio no pueden ser en el pasado. Verifica la fecha seleccionada en tu dispositivo."})
+            
+            margen = timedelta(minutes=15)
+            inicio_con_margen = fecha_inicio - margen
+            fin_con_margen = fecha_fin + margen
+            
+            from .models import Reserva
+            solapamientos = Reserva.objects.filter(
+                espacio=espacio,
+                estado='activa',
+                fecha_inicio__lt=fin_con_margen,
+                fecha_fin__gt=inicio_con_margen
+            )
+            
+            if self.instance:
+                solapamientos = solapamientos.exclude(id=self.instance.id)
+                
+            if solapamientos.exists():
+                raise serializers.ValidationError("El espacio ya está reservado en esa franja horaria (incluyendo 15 min de gracia).")
+        
+        return attrs
+
 
 class SesionParqueoSerializer(serializers.ModelSerializer):
     """
@@ -157,9 +260,33 @@ class PagoSerializer(serializers.ModelSerializer):
     """
     Serializer para el manejo de los pagos realizados en el sistema.
     """
+    factura_url = serializers.SerializerMethodField()
+    vehiculo_placa = serializers.SerializerMethodField()
+    usuario_nombre = serializers.SerializerMethodField()
+
     class Meta:
         model = Pago
         fields = '__all__'
+
+    def get_factura_url(self, obj):
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(f'/api/pagos/{obj.id}/factura/')
+        return f'/api/pagos/{obj.id}/factura/'
+
+    def get_vehiculo_placa(self, obj):
+        if getattr(obj, 'reserva', None) and getattr(obj.reserva, 'vehiculo', None):
+            return obj.reserva.vehiculo.placa
+        if getattr(obj, 'sesion', None) and getattr(obj.sesion, 'vehiculo', None):
+            return obj.sesion.vehiculo.placa
+        return None
+
+    def get_usuario_nombre(self, obj):
+        if getattr(obj, 'reserva', None) and getattr(obj.reserva, 'usuario', None):
+            return getattr(obj.reserva.usuario, 'nombre', getattr(obj.reserva.usuario, 'email', None))
+        if getattr(obj, 'sesion', None) and getattr(obj.sesion, 'usuario', None):
+            return getattr(obj.sesion.usuario, 'nombre', getattr(obj.sesion.usuario, 'email', None))
+        return None
 
 
 class EventoAccesoSerializer(serializers.ModelSerializer):
@@ -168,6 +295,7 @@ class EventoAccesoSerializer(serializers.ModelSerializer):
     """
     vehiculo_placa = serializers.CharField(source='vehiculo.placa', read_only=True)
     espacio_numero = serializers.IntegerField(source='espacio.numero', read_only=True)
+    espacio_zona = serializers.CharField(source='espacio.zona', read_only=True)
     operador_nombre = serializers.CharField(source='operador.nombre', read_only=True)
 
     class Meta:

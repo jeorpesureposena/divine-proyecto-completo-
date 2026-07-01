@@ -1,0 +1,1025 @@
+{
+  "info": {
+    "_postman_id": "a98d3c52-7b2a-4632-9df7-22f168fbe1aa",
+    "name": "Divine Park API - Proyecto Formativo SENA",
+    "description": "Colección completa de endpoints para probar el sistema de gestión inteligente de estacionamientos Divine Park (ADSO - SENA). Incluye autenticación JWT, CRUDs, simuladores OCR y tablero estadístico.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Módulo de Autenticación y Sesión (Auth)",
+      "item": [
+        {
+          "name": "Registro de Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan P\\u00e9rez\",\n  \"correo\": \"juan.perez@email.com\",\n  \"password\": \"PasswordSegura123*\",\n  \"password2\": \"PasswordSegura123*\",\n  \"rol\": \"conductor\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/registro/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "registro",
+                ""
+              ]
+            },
+            "description": "Registra un nuevo usuario en el sistema. Roles permitidos: conductor, operador, administrador."
+          }
+        },
+        {
+          "name": "Inicio de Sesión General (Login Conductor/Operador)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"juan.perez@email.com\",\n  \"password\": \"PasswordSegura123*\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login",
+                ""
+              ]
+            },
+            "description": "Autentica al usuario y retorna los tokens de acceso y de actualización (JWT)."
+          }
+        },
+        {
+          "name": "Inicio de Sesión Operador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"operador@divinepark.com\",\n  \"password\": \"PasswordOperador123*\",\n  \"codigo_operador\": \"OP-12345\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/operador-login/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "operador-login",
+                ""
+              ]
+            },
+            "description": "Autentica a un operador de parqueadero validando su código interno de operador."
+          }
+        },
+        {
+          "name": "Inicio de Sesión Administrador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"admin@divinepark.com\",\n  \"password\": \"PasswordAdmin123*\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login-admin/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login-admin",
+                ""
+              ]
+            },
+            "description": "Permite el inicio de sesión exclusivo para personal de administración del backend."
+          }
+        },
+        {
+          "name": "Ver Perfil de Usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/perfil/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "perfil",
+                ""
+              ]
+            },
+            "description": "Obtiene los detalles de perfil del usuario logueado en la sesión."
+          }
+        },
+        {
+          "name": "Cambiar Contraseña",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password_actual\": \"PasswordSegura123*\",\n  \"password_nuevo\": \"NuevaPassword456*\",\n  \"password_nuevo2\": \"NuevaPassword456*\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/cambiar-password/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "cambiar-password",
+                ""
+              ]
+            },
+            "description": "Permite al usuario cambiar su contraseña actual por una nueva."
+          }
+        },
+        {
+          "name": "Recuperar Contraseña: Enviar Código",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"juan.perez@email.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/recuperar-password/enviar-codigo/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "recuperar-password",
+                "enviar-codigo",
+                ""
+              ]
+            },
+            "description": "Envía un código de 6 dígitos al correo del usuario para iniciar el restablecimiento de contraseña."
+          }
+        },
+        {
+          "name": "Recuperar Contraseña: Verificar Código",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"juan.perez@email.com\",\n  \"codigo\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/recuperar-password/verificar-codigo/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "recuperar-password",
+                "verificar-codigo",
+                ""
+              ]
+            },
+            "description": "Verifica si el código ingresado coincide con el enviado al correo del usuario."
+          }
+        },
+        {
+          "name": "Recuperar Contraseña: Restablecer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"juan.perez@email.com\",\n  \"codigo\": \"123456\",\n  \"password_nuevo\": \"RestablecidaPassword123*\",\n  \"password_nuevo2\": \"RestablecidaPassword123*\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/recuperar-password/restablecer/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "recuperar-password",
+                "restablecer",
+                ""
+              ]
+            },
+            "description": "Restablece la contraseña del usuario si el código de validación es correcto."
+          }
+        },
+        {
+          "name": "Cerrar Sesión (Logout)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout",
+                ""
+              ]
+            },
+            "description": "Invalida el token refresh enviándolo a la lista negra del backend."
+          }
+        },
+        {
+          "name": "Refrescar Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/refresh/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "refresh",
+                ""
+              ]
+            },
+            "description": "Genera un nuevo access token utilizando el refresh token vigente."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Módulo de Espacios de Parqueo",
+      "item": [
+        {
+          "name": "Listar todos los Espacios",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/espacios/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "espacios",
+                ""
+              ]
+            },
+            "description": "Retorna la lista de todos los espacios de estacionamiento."
+          }
+        },
+        {
+          "name": "Registrar Nuevo Espacio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numero\": 150,\n  \"zona\": \"A\",\n  \"tipo\": \"estandar\",\n  \"estado\": \"libre\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/espacios/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "espacios",
+                ""
+              ]
+            },
+            "description": "Crea un nuevo espacio de parqueo (Exclusivo Administrador)."
+          }
+        },
+        {
+          "name": "Actualizar Espacio (PATCH Estado Libre)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"libre\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/espacios/1/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "espacios",
+                "1",
+                ""
+              ]
+            },
+            "description": "Actualiza parcialmente un espacio de parqueo. Si cambia a 'libre', limpia automáticamente los campos de mantenimiento."
+          }
+        },
+        {
+          "name": "Actualizar Espacio (PATCH Estado Mantenimiento)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"mantenimiento\",\n  \"motivo_mantenimiento\": \"Falla en el sensor de piso\",\n  \"duracion_mantenimiento\": \"24 horas\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/espacios/1/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "espacios",
+                "1",
+                ""
+              ]
+            },
+            "description": "Coloca un espacio en mantenimiento y permite guardar el motivo y duración."
+          }
+        },
+        {
+          "name": "Consultar Espacios Disponibles por Horario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/espacios/disponibles/?inicio=2026-06-21T16:45:00Z&fin=2026-06-21T18:45:00Z",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "espacios",
+                "disponibles",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "inicio",
+                  "value": "2026-06-21T16:45:00Z"
+                },
+                {
+                  "key": "fin",
+                  "value": "2026-06-21T18:45:00Z"
+                }
+              ]
+            },
+            "description": "Filtra y retorna los espacios libres de reservas en el rango de tiempo indicado."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Módulo de Vehículos",
+      "item": [
+        {
+          "name": "Listar Vehículos del Usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/vehiculos/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehiculos",
+                ""
+              ]
+            },
+            "description": "Retorna los vehículos registrados por el usuario autenticado."
+          }
+        },
+        {
+          "name": "Registrar Vehículo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"XYZ987\",\n  \"tipo\": \"carro\",\n  \"marca\": \"Toyota\",\n  \"color\": \"Rojo\",\n  \"modelo\": \"2025\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/vehiculos/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "vehiculos",
+                ""
+              ]
+            },
+            "description": "Registra un nuevo vehículo asociándolo al conductor actual."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Módulo de Reservas",
+      "item": [
+        {
+          "name": "Listar Reservas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reservas/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reservas",
+                ""
+              ]
+            },
+            "description": "Obtiene la lista de reservas del usuario."
+          }
+        },
+        {
+          "name": "Crear Reserva de Espacio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"espacio\": 1,\n  \"vehiculo\": 1,\n  \"fecha_inicio\": \"2026-07-05T14:00:00Z\",\n  \"fecha_fin\": \"2026-07-05T16:00:00Z\",\n  \"estado\": \"activa\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/reservas/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reservas",
+                ""
+              ]
+            },
+            "description": "Genera una reserva para un espacio libre en un rango de fecha específico."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Módulo de Sesiones de Parqueo",
+      "item": [
+        {
+          "name": "Registrar Entrada Manual",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"XYZ987\",\n  \"tipo_vehiculo\": \"carro\",\n  \"espacio_numero\": 101\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sesiones/entrada-manual/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sesiones",
+                "entrada-manual",
+                ""
+              ]
+            },
+            "description": "Registra manualmente el ingreso de un vehículo en el parqueadero asignándole un espacio."
+          }
+        },
+        {
+          "name": "Registrar Salida Manual (Cobro)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"metodo_pago\": \"efectivo\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/sesiones/1/salida-m/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sesiones",
+                "1",
+                "salida-m",
+                ""
+              ]
+            },
+            "description": "Registra la salida del vehículo, calcula la tarifa a cobrar y emite el pago."
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Módulo de Sensores IoT",
+      "item": [
+        {
+          "name": "Listar Sensores",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/sensores/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sensores",
+                ""
+              ]
+            },
+            "description": "Consulta todos los sensores registrados en el parqueadero y su estado de lectura."
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Módulo de Tarifas",
+      "item": [
+        {
+          "name": "Listar Tarifas de Parqueo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/tarifas/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tarifas",
+                ""
+              ]
+            },
+            "description": "Consulta las tarifas configuradas por tipo de vehículo (carro, moto, etc.)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Módulo de Pagos y Facturación",
+      "item": [
+        {
+          "name": "Listar Historial de Pagos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/pagos/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pagos",
+                ""
+              ]
+            },
+            "description": "Obtiene la lista de pagos efectuados por el usuario."
+          }
+        },
+        {
+          "name": "Ver Factura",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/pagos/1/factura/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pagos",
+                "1",
+                "factura",
+                ""
+              ]
+            },
+            "description": "Obtiene el detalle o la representación en HTML/PDF de una factura por ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Módulo de Billetera Virtual y Recargas",
+      "item": [
+        {
+          "name": "Ver Mi Billetera (Saldo)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/billetera/mi_billetera/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "billetera",
+                "mi_billetera",
+                ""
+              ]
+            },
+            "description": "Muestra el saldo disponible de la billetera virtual del usuario logueado."
+          }
+        },
+        {
+          "name": "Crear Transacción de Recarga",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 20000.0,\n  \"metodo\": \"pse\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/recargas/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "recargas",
+                ""
+              ]
+            },
+            "description": "Recarga saldo a la billetera virtual mediante simulación PSE, Tarjeta de Crédito, etc."
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Módulo de Estadísticas y Tablero",
+      "item": [
+        {
+          "name": "Ver KPIs del Tablero General",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/estadisticas/tablero/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "estadisticas",
+                "tablero",
+                ""
+              ]
+            },
+            "description": "Entrega métricas clave como: total de espacios ocupados, libres, tasa de ocupación e ingresos totales del día."
+          }
+        },
+        {
+          "name": "Ver Reporte de Ventas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/estadisticas/ventas/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "estadisticas",
+                "ventas",
+                ""
+              ]
+            },
+            "description": "Retorna gráficos consolidados e históricos de ventas."
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Módulo de Gestión de Usuarios (Admin)",
+      "item": [
+        {
+          "name": "Listar todos los Usuarios",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                ""
+              ]
+            },
+            "description": "Retorna la lista de todos los usuarios registrados en el sistema (Admin only)."
+          }
+        },
+        {
+          "name": "Activar Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios/1/activar/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "1",
+                "activar",
+                ""
+              ]
+            },
+            "description": "Cambia el estado de un usuario a activo (estado=true)."
+          }
+        },
+        {
+          "name": "Desactivar Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios/1/desactivar/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "1",
+                "desactivar",
+                ""
+              ]
+            },
+            "description": "Desactiva la cuenta de un usuario (estado=false)."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "INSERTE_TOKEN_AQUI",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "INSERTE_TOKEN_AQUI",
+      "type": "string"
+    }
+  ]
+}

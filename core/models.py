@@ -75,7 +75,7 @@ class Vehiculo(models.Model):
         ('camioneta', 'Camioneta'),
     ]
 
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='vehiculos')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='vehiculos', null=True, blank=True)
     placa   = models.CharField(max_length=20, unique=True)
     tipo    = models.CharField(max_length=50, choices=TIPO_CHOICES)
     marca   = models.CharField(max_length=50, blank=True, null=True)
@@ -241,9 +241,9 @@ class Pago(models.Model):
     Modelo que gestiona los registros de pago asociados a reservas o sesiones de parqueo.
     """
     METODO_CHOICES = [
-        ('efectivo', 'Efectivo'),
         ('tarjeta', 'Tarjeta'),
         ('app', 'App'),
+        ('excepcion', 'Excepciones'),
     ]
     ESTADO_CHOICES = [
         ('aprobado', 'Aprobado'),
@@ -312,6 +312,7 @@ class AutorizacionExcepcional(models.Model):
     operador    = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, related_name='autorizaciones')
     vehiculo    = models.ForeignKey(Vehiculo, on_delete=models.SET_NULL, null=True, blank=True, related_name='autorizaciones')
     espacio     = models.ForeignKey(EspacioParqueo, on_delete=models.SET_NULL, null=True, related_name='autorizaciones')
+    pago        = models.OneToOneField('Pago', on_delete=models.SET_NULL, null=True, blank=True, related_name='autorizacion')
     placa       = models.CharField(max_length=20)
     tipo        = models.CharField(max_length=10, choices=TIPO_CHOICES)
     motivo      = models.TextField()

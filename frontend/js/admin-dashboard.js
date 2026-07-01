@@ -91,7 +91,7 @@ class AdminDashboardController {
 
     // ── Reservas activas ───────────────────────────────────────────
     try {
-        const reservas = await window.apiFetch('/reservas/');
+        const reservas = await window.apiFetch('/reservas/?all=true');
         const statReservas = document.getElementById('stat-reservas');
         if (statReservas) {
             statReservas.textContent = Array.isArray(reservas) ? reservas.length : 0;
@@ -144,7 +144,79 @@ class AdminDashboardController {
             div.classList.add('cursor-pointer', 'transition-transform', 'hover:scale-105', 'shadow-sm');
             
             // Open modal on click
-            div.addEventListener('click', () => {
+            div.addEventListener('click', async () => {
+                if (estado === 'ocupado') {
+                    const ocupModal = document.getElementById('ocupado-modal');
+                    const ocupContent = document.getElementById('ocupado-modal-content');
+                    if (!ocupModal) return;
+
+                    document.getElementById('ocupado-modal-name').value = `${espacio.zona}-${numStr}`;
+                    document.getElementById('ocupado-modal-placa').value = 'Cargando...';
+                    document.getElementById('ocupado-modal-hora').value = 'Cargando...';
+
+                    ocupModal.classList.remove('hidden');
+                    void ocupModal.offsetWidth;
+                    ocupModal.classList.remove('opacity-0');
+                    if (ocupContent) ocupContent.classList.remove('scale-95');
+
+                    try {
+                        const sesiones = await window.apiFetch('/sesiones/');
+                        const activa = sesiones.find(s => s.espacio === espacio.id && s.estado_sesion === 'abierta');
+                        if (activa) {
+                            document.getElementById('ocupado-modal-placa').value = activa.vehiculo_placa || 'N/A';
+                            const dt = new Date(activa.hora_inicio);
+                            document.getElementById('ocupado-modal-hora').value = dt.toLocaleString('es-CO');
+                        } else {
+                            document.getElementById('ocupado-modal-placa').value = 'No encontrada';
+                            document.getElementById('ocupado-modal-hora').value = '--';
+                        }
+                    } catch (e) {
+                        document.getElementById('ocupado-modal-placa').value = 'Error';
+                        document.getElementById('ocupado-modal-hora').value = 'Error';
+                    }
+                    return;
+                }
+
+                if (estado === 'reservado') {
+                    const resModal = document.getElementById('reservado-modal');
+                    const resContent = document.getElementById('reservado-modal-content');
+                    if (!resModal) return;
+
+                    document.getElementById('reservado-modal-name').value = `${espacio.zona}-${numStr}`;
+                    document.getElementById('reservado-modal-usuario').value = 'Cargando...';
+                    document.getElementById('reservado-modal-placa').value = 'Cargando...';
+                    document.getElementById('reservado-modal-inicio').value = 'Cargando...';
+                    document.getElementById('reservado-modal-fin').value = 'Cargando...';
+
+                    resModal.classList.remove('hidden');
+                    void resModal.offsetWidth;
+                    resModal.classList.remove('opacity-0');
+                    if (resContent) resContent.classList.remove('scale-95');
+
+                    try {
+                        const info = espacio.info_reserva;
+                        if (info) {
+                            document.getElementById('reservado-modal-usuario').value = info.usuario_nombre || 'N/A';
+                            document.getElementById('reservado-modal-placa').value = info.vehiculo_placa || 'N/A';
+                            const dtInicio = new Date(info.fecha_inicio);
+                            const dtFin = new Date(info.fecha_fin);
+                            document.getElementById('reservado-modal-inicio').value = dtInicio.toLocaleString('es-CO');
+                            document.getElementById('reservado-modal-fin').value = dtFin.toLocaleString('es-CO');
+                        } else {
+                            document.getElementById('reservado-modal-usuario').value = 'No encontrada';
+                            document.getElementById('reservado-modal-placa').value = '--';
+                            document.getElementById('reservado-modal-inicio').value = '--';
+                            document.getElementById('reservado-modal-fin').value = '--';
+                        }
+                    } catch (e) {
+                        document.getElementById('reservado-modal-usuario').value = 'Error';
+                        document.getElementById('reservado-modal-placa').value = 'Error';
+                        document.getElementById('reservado-modal-inicio').value = 'Error';
+                        document.getElementById('reservado-modal-fin').value = 'Error';
+                    }
+                    return;
+                }
+
                 const modal = document.getElementById('spot-modal');
                 const modalContent = document.getElementById('spot-modal-content');
                 const inputName = document.getElementById('spot-modal-name');
@@ -500,6 +572,72 @@ class AdminDashboardController {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
             closeModal();
+        }
+    });
+
+    // Ocupado Modal close logic
+    const ocupModal = document.getElementById('ocupado-modal');
+    const ocupContent = document.getElementById('ocupado-modal-content');
+    const btnOcupadoClose = document.getElementById('btn-ocupado-close');
+
+    const closeOcupadoModal = () => {
+        if (ocupModal && !ocupModal.classList.contains('hidden')) {
+            ocupModal.classList.add('opacity-0');
+            if (ocupContent) ocupContent.classList.add('scale-95');
+            setTimeout(() => {
+                ocupModal.classList.add('hidden');
+            }, 300);
+        }
+    };
+
+    if (btnOcupadoClose) {
+        btnOcupadoClose.addEventListener('click', closeOcupadoModal);
+    }
+
+    if (ocupModal) {
+        ocupModal.addEventListener('click', (e) => {
+            if (e.target === ocupModal) {
+                closeOcupadoModal();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && ocupModal && !ocupModal.classList.contains('hidden')) {
+            closeOcupadoModal();
+        }
+    });
+
+    // Reservado Modal close logic
+    const resModal = document.getElementById('reservado-modal');
+    const resContent = document.getElementById('reservado-modal-content');
+    const btnReservadoClose = document.getElementById('btn-reservado-close');
+
+    const closeReservadoModal = () => {
+        if (resModal && !resModal.classList.contains('hidden')) {
+            resModal.classList.add('opacity-0');
+            if (resContent) resContent.classList.add('scale-95');
+            setTimeout(() => {
+                resModal.classList.add('hidden');
+            }, 300);
+        }
+    };
+
+    if (btnReservadoClose) {
+        btnReservadoClose.addEventListener('click', closeReservadoModal);
+    }
+
+    if (resModal) {
+        resModal.addEventListener('click', (e) => {
+            if (e.target === resModal) {
+                closeReservadoModal();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && resModal && !resModal.classList.contains('hidden')) {
+            closeReservadoModal();
         }
     });
   }

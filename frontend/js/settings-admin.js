@@ -34,16 +34,15 @@ async function loadTarifa() {
             if (el) el.value = val ?? '';
         };
 
-        setVal('tarifa-minuto', activa.valor_minuto ?? '');
+        setVal('tarifa-minuto', activa.valor_fraccion ?? '');
         setVal('tarifa-hora',   activa.valor_hora   ?? '');
-        setVal('tarifa-dia',    activa.valor_dia     ?? '');
-        setVal('tarifa-exceso', activa.valor_exceso  ?? '');
 
-        // Mostrar fecha última actualización
+        // Mostrar rango de vigencia de la tarifa
         const updated = document.getElementById('tarifa-updated');
-        if (updated && activa.fecha_actualizacion) {
-            const d = new Date(activa.fecha_actualizacion);
-            updated.textContent = `Última actualización: ${d.toLocaleString()}`;
+        if (updated && activa.vigencia_inicio && activa.vigencia_fin) {
+            const inicio = new Date(activa.vigencia_inicio);
+            const fin = new Date(activa.vigencia_fin);
+            updated.textContent = `Vigencia: ${inicio.toLocaleString()} - ${fin.toLocaleString()}`;
         } else if (updated) {
             updated.textContent = 'Tarifa cargada desde el sistema';
         }
@@ -60,11 +59,14 @@ async function loadTarifa() {
 async function saveTarifa(e) {
     e.preventDefault();
 
+    const now = new Date();
+    const nextYear = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000);
+
     const payload = {
-        valor_minuto: parseFloat(document.getElementById('tarifa-minuto').value) || 0,
-        valor_hora:   parseFloat(document.getElementById('tarifa-hora').value)   || 0,
-        valor_dia:    parseFloat(document.getElementById('tarifa-dia').value)    || 0,
-        valor_exceso: parseFloat(document.getElementById('tarifa-exceso').value) || 0,
+        valor_fraccion: parseFloat(document.getElementById('tarifa-minuto').value) || 0,
+        valor_hora:     parseFloat(document.getElementById('tarifa-hora').value)   || 0,
+        vigencia_inicio: now.toISOString(),
+        vigencia_fin:    nextYear.toISOString(),
         activa: true,
     };
 

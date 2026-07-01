@@ -150,7 +150,7 @@
     <!-- Main Content Area -->
     <main class="flex-grow overflow-y-auto bg-white" data-purpose="main-content-area">
         <!-- BEGIN: Header -->
-        <header class="p-8 pb-4" data-purpose="dashboard-header">
+        <header class="p-6 pb-4" data-purpose="dashboard-header">
             <h1 class="text-3xl font-extrabold text-gray-900" data-i18n="dashboard.title" data-i18n="dashboard.title">Tablero Principal</h1>
             <p class="text-gray-500 font-medium" data-i18n="dashboard.subtitle" data-i18n="dashboard.subtitle">Monitoreo en tiempo real del sistema Divine Park</p>
         </header>
@@ -366,6 +366,76 @@
         </div>
     </div>
     <!-- END: Modal Desactivar Cupo -->
+
+    <!-- BEGIN: Modal Cupo Ocupado -->
+    <div id="ocupado-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-11/12 max-w-md flex flex-col p-8 transform scale-95 transition-transform duration-300 relative" id="ocupado-modal-content">
+            
+            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Información del Cupo Ocupado</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-900 mb-2">Espacio</label>
+                    <input type="text" id="ocupado-modal-name" readonly class="w-full border border-slate-300 rounded-lg px-4 py-2 text-slate-700 bg-slate-50 focus:outline-none">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-900 mb-2">Placa del Vehículo</label>
+                    <input type="text" id="ocupado-modal-placa" readonly class="w-full border border-slate-300 rounded-lg px-4 py-2 text-slate-700 bg-slate-50 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-900 mb-2">Hora de Entrada</label>
+                    <input type="text" id="ocupado-modal-hora" readonly class="w-full border border-slate-300 rounded-lg px-4 py-2 text-slate-700 bg-slate-50 focus:outline-none">
+                </div>
+            </div>
+            
+            <div class="mt-8 flex gap-4">
+                <button id="btn-ocupado-close" class="flex-1 bg-[#001A8E] text-white font-bold py-3 px-4 rounded-full hover:bg-blue-900 transition-colors">Cerrar</button>
+            </div>
+        </div>
+    </div>
+    <!-- END: Modal Cupo Ocupado -->
+
+    <!-- BEGIN: Modal Cupo Reservado -->
+    <div id="reservado-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-11/12 max-w-md flex flex-col p-8 transform scale-95 transition-transform duration-300 relative" id="reservado-modal-content">
+            
+            <h2 class="text-2xl font-extrabold text-slate-900 mb-6">Información del Cupo Reservado</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-900 mb-2">Espacio</label>
+                    <input type="text" id="reservado-modal-name" readonly class="w-full border border-slate-300 rounded-lg px-4 py-2 text-slate-700 bg-slate-50 focus:outline-none">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-900 mb-2">Cliente / Usuario</label>
+                    <input type="text" id="reservado-modal-usuario" readonly class="w-full border border-slate-300 rounded-lg px-4 py-2 text-slate-700 bg-slate-50 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-900 mb-2">Placa del Vehículo</label>
+                    <input type="text" id="reservado-modal-placa" readonly class="w-full border border-slate-300 rounded-lg px-4 py-2 text-slate-700 bg-slate-50 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-900 mb-2">Hora de Inicio</label>
+                    <input type="text" id="reservado-modal-inicio" readonly class="w-full border border-slate-300 rounded-lg px-4 py-2 text-slate-700 bg-slate-50 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-900 mb-2">Hora de Fin</label>
+                    <input type="text" id="reservado-modal-fin" readonly class="w-full border border-slate-300 rounded-lg px-4 py-2 text-slate-700 bg-slate-50 focus:outline-none">
+                </div>
+            </div>
+            
+            <div class="mt-8 flex gap-4">
+                <button id="btn-reservado-close" class="flex-1 bg-[#001A8E] text-white font-bold py-3 px-4 rounded-full hover:bg-blue-900 transition-colors">Cerrar</button>
+            </div>
+        </div>
+    </div>
+    <!-- END: Modal Cupo Reservado -->
 
 <script src="js/api.js"></script>
     <script src="js/i18n.js"></script>

@@ -84,15 +84,15 @@ class SellReportsController {
         container.innerHTML = ventas_diarias.map((v, idx) => {
             const heightPct = maxVal > 0 ? Math.round((v.total / maxVal) * 100) : 2;
             const isMax = v.total === maxVal && maxVal > 0;
-            const barColor = isMax ? 'bg-divine-cyan shadow-[0_0_20px_rgba(0,212,255,0.4)]' : 'bg-divine-blue';
-            const tooltip = isMax
-                ? `<div class="absolute -top-12 bg-divine-cyan text-divine-blue px-3 py-1 rounded-md text-xs font-bold shadow-lg">${this.formatCOP(v.total)}<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-divine-cyan rotate-45"></div></div>`
-                : '';
+            const barColor = isMax ? 'bg-divine-cyan' : 'bg-divine-blue';
+            const barShadow = isMax ? 'shadow-lg shadow-cyan-200' : 'shadow shadow-blue-200';
             return `
-            <div class="flex-1 flex flex-col items-center ${isMax ? 'relative' : 'group'}">
-                ${tooltip}
-                <div class="w-full ${barColor} rounded-t-sm transition-all hover:opacity-80" style="height:${heightPct}%"></div>
-                <span class="mt-4 text-xs font-bold text-gray-400">${v.dia.substring(0, 3)}</span>
+            <div class="flex-1 flex flex-col items-center justify-end group">
+                <div class="text-xs font-bold text-slate-600 mb-2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    ${this.formatCOP(v.total)}
+                </div>
+                <div class="w-full ${barColor} ${barShadow} rounded-t-md transition-all hover:opacity-90 hover:scale-y-105" style="height:${Math.max(heightPct, 5)}%; min-height: 4px;"></div>
+                <div class="text-xs font-bold text-gray-500 mt-3">${v.dia.substring(0, 3)}</div>
             </div>`;
         }).join('');
     }
@@ -124,8 +124,9 @@ class SellReportsController {
             return;
         }
 
-        const metodoIcono = { 'tarjeta': 'CARD', 'efectivo': 'CASH', 'app': 'APP' };
-        const metodoLabel = { 'tarjeta': 'Tarjeta de Crédito', 'efectivo': 'Efectivo', 'app': 'App Móvil' };
+        const metodoIcono = { 'tarjeta': 'CARD', 'excepcion': 'EXC', 'app': 'APP' };
+        const metodoLabel = { 'tarjeta': 'Tarjeta de Crédito', 'excepcion': 'Excepciones', 'app': 'App Móvil' };
+        const estadoLabel = { 'aprobado': 'Aprobado', 'pendiente': 'Pendiente', 'rechazado': 'Rechazado' };
 
         tbody.innerHTML = items.map(p => {
             const estadoClass = p.estado === 'aprobado'
@@ -133,7 +134,7 @@ class SellReportsController {
                 : p.estado === 'pendiente'
                     ? 'bg-yellow-400 text-black'
                     : 'bg-red-400 text-white';
-            const estadoLabel = window.getTranslation('status.' + p.estado) || p.estado;
+            const estadoText = estadoLabel[p.estado] || (p.estado.charAt(0).toUpperCase() + p.estado.slice(1));
             const icono = metodoIcono[p.metodo] || 'OTR';
             const label = metodoLabel[p.metodo] || p.metodo;
             return `
@@ -147,11 +148,12 @@ class SellReportsController {
                     </div>
                 </td>
                 <td class="px-6 py-4">
-                    <span class="px-3 py-1 ${estadoClass} rounded-md text-[10px] font-bold">${estadoLabel}</span>
+                    <span class="px-3 py-1 ${estadoClass} rounded-md text-[10px] font-bold">${estadoText}</span>
                 </td>
                 <td class="px-6 py-4 text-right text-sm font-extrabold text-slate-800">${this.formatCOP(p.monto)}</td>
             </tr>`;
         }).join('');
+
 
         // Estado botones paginación
         const totalPages = Math.ceil(pagos.length / this.perPage);

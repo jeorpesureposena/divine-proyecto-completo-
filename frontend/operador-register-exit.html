@@ -196,8 +196,8 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <i class='bx bxs-parking' style='font-size: 2rem; color: var(--accent-color);'></i>
-            <h2>DivinePark</h2>
+            <img src="assets/logo.jpg" alt="Divine Park Logo" style="width: 32px; height: 32px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); object-fit: cover;">
+            <h2 style="color: white; font-weight: 800; letter-spacing: -0.5px;">Divine Park</h2>
         </div>
 
         <nav class="sidebar-nav">
@@ -308,11 +308,11 @@
                 <!-- Autorización Excepcional -->
                 <div id="seccion-autorizacion" style="display:none;">
                     <p class="section-title">Módulo de Autorización Excepcional</p>
-                    <p class="section-subtitle">Motivo de la excepción (Obligatorio para registrar salida sin pago)</p>
+                    <p class="section-subtitle">Motivo de la excepción (Obligatorio para registrar)</p>
                     <textarea
                         id="motivo-excepcion"
                         class="exc-textarea"
-                        placeholder="Describa la razón por la cual se autoriza la salida sin pago registrado..."
+                        placeholder="Describa la razón por la cual se autoriza la salida excepcional..."
                     ></textarea>
                 </div>
 
@@ -377,9 +377,11 @@ async function buscarVehiculo() {
 
     try {
         const sesiones = await apiFetch('/sesiones/');
-        sesionActiva = sesiones.find(s =>
-            s.vehiculo_placa === placa && s.estado_sesion === 'abierta'
-        );
+        const placaLimpia = placa.replace(/[-\s]/g, '');
+        sesionActiva = sesiones.find(s => {
+            const dbPlaca = (s.vehiculo_placa || '').toUpperCase().replace(/[-\s]/g, '');
+            return dbPlaca === placaLimpia && s.estado_sesion === 'abierta';
+        });
 
         if (!sesionActiva) {
             mostrarStatus('error', `No se encontró una sesión activa para la placa ${placa}.`);

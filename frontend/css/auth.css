@@ -20,9 +20,14 @@
     margin-bottom: 5rem;
 }
 
+.auth-info__header h1 {
+    color: var(--white);
+}
+
 .auth-info__content h2 {
     font-size: 2rem;
     margin-bottom: 2rem;
+    color: var(--white);
 }
 
 .auth-info__content p {

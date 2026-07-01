@@ -21,8 +21,8 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <i class='bx bxs-parking' style='font-size: 2rem; color: var(--accent-color);'></i>
-                <h2>DivinePark</h2>
+                <img src="assets/logo.jpg" alt="Divine Park Logo" style="width: 32px; height: 32px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); object-fit: cover;">
+                <h2 style="color: white; font-weight: 800; letter-spacing: -0.5px;">Divine Park</h2>
             </div>
 
             <nav class="sidebar-nav">
@@ -116,7 +116,7 @@
                 <div class="history-section">
                     <div class="section-header">
                         <h2>Historial de Entradas y Salidas de vehículos</h2>
-                        <a href="#" style="font-size: 0.85rem; font-weight: 600;" id="btn-ver-historial">Ver historial
+                        <a href="#" style="font-size: 0.85rem; font-weight: 600; color: var(--primary-blue);" id="btn-ver-historial">Ver historial
                             de entradas y salidas</a>
                     </div>
                     <table class="data-table">
@@ -124,13 +124,14 @@
                             <tr>
                                 <th>Fecha/Hora</th>
                                 <th>Placa</th>
+                                <th>Espacio</th>
                                 <th>Tipo</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody id="historial-tbody">
                             <tr>
-                                <td colspan="4" style="text-align:center; color:#94a3b8; padding:20px;">Cargando
+                                <td colspan="5" style="text-align:center; color:#94a3b8; padding:20px;">Cargando
                                     historial...</td>
                             </tr>
                         </tbody>
@@ -154,15 +155,22 @@
             <form id="form-entrada">
                 <div class="input-group">
                     <label>Placa del Vehículo</label>
-                    <input type="text" id="placa-entrada" class="input-control" placeholder="Ej. ABC123" required
-                        style="text-transform: uppercase;">
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="placa-entrada" class="input-control" placeholder="Ej. ABC123" required
+                            style="text-transform: uppercase;">
+                        <button type="button" class="btn btn-primary" id="btn-buscar-entrada" style="width: auto; padding: 0 20px;">
+                            <i class='bx bx-search'></i> Buscar
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="vehiculo-info-entrada" style="display: none; margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem;">
+                    <!-- Dinámico -->
                 </div>
                 <div class="input-group">
                     <label>Tipo de Vehículo</label>
                     <select id="tipo-entrada" class="input-control" required>
-                        <option value="carro">Carro</option>
-                        <option value="moto">Moto</option>
-                        <option value="camioneta">Camioneta</option>
+                        <option value="">Cargando tipos...</option>
                     </select>
                 </div>
                 <div class="input-group">
@@ -223,13 +231,14 @@
                         <tr>
                             <th>Fecha/Hora</th>
                             <th>Placa</th>
+                            <th>Espacio</th>
                             <th>Tipo</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody id="hist-modal-tbody">
                         <tr>
-                            <td colspan="4" style="text-align:center;padding:30px;color:#94a3b8;">Cargando...</td>
+                            <td colspan="5" style="text-align:center;padding:30px;color:#94a3b8;">Cargando...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -254,10 +263,15 @@
                         <option value="salida">Salida</option>
                     </select>
                 </div>
-                <button class="btn btn-primary" id="hist-btn-filtrar" style="padding:8px 20px; font-size:0.85rem;">
+                <div class="filter-group">
+                    <select id="hist-filtro-zona" class="filter-input">
+                        <option value="">Todas las Zonas</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" id="hist-btn-filtrar" style="padding:8px 20px; font-size:0.85rem;">
                     Filtrar
                 </button>
-                <button class="nav-btn" id="hist-btn-limpiar" style="padding:8px 16px;">Limpiar</button>
+                <button type="button" class="nav-btn" id="hist-btn-limpiar" style="padding:8px 16px;">Limpiar</button>
                 <span id="hist-info-pagina" style="margin-left:auto; color:#94a3b8; font-size:0.85rem;"></span>
             </div>
         </div>

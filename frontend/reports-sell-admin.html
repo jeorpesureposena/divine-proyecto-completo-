@@ -146,7 +146,7 @@
     </aside>
     <!-- END: Sidebar -->
     <!-- BEGIN: Main Content Area -->
-    <main class="flex-1 overflow-y-auto bg-divine-bg p-8" data-purpose="main-content">
+    <main class="flex-1 overflow-y-auto bg-divine-bg p-6" data-purpose="main-content">
         <!-- BEGIN: Header Section -->
         <header class="mb-8" data-purpose="content-header">
             <h1 class="text-3xl font-extrabold text-slate-800" data-i18n="reports.title">Reportes</h1>
@@ -218,8 +218,16 @@
                 </div>
             </div>
             <!-- Bar Chart Visualization -->
-            <div id="chart-bars" class="flex items-end justify-between h-48 px-4 gap-4" data-purpose="chart-bars">
-                <!-- JS renderiza las barras dinámicamente -->
+            <div class="relative bg-gray-50 rounded-lg p-6 border border-gray-100">
+                <div class="absolute inset-0 flex flex-col justify-between pointer-events-none pl-12 pr-6 py-6">
+                    <div class="border-t border-gray-200"></div>
+                    <div class="border-t border-gray-200"></div>
+                    <div class="border-t border-gray-200"></div>
+                    <div class="border-t border-gray-200"></div>
+                </div>
+                <div id="chart-bars" class="flex items-end justify-between h-64 px-6 py-6 gap-2 relative z-10" data-purpose="chart-bars">
+                    <!-- JS renderiza las barras dinámicamente -->
+                </div>
             </div>
         </section>
         <!-- END: Chart Section -->
@@ -270,8 +278,8 @@
                                 <div class="flex items-center gap-2">
                                     <div
                                         class="w-8 h-5 bg-gray-100 rounded flex items-center justify-center text-[8px] font-bold text-gray-500 border border-gray-200">
-                                        CASH</div>
-                                    <span class="text-sm font-semibold text-slate-700">Efectivo</span>
+                                        EXC</div>
+                                    <span class="text-sm font-semibold text-slate-700">Excepciones</span>
                                 </div>
                             </td>
                             <td class="px-6 py-4">

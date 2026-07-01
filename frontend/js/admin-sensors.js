@@ -10,6 +10,7 @@ class SensorsController {
 
     async init() {
         this.checkAuth();
+        this.setupExportButton();
         await this.loadData();
     }
 
@@ -18,6 +19,46 @@ class SensorsController {
         if (!token) {
             window.location.href = 'admin-login.html';
         }
+    }
+
+    setupExportButton() {
+        const btnExport = document.getElementById('btn-export-sensors');
+        if (!btnExport) return;
+
+        btnExport.addEventListener('click', () => {
+            const tbody = document.getElementById('devices-tbody');
+            if (!tbody) return;
+
+            const rows = tbody.querySelectorAll('tr');
+            if (rows.length === 0 || tbody.textContent.includes('No hay dispositivos')) {
+                alert('No hay dispositivos para exportar.');
+                return;
+            }
+
+            let csvContent = "\ufeff"; // BOM para UTF-8
+            csvContent += "ID Sensor,Tipo,Ubicación,Estado,Lectura\n";
+
+            rows.forEach(row => {
+                const cols = row.querySelectorAll('td');
+                const rowData = [];
+                cols.forEach(col => {
+                    let text = col.innerText || col.textContent || '';
+                    text = text.replace(/[\n\r]+/g, ' ').replace(/,/g, ';').trim();
+                    rowData.push(text);
+                });
+                csvContent += rowData.join(",") + "\n";
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `estado_dispositivos_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        });
     }
 
     async loadData() {

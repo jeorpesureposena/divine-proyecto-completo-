@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DivinePark - Listas de Chequeo de Calidad</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Boxicons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #001f66;
+            --dark-navy: #00154d;
+            --success-green: #16a34a;
+            --success-bg: #f0fdf4;
+            --border-color: #cbd5e1;
+            --text-main: #334155;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            /* Textura de papel cuadriculado como en la presentación diapositiva */
+            background-image: 
+                linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+                linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Encabezado */
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        /* Selector de Módulos (Tabs) */
+        .module-selector {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .module-btn {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .module-btn:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+
+        .module-btn.active {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 31, 102, 0.2);
+        }
+
+        /* Tablero de Cartas */
+        .checklists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 28px;
+            align-items: start;
+        }
+
+        /* Estilo de Carta de Chequeo idéntico al slide */
+        .checklist-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .checklist-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Cabecera de Carta con banner de color oscuro */
+        .card-header {
+            background: var(--dark-navy);
+            padding: 16px 20px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .progress-badge {
+            background: rgba(255,255,255,0.15);
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Cuerpo / Lista de chequeo */
+        .card-body {
+            padding: 24px 20px;
+            list-style: none;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Checkbox interactivo personalizado con estilo de checkmark verde */
+        .check-icon-wrapper {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            margin-top: 1px;
+            background: #fff;
+        }
+
+        .check-icon-wrapper i {
+            font-size: 0.95rem;
+            color: transparent;
+            transition: color 0.15s ease;
+        }
+
+        /* Estados activos al marcar */
+        .checklist-item.checked .check-icon-wrapper {
+            background: var(--success-bg);
+            border-color: var(--success-green);
+        }
+
+        .checklist-item.checked .check-icon-wrapper i {
+            color: var(--success-green);
+        }
+
+        .checklist-item.checked span {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .checklist-item span {
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.4;
+            color: var(--text-main);
+            transition: color 0.2s;
+        }
+
+        .checklist-item:hover .check-icon-wrapper {
+            border-color: var(--primary-blue);
+        }
+
+        /* Botón de limpiar progreso global */
+        .reset-container {
+            text-align: center;
+            margin-top: 48px;
+        }
+
+        .reset-btn {
+            background: transparent;
+            border: 1.5px dashed var(--text-muted);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reset-btn:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+            background: #fef2f2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Listas de Chequeo de Calidad Front-End</h1>
+        <p>Valida los requisitos de calidad técnica de cada módulo del proyecto DivinePark</p>
+    </header>
+
+    <!-- Selector de Módulos (Botones de Tabs) -->
+    <div class="module-selector" id="module-selector">
+        <!-- Generado dinámicamente -->
+    </div>
+
+    <!-- Contenedor del Tablero de Cartas -->
+    <div class="checklists-grid" id="checklists-grid">
+        <!-- Generado dinámicamente -->
+    </div>
+
+    <!-- Limpiar Progreso -->
+    <div class="reset-container">
+        <button class="reset-btn" onclick="resetProgress()"><i class="bx bx-refresh"></i> Reiniciar Progreso del Módulo</button>
+    </div>
+</div>
+
+<script>
+    // Datos completos de las listas de chequeo estructuradas por módulos
+    const database = {
+        1: {
+            name: "Módulo 1: Autenticación y Seguridad",
+            cards: [
+                {
+                    title: "1. Lista de Chequeo UI/UX",
+                    items: [
+                        "Diseño consistente en Login y Registro",
+                        "Colores corporativos correctos (--primary-color, --accent-gold)",
+                        "Tipografía uniforme en campos de texto",
+                        "Botones de envío visibles y centrados",
+                        "Formularios claros con placeholders explicativos",
+                        "Espaciado adecuado entre inputs de credenciales",
+                        "Navegación sencilla hacia recuperar contraseña",
+                        "Feedback visual al verificar credenciales (spinner)"
+                    ]
+                },
+                {
+                    title: "2. Lista de Chequeo Funcional",
+                    items: [
+                        "Login de conductor funciona y genera JWT",
+                        "Login de operador funciona y valida rol",
+                        "Login de administrador funciona y da acceso total",
+                        "Registro de usuario funciona y guarda en DB",
+                        "Recuperación de contraseña envía código de 6 dígitos",
+                        "Validación de código de recuperación funciona",
+                        "Restablecimiento de contraseña cambia clave en la DB",
+                        "Manejo de errores de credenciales incorrectas (400/401)",
+                        "Sesiones funcionan y refrescan token automáticamente",
+                        "Logout correcto e invalida token (blacklist)"
+                    ]
+                },
+                {
+                    title: "3. Lista de Chequeo Responsive Design",
+                    items: [
+                        "Visualización móvil correcta de formularios",
+                        "Pantalla de Login adaptable a tablet",
+                        "Alineación correcta en pantallas desktop",
+                        "Inputs de texto adaptables al ancho de pantalla",
+                        "Botones táctiles adecuados (min. 48dp de alto en móviles)",
+                        "Scroll correcto cuando se despliega el teclado virtual",
+                        "Sin desbordamientos de texto ni desborde de píxeles"
+                    ]
+                },
+                {
+                    title: "4. Lista de Chequeo de Compatibilidad",
+                    items: [
+                        "Renderizado idéntico en Google Chrome y Edge",
+                        "Visualización correcta en Mozilla Firefox",
+                        "Compatible con Safari en iOS/macOS",
+                        "Iconos de Boxicons visibles en todos los navegadores",
+                        "Cookies/Storage compatibles en Safari e incógnito"
+                    ]
+                },
+                {
+                    title: "5. Lista de Chequeo de Rendimiento",
+                    items: [
+                        "Carga inicial rápida de pantallas de Login/Registro",
+                        "Petición de autenticación responde en < 1 segundo",
+                        "Scripts JS de autenticación cargados de forma diferida (defer)",
+                        "Reuso de instancia ApiClient en la app móvil"
+                    ]
+                },
+                {
+                    title: "6. Lista de Chequeo de Accesibilidad",
+                    items: [
+                        "Etiquetas <label> asociadas a cada input",
+                        "Contraste de texto de error alto (WCAG AA)",
+                        "Campos enfocados distinguibles visualmente",
+                        "Navegación por teclado funcional (tecla Tab)"
+                    ]
+                },
+                {
+                    title: "7. Lista de Chequeo de Seguridad",
+                    items: [
+                        "Rutas protegidas redirigen al Login si no hay token",
+                        "Tokens JWT guardados de forma segura (SecureStorage / localStorage)",
+                        "Expiración automática de sesión inactiva",
+                        "Contraseñas no expuestas en texto plano en la red",
+                        "Confirmación de contraseñas validada antes de enviar"
+                    ]
+                },
+                {
+                    title: "8. Lista de Chequeo de Calidad de Código",
+                    items: [
+                        "Nombres de funciones descriptivos en js/auth.js",
+                        "Linter de Flutter sin errores de autenticación",
+                        "Sin credenciales harcodeadas en el código",
+                        "Modularización correcta del interceptor de refresco de tokens"
+                    ]
+                },
+                {
+                    title: "9. Lista de Chequeo SEO",
+                    items: [
+                        "Título de página descriptivo (ej: 'DivinePark - Iniciar Sesión')",
+                        "Meta tag viewport configurado para móviles",
+                        "Estructura jerárquica de encabezados (un solo h1 por página)",
+                        "Idioma del documento HTML declarado (lang='es')"
+                    ]
+                },
+                {
+                    title: "10. Lista de Chequeo de Testing",
+                    items: [
+                        "Pruebas unitarias de validación de contraseñas pasan",
+                        "Login simulado responde con código 200 en consola de pruebas",
+                        "Errores de red controlados y mostrados en SnackBar/Toast"
+                    ]
+                }
+            ]
+        },
+        2: {
+            name: "Módulo 2: Gestión de Vehículos",
+            cards: [
+                {
+                    title: "1. Lista de Chequeo UI/UX",
+                    items: [
+                        "Listado de vehículos ordenado y claro",
+                        "Iconos de vehículos legibles (Carro, Moto, Camioneta)",
+                        "Botones de 'Agregar Vehículo' visibles y accesibles",
+                        "Formularios de registro de datos del carro limpios",
+                        "Colores de campos consistentes en modo edición",
+                        "Feedback visual al guardar vehículo exitosamente"
+                    ]
+                },
+                {
+                    title: "2. Lista de Chequeo Funcional",
+                    items: [
+                        "Creación de vehículo funciona y guarda en DB",
+                        "Listado de vehículos asociados al usuario carga correctamente",
+                        "Edición de datos del vehículo funciona (marca, placa, color)",
+                        "Eliminación de vehículos desvincula el registro",
+                        "Selección de vehículo activo se guarda en almacenamiento local",
+                        "Validación de placa duplicada responde correctamente (400)"
+                    ]
+                },
+                {
+                    title: "3. Lista de Chequeo Responsive Design",
+                    items: [
+                        "Visualización móvil correcta de tarjetas de vehículo",
+                        "Formulario de agregar vehículo adaptable a pantallas táctiles",
+                        "Grid de vehículos ajustable de 3 a 1 columnas",
+                        "Sin desbordamientos de texto en placas largas"
+                    ]
+                },
+                {
+                    title: "4. Lista de Chequeo de Compatibilidad",
+                    items: [
+                        "Iconos de transporte renderizan correctamente en Firefox/Safari",
+                        "Comportamiento idéntico de desplegables en Android e iOS",
+                        "Selectores de tipo de vehículo compatibles en navegadores móviles"
+                    ]
+                },
+                {
+                    title: "5. Lista de Chequeo de Rendimiento",
+                    items: [
+                        "Carga instantánea de la lista de vehículos del usuario",
+                        "Datos de vehículos cacheados localmente en el flujo de reservas",
+                        "Renderizado sin retrasos al eliminar un elemento de la lista"
+                    ]
+                },
+                {
+                    title: "6. Lista de Chequeo de Accesibilidad",
+                    items: [
+                        "Alt text en los iconos de carros y motos",
+                        "Foco visual claro en campos de edición de placa",
+                        "Botón de eliminación accesible para lectores de pantalla"
+                    ]
+                },
+                {
+                    title: "7. Lista de Chequeo de Seguridad",
+                    items: [
+                        "Usuario solo puede ver y editar sus propios vehículos",
+                        "Peticiones de vehículos requieren token JWT Bearer",
+                        "Sanitización de entradas para evitar inyecciones HTML en inputs"
+                    ]
+                },
+                {
+                    title: "8. Lista de Chequeo de Calidad de Código",
+                    items: [
+                        "Validaciones de formato de placa en frontend y backend",
+                        "Uso de serializer de Vehículo para filtrar campos expuestos",
+                        "Cumplimiento de nombres camelCase en campos del modelo de datos"
+                    ]
+                },
+                {
+                    title: "9. Lista de Chequeo SEO",
+                    items: [
+                        "Título de la pestaña web dinámico ('DivinePark - Mis Vehículos')",
+                        "Estructura semántica correcta con etiquetas main y section",
+                        "IDs únicos en elementos interactivos de la lista"
+                    ]
+                },
+                {
+                    title: "10. Lista de Chequeo de Testing",
+                    items: [
+                        "Test unitario de formato de placa pasa correctamente",
+                        "Test de integración de agregar vehículo simula flujo exitoso",
+                        "Errores de API capturados y mostrados descriptivamente"
+                    ]
+                }
+            ]
+        },
+        3: {
+            name: "Módulo 3: Espacios y Sensores",
+            cards: [
+                {
+                    title: "1. Lista de Chequeo UI/UX",
+                    items: [
+                        "Mapa de espacios de parqueo claro e interactivo",
+                        "Colores de estado corporativos (Verde: libre, Rojo: ocupado, Amarillo: mantenimiento)",
+                        "Leyenda de estados visible y fácil de entender",
+                        "Visualización de zona y número de espacio legible",
+                        "Indicadores visuales de sensores ultrasónicos activos"
+                    ]
+                },
+                {
+                    title: "2. Lista de Chequeo Funcional",
+                    items: [
+                        "Obtención de lista de espacios libres funciona",
+                        "Estado de espacio cambia en vivo al recibir datos de sensor",
+                        "Espacios en mantenimiento bloqueados para reserva/entrada manual",
+                        "Información detallada del espacio (tipo, estado) se muestra en modal",
+                        "Integración de sensores IoT con base de datos funciona"
+                    ]
+                },
+                {
+                    title: "3. Lista de Chequeo Responsive Design",
+                    items: [
+                        "Mapa de parqueadero adaptable a pantallas móviles",
+                        "Grid de espacios reordenable en pantallas pequeñas",
+                        "Scroll horizontal suave en móviles si el mapa excede pantalla",
+                        "Sin desbordes de texto en el número de espacio"
+                    ]
+                },
+                {
+                    title: "4. Lista de Chequeo de Compatibilidad",
+                    items: [
+                        "Gráficas de mapa compatibles en todos los motores de renderizado",
+                        "Modales de detalle de espacio abren correctamente en Safari móvil",
+                        "Desempeño uniforme del plano en tablets y desktops"
+                    ]
+                },
+                {
+                    title: "5. Lista de Chequeo de Rendimiento",
+                    items: [
+                        "Tiempo de carga del plano de parqueo inferior a 1.5 segundos",
+                        "Renderizado optimizado para recargar solo espacios modificados",
+                        "API de consulta de espacios paginada o filtrada eficientemente"
+                    ]
+                },
+                {
+                    title: "6. Lista de Chequeo de Accesibilidad",
+                    items: [
+                        "Estados legibles por texto (no depender únicamente del color)",
+                        "Relación de contraste correcta en etiquetas de zonas (A, B, C)",
+                        "Compatibilidad con lectores de pantalla para leer número de espacio"
+                    ]
+                },
+                {
+                    title: "7. Lista de Chequeo de Seguridad",
+                    items: [
+                        "Modificación de estado de sensores restringida a operadores/administradores",
+                        "Datos de sensores protegidos contra adulteración externa",
+                        "Sanitización de descripciones de mantenimiento de espacios"
+                    ]
+                },
+                {
+                    title: "8. Lista de Chequeo de Calidad de Código",
+                    items: [
+                        "Definición clara de estados en el modelo EspacioParqueo",
+                        "Linter de Flutter sin advertencias en la pantalla de espacios",
+                        "Separación de lógica de sensor IoT en servicios independientes"
+                    ]
+                },
+                {
+                    title: "9. Lista de Chequeo SEO",
+                    items: [
+                        "Página de monitoreo estructurada semánticamente",
+                        "Encabezados h2 para delimitar zonas de parqueo (Zona A, Zona B)",
+                        "URLs limpias y amigables para el panel de administración"
+                    ]
+                },
+                {
+                    title: "10. Lista de Chequeo de Testing",
+                    items: [
+                        "Prueba automática de cambio de estado de espacio funciona",
+                        "Conexión simulada con sensores IoT responde adecuadamente",
+                        "Errores de API de espacios controlados sin colapsar la interfaz"
+                    ]
+                }
+            ]
+        },
+        4: {
+            name: "Módulo 4: Reservas y Pagos",
+            cards: [
+                {
+                    title: "1. Lista de Chequeo UI/UX",
+                    items: [
+                        "Wizard o flujo paso a paso intuitivo",
+                        "Selección de fecha y hora interactiva (Cupertino/Material)",
+                        "Resumen de reserva estructurado y claro",
+                        "Métodos de pago visibles y con logos corporativos",
+                        "Indicador de saldo de 'Mi Billetera' visible en el checkout"
+                    ]
+                },
+                {
+                    title: "2. Lista de Chequeo Funcional",
+                    items: [
+                        "Creación de reserva funciona y bloquea el espacio",
+                        "Selección de método de pago 'Mi Billetera' valida y descuenta saldo",
+                        "Métodos de pago Nequi, Bancolombia y Visa mapean a 'tarjeta'",
+                        "Generación de factura en HTML y PDF funciona",
+                        "Recargas a la billetera virtual se acreditan de inmediato en el saldo",
+                        "Simulación de pago de tarjetas aprobado/rechazado responde correctamente"
+                    ]
+                },
+                {
+                    title: "3. Lista de Chequeo Responsive Design",
+                    items: [
+                        "Resumen de cobros adaptable a móviles y tablets",
+                        "Selector de fecha y duración responsivo",
+                        "Scroll vertical cómodo en la pantalla de facturación móvil",
+                        "Sin desbordamientos en campos de totales y monedas"
+                    ]
+                },
+                {
+                    title: "4. Lista de Chequeo de Compatibilidad",
+                    items: [
+                        "Descarga de factura por enlace funciona en Chrome y Safari",
+                        "Date pickers nativos adaptables a Android e iOS",
+                        "PDF renderizado correctamente en todos los visores nativos"
+                    ]
+                },
+                {
+                    title: "5. Lista de Chequeo de Rendimiento",
+                    items: [
+                        "Procesamiento de reserva y pago completado en < 2 segundos",
+                        "Carga de historial de facturación paginado",
+                        "Documento PDF de factura generado localmente de forma instantánea"
+                    ]
+                },
+                {
+                    title: "6. Lista de Chequeo de Accesibilidad",
+                    items: [
+                        "Campos de tarjeta de crédito etiquetados correctamente para lectores",
+                        "Contraste alto en texto de totales a pagar",
+                        "Descriptores de error legibles en Snackbars"
+                    ]
+                },
+                {
+                    title: "7. Lista de Chequeo de Seguridad",
+                    items: [
+                        "Acceso público seguro (AllowAny) para la factura HTML",
+                        "Validación atómica de saldo de billetera para evitar doble gasto",
+                        "Datos de tarjetas de crédito no almacenados en la base de datos"
+                    ]
+                },
+                {
+                    title: "8. Lista de Chequeo de Calidad de Código",
+                    items: [
+                        "Mapeo de método de pago limpio en crear_reserva_screen.dart",
+                        "Manejo estructurado de transacciones atómicas en Django",
+                        "Reuso de formateadores de moneda consistentes en toda la app"
+                    ]
+                },
+                {
+                    title: "9. Lista de Chequeo SEO",
+                    items: [
+                        "Título de la factura electrónica estructurado",
+                        "Etiquetas semánticas en el comprobante web",
+                        "Meta tags responsivos en la plantilla HTML"
+                    ]
+                },
+                {
+                    title: "10. Lista de Chequeo de Testing",
+                    items: [
+                        "Test unitario de cálculo de tarifas y horas funciona",
+                        "Parser de errores de API (parseError) procesa respuestas tipo List",
+                        "Test de simulación de recarga de saldo de billetera verificado"
+                    ]
+                }
+            ]
+        },
+        5: {
+            name: "Módulo 5: Control de Acceso",
+            cards: [
+                {
+                    title: "1. Lista de Chequeo UI/UX",
+                    items: [
+                        "Pantalla de registro de entrada manual limpia",
+                        "Datos del vehículo verificado en entrada mostrados claramente",
+                        "Alertas de estado de barrera de entrada/salida visibles",
+                        "Inputs de placa con texto auto-mayúsculas",
+                        "Campo de justificación excepcional destacado"
+                    ]
+                },
+                {
+                    title: "2. Lista de Chequeo Funcional",
+                    items: [
+                        "Buscador de placa en entrada valida reserva en base de datos",
+                        "Registro de entrada manual crea sesión abierta y ocupa espacio",
+                        "Buscador de salida normaliza placas (ignora guiones y espacios)",
+                        "Registro de salida manual calcula tiempo, tarifa y genera pago",
+                        "Guardar autorización excepcional requiere motivo obligatorio",
+                        "Cámaras OCR simulan lecturas y abren barreras automáticamente"
+                    ]
+                },
+                {
+                    title: "3. Lista de Chequeo Responsive Design",
+                    items: [
+                        "Layout del panel de operador adaptable a tablets",
+                        "Tablas de historial de accesos con scroll horizontal en móviles",
+                        "Formulario de salida manual cómodo para uso con una sola mano",
+                        "Sin desbordes de texto en datos de operador responsable"
+                    ]
+                },
+                {
+                    title: "4. Lista de Chequeo de Compatibilidad",
+                    items: [
+                        "Interfaz de operador funciona en Chrome, Firefox y Safari",
+                        "Script de eventos en tiempo real compatible con tablets Android",
+                        "Impresión automática de ticket de entrada compatible con móviles"
+                    ]
+                },
+                {
+                    title: "5. Lista de Chequeo de Rendimiento",
+                    items: [
+                        "Búsqueda de placa responde en menos de 1 segundo",
+                        "Auto-refresco de barreras y sensores mediante pooling de 30s",
+                        "Renderizado rápido de logs de eventos en tiempo real"
+                    ]
+                },
+                {
+                    title: "6. Lista de Chequeo de Accesibilidad",
+                    items: [
+                        "Etiquetas y placeholders claros en el campo de placa",
+                        "Contraste óptimo en los mensajes de estado de barreras",
+                        "Alt text en el log de flujo de eventos de acceso"
+                    ]
+                },
+                {
+                    title: "7. Lista de Chequeo de Seguridad",
+                    items: [
+                        "Registro de entrada/salida manual requiere rol de operador/admin",
+                        "Logs de accesos de vehículos son de solo lectura",
+                        "Autorización excepcional asocia automáticamente el operador en sesión"
+                    ]
+                },
+                {
+                    title: "8. Lista de Chequeo de Calidad de Código",
+                    items: [
+                        "Normalización de placas en operador-register-exit.html mediante regex (/[-\\s]/g)",
+                        "Validación de estado de espacio en Django antes de entrada manual",
+                        "Nombres descriptivos en funciones de js/operador.js"
+                    ]
+                },
+                {
+                    title: "9. Lista de Chequeo SEO",
+                    items: [
+                        "Título de la pestaña dinámico ('DivinePark - Registrar Entrada/Salida')",
+                        "Código HTML limpio con secciones estructuradas por aside y main",
+                        "Atributos id únicos en campos de formulario"
+                    ]
+                },
+                {
+                    title: "10. Lista de Chequeo de Testing",
+                    items: [
+                        "Test de flujo completo: buscar placa -> entrada -> salida",
+                        "Validación de normalización con kls-123, KLS 123 y KLS123",
+                        "Error de placa sin reserva capturado y mostrado en Toast"
+                    ]
+                }
+            ]
+        },
+        6: {
+            name: "Módulo 6: Estadísticas y Reportes",
+            cards: [
+                {
+                    title: "1. Lista de Chequeo UI/UX",
+                    items: [
+                        "Tarjetas de estadísticas (KPIs) legibles y organizadas",
+                        "Gráficas de ventas y ocupación claras",
+                        "Tablas de historial con diseño limpio",
+                        "Botones para exportar reportes (PDF, Excel, CSV) visibles",
+                        "Alertas de sobretiempo con colores de advertencia descriptivos"
+                    ]
+                },
+                {
+                    title: "2. Lista de Chequeo Funcional",
+                    items: [
+                        "KPIs calculan ocupación, ingresos y hardware en vivo",
+                        "Listado de alertas muestra conductores con tiempo excedido",
+                        "Historial de accesos paginado del lado del cliente funciona",
+                        "Filtros de historial aplican de inmediato",
+                        "Generación e impresión de reportes financieros y operativos funciona"
+                    ]
+                },
+                {
+                    title: "3. Lista de Chequeo Responsive Design",
+                    items: [
+                        "Dashboard de administrador responsivo (de 3 a 1 columna)",
+                        "Gráficos adaptables al ancho del contenedor en móviles",
+                        "Modales de historial y alertas expandibles al 100% en pantallas pequeñas",
+                        "Sin desbordes en filas de tablas de datos extensas"
+                    ]
+                },
+                {
+                    title: "4. Lista de Chequeo de Compatibilidad",
+                    items: [
+                        "Librerías de gráficos web compatibles en Firefox, Safari y Chrome",
+                        "Descargas de reportes en Excel y CSV funcionales en todos los navegadores",
+                        "Tablas dinámicas y modales compatibles con Safari en iPad"
+                    ]
+                },
+                {
+                    title: "5. Lista de Chequeo de Rendimiento",
+                    items: [
+                        "Consulta de estadísticas consolidada en una sola llamada de API",
+                        "Paginación de logs de 8 a 10 registros por página para optimizar renderizado",
+                        "Gráficos iniciales cargados en menos de 2 segundos"
+                    ]
+                },
+                {
+                    title: "6. Lista de Chequeo de Accesibilidad",
+                    items: [
+                        "Gráficas con etiquetas de texto legibles (no color-dependiente)",
+                        "Contraste alto en tablas de datos financieros",
+                        "Navegación por teclado funcional en inputs de filtros"
+                    ]
+                },
+                {
+                    title: "7. Lista de Chequeo de Seguridad",
+                    items: [
+                        "Acceso a estadísticas restringido a operadores y administradores",
+                        "Reportes financieros accesibles únicamente por administradores",
+                        "Sanitización de datos de logs de eventos expuestos"
+                    ]
+                },
+                {
+                    title: "8. Lista de Chequeo de Calidad de Código",
+                    items: [
+                        "Cálculos de ingresos procesados mediante Django ORM",
+                        "Lógica de paginado encapsulada en objeto de control JavaScript",
+                        "Código JS libre de llamadas cíclicas o loops infinitos"
+                    ]
+                },
+                {
+                    title: "9. Lista de Chequeo SEO",
+                    items: [
+                        "Título de página descriptivo ('DivinePark - Tablero Administrador')",
+                        "Encabezados semánticos de secciones del dashboard",
+                        "Atributos aria y descriptores estructurados en gráficas"
+                    ]
+                },
+                {
+                    title: "10. Lista de Chequeo de Testing",
+                    items: [
+                        "Pruebas unitarias de filtros de historial pasan con éxito",
+                        "Comprobar que la exportación de reportes devuelve el formato de archivo correcto",
+                        "Carga simulada maneja paginación sin colapsar"
+                    ]
+                }
+            ]
+        }
+    };
+
+    let activeModule = 1;
+
+    // Inicializar selector de módulos
+    function initModuleSelector() {
+        const selector = document.getElementById('module-selector');
+        selector.innerHTML = '';
+        Object.keys(database).forEach(id => {
+            const btn = document.createElement('button');
+            btn.className = `module-btn ${id == activeModule ? 'active' : ''}`;
+            btn.textContent = database[id].name;
+            btn.onclick = () => selectModule(id);
+            selector.appendChild(btn);
+        });
+    }
+
+    // Cambiar de módulo
+    function selectModule(id) {
+        activeModule = id;
+        document.querySelectorAll('.module-btn').forEach((btn, index) => {
+            btn.classList.toggle('active', (index + 1) == id);
+        });
+        renderCards();
+    }
+
+    // Renderizar cartas con sus ítems
+    function renderCards() {
+        const grid = document.getElementById('checklists-grid');
+        grid.innerHTML = '';
+        const module = database[activeModule];
+
+        module.cards.forEach((card, cardIndex) => {
+            const cardEl = document.createElement('div');
+            cardEl.className = 'checklist-card';
+
+            // Cargar estado de almacenamiento local
+            const storageKey = `divine_check_m${activeModule}_c${cardIndex}`;
+            let checkedIndices = [];
+            try {
+                checkedIndices = JSON.parse(localStorage.getItem(storageKey)) || [];
+            } catch(e){}
+
+            // Header de la carta
+            const header = document.createElement('div');
+            header.className = 'card-header';
+            header.innerHTML = `
+                <h2>${card.title}</h2>
+                <span class="progress-badge" id="badge-${cardIndex}">0/0</span>
+            `;
+            cardEl.appendChild(header);
+
+            // Lista de items
+            const list = document.createElement('ul');
+            list.className = 'card-body';
+
+            card.items.forEach((item, itemIndex) => {
+                const isChecked = checkedIndices.includes(itemIndex);
+                const li = document.createElement('li');
+                li.className = `checklist-item ${isChecked ? 'checked' : ''}`;
+                li.innerHTML = `
+                    <div class="check-icon-wrapper">
+                        <i class="bx bx-check"></i>
+                    </div>
+                    <span>${item}</span>
+                `;
+
+                li.onclick = () => {
+                    toggleItem(cardIndex, itemIndex, li, card.items.length);
+                };
+
+                list.appendChild(li);
+            });
+
+            cardEl.appendChild(list);
+            grid.appendChild(cardEl);
+
+            updateProgressBadge(cardIndex, checkedIndices.length, card.items.length);
+        });
+    }
+
+    // Modificar estado de un ítem
+    function toggleItem(cardIndex, itemIndex, element, totalItems) {
+        const storageKey = `divine_check_m${activeModule}_c${cardIndex}`;
+        let checkedIndices = [];
+        try {
+            checkedIndices = JSON.parse(localStorage.getItem(storageKey)) || [];
+        } catch(e){}
+
+        const index = checkedIndices.indexOf(itemIndex);
+        if (index > -1) {
+            checkedIndices.splice(index, 1);
+            element.classList.remove('checked');
+        } else {
+            checkedIndices.push(itemIndex);
+            element.classList.add('checked');
+        }
+
+        localStorage.setItem(storageKey, JSON.stringify(checkedIndices));
+        updateProgressBadge(cardIndex, checkedIndices.length, totalItems);
+    }
+
+    // Actualizar badge indicador superior
+    function updateProgressBadge(cardIndex, checkedCount, totalCount) {
+        const badge = document.getElementById(`badge-${cardIndex}`);
+        if (badge) {
+            badge.textContent = `${checkedCount}/${totalCount}`;
+            if (checkedCount === totalCount) {
+                badge.style.background = 'var(--success-green)';
+            } else {
+                badge.style.background = 'rgba(255,255,255,0.15)';
+            }
+        }
+    }
+
+    // Reiniciar progreso del módulo actual
+    function resetProgress() {
+        const module = database[activeModule];
+        module.cards.forEach((card, cardIndex) => {
+            const storageKey = `divine_check_m${activeModule}_c${cardIndex}`;
+            localStorage.removeItem(storageKey);
+        });
+        renderCards();
+    }
+
+    // Carga inicial
+    document.addEventListener('DOMContentLoaded', () => {
+        initModuleSelector();
+        renderCards();
+    });
+</script>
+
+</body>
+</html>

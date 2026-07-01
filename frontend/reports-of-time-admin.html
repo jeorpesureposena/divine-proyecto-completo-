@@ -155,54 +155,43 @@
         <!-- END: Tabs -->
         <!-- BEGIN: Filters -->
         <div class="flex items-center gap-4 mb-8">
-            <div class="relative">
-                <button
-                    class="flex items-center justify-between px-4 py-2 bg-white border border-[#E0E0E0] rounded-full text-[#B0B0B0] min-w-[160px]">
-                    <span data-i18n="filter.date_range">Rango de Fecha</span>
-                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-                        <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                </button>
+            <div class="flex items-center gap-2">
+                <input id="filtro-fecha-inicio" type="date" class="appearance-none px-4 py-2 bg-white border border-[#E0E0E0] rounded-full text-[#4B5563] min-w-[160px]" placeholder="Desde" />
+                <input id="filtro-fecha-fin" type="date" class="appearance-none px-4 py-2 bg-white border border-[#E0E0E0] rounded-full text-[#4B5563] min-w-[160px]" placeholder="Hasta" />
             </div>
             <div class="relative">
-                <button
-                    class="flex items-center justify-between px-4 py-2 bg-white border border-[#E0E0E0] rounded-full text-[#B0B0B0] min-w-[120px]">
-                    <span data-i18n="filter.zone">Zona</span>
-                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-                        <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                </button>
+                <select id="filtro-zona" class="appearance-none px-4 py-2 bg-white border border-[#E0E0E0] rounded-full text-[#4B5563] min-w-[160px]">
+                    <option value="">Todas</option>
+                </select>
             </div>
             <div class="relative">
-                <button
-                    class="flex items-center justify-between px-4 py-2 bg-white border border-[#E0E0E0] rounded-full text-[#B0B0B0] min-w-[120px]">
-                    <span data-i18n="table.status">Estado</span>
-                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-                        <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                    </svg>
-                </button>
+                <select id="filtro-estado" class="appearance-none px-4 py-2 bg-white border border-[#E0E0E0] rounded-full text-[#4B5563] min-w-[140px]">
+                    <option value="">Todos</option>
+                    <option value="entrada">Entrada</option>
+                    <option value="salida">Salida</option>
+                </select>
             </div>
-            <button class="text-[#001D8F] font-bold text-sm ml-2" data-i18n="button.clear_filters">Limpiar Filtros</button>
+            <button id="btn-limpiar-filtros" class="text-[#001D8F] font-bold text-sm ml-2">Limpiar Filtros</button>
         </div>
         <!-- END: Filters -->
         <!-- BEGIN: KPI Cards -->
-        <div class="grid grid-cols-3 gap-8 mb-10">
-            <div class="bg-white p-8 rounded-2xl custom-shadow text-center">
-                <p class="text-[#8E8E8E] font-semibold text-lg leading-tight mb-2" data-i18n="reports.time_kpi1">Total Infracciones por<br />Mes</p>
-                <p id="kpi-infracciones" class="text-5xl font-extrabold text-black">--</p>
+        <div class="grid grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-4 rounded-2xl custom-shadow text-center">
+                <p class="text-[#8E8E8E] font-semibold text-sm leading-tight mb-1" data-i18n="reports.time_kpi1">Total Infracciones por<br />Mes</p>
+                <p id="kpi-infracciones" class="text-2xl md:text-3xl font-extrabold text-black">--</p>
             </div>
-            <div class="bg-white p-8 rounded-2xl custom-shadow text-center">
-                <p class="text-[#8E8E8E] font-semibold text-lg leading-tight mb-2" data-i18n="reports.time_kpi2">Promedio de tiempo que<br />los clientes exceden</p>
-                <p id="kpi-promedio" class="text-5xl font-extrabold text-black">--</p>
+            <div class="bg-white p-4 rounded-2xl custom-shadow text-center">
+                <p class="text-[#8E8E8E] font-semibold text-sm leading-tight mb-1" data-i18n="reports.time_kpi2">Promedio de tiempo que<br />los clientes exceden</p>
+                <p id="kpi-promedio" class="text-2xl md:text-3xl font-extrabold text-black">--</p>
             </div>
-            <div class="bg-white p-8 rounded-2xl custom-shadow text-center">
-                <p class="text-[#8E8E8E] font-semibold text-lg leading-tight mb-2" data-i18n="reports.time_kpi3">Zonas con mas<br />incidencias este mes</p>
-                <p id="kpi-zona" class="text-5xl font-extrabold text-black">--</p>
+            <div class="bg-white p-4 rounded-2xl custom-shadow text-center">
+                <p class="text-[#8E8E8E] font-semibold text-sm leading-tight mb-1" data-i18n="reports.time_kpi3">Zonas con mas<br />incidencias este mes</p>
+                <p id="kpi-zona" class="text-2xl md:text-3xl font-extrabold text-black">--</p>
             </div>
         </div>
         <!-- END: KPI Cards -->
         <!-- BEGIN: Data Table Section -->
-        <div class="bg-white rounded-3xl custom-shadow p-8">
+        <div class="bg-white rounded-3xl custom-shadow p-6">
             <div class="flex justify-between items-center mb-8">
                 <h3 class="text-2xl font-bold text-black" data-i18n="reports.time_table_title">Incidencias de Tiempo excedido por los usuarios</h3>
                 <div class="flex items-center gap-6">
@@ -217,153 +206,16 @@
                             <th class="pb-4 px-4" data-i18n="table.datetime">Fecha/Hora</th>
                             <th class="pb-4 px-4 text-center" data-i18n="table.plate">Placa</th>
                             <th class="pb-4 px-4 text-center" data-i18n="table.zone">Ubicación</th>
-                            <th class="pb-4 px-4 text-center" data-i18n="table.total_time">Tiempo Total</th>
-                            <th class="pb-4 px-4 text-center" data-i18n="table.status">Estado</th>
-                            <th class="pb-4 px-4 text-right" data-i18n="table.actions">Acciones</th>
+                            <th class="pb-4 px-4 text-center" data-i18n="table.operator">Operador</th>
+                            <th class="pb-4 px-4 text-center" data-i18n="table.event_type">Evento</th>
+                            <!-- Acciones column removed per request -->
                         </tr>
                     </thead>
                     <tbody id="time-table-body" class="text-[#2D2D2D] font-semibold">
-                        <tr><td colspan="6" class="py-10 text-center text-gray-400" data-i18n="status.loading_short">Cargando...</td></tr>
-                    </tbody>
-                        <!-- Row 1 -->
-                        <tr class="border-b border-gray-50">
-                            <td class="py-6 px-4">22 Oct 2026</td>
-                            <td class="py-6 px-4 text-center">#ABC - 0210</td>
-                            <td class="py-6 px-4 text-center">Zona B - Cúcuta</td>
-                            <td class="py-6 px-4 text-center">1h 40 min</td>
-                            <td class="py-6 px-4 text-center">
-                                <span class="status-badge-red px-3 py-1 rounded text-xs font-bold uppercase" data-i18n="status.in_process">En
-                                    Proceso</span>
-                            </td>
-                            <td class="py-6 px-4 text-right">
-                                <div class="flex justify-end gap-4">
-                                    <button class="text-gray-600 hover:text-black"><svg class="w-6 h-6" fill="none"
-                                            stroke="currentColor" viewbox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="2"></path>
-                                            <path
-                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                        </svg></button>
-                                    <button class="text-gray-600 hover:text-black"><svg class="w-6 h-6" fill="none"
-                                            stroke="currentColor" viewbox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                        </svg></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- Row 2 -->
-                        <tr class="border-b border-gray-50">
-                            <td class="py-6 px-4">15 Oct 2026</td>
-                            <td class="py-6 px-4 text-center">#AFC - 0102</td>
-                            <td class="py-6 px-4 text-center">Zona B - Cúcuta</td>
-                            <td class="py-6 px-4 text-center">1h 35 min</td>
-                            <td class="py-6 px-4 text-center">
-                                <span
-                                    class="status-badge-green px-3 py-1 rounded text-xs font-bold uppercase" data-i18n="status.resolved">Resuelto</span>
-                            </td>
-                            <td class="py-6 px-4 text-right">
-                                <div class="flex justify-end gap-4">
-                                    <button class="text-gray-600 hover:text-black"><svg class="w-6 h-6" fill="none"
-                                            stroke="currentColor" viewbox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="2"></path>
-                                            <path
-                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                        </svg></button>
-                                    <button class="text-gray-600 hover:text-black"><svg class="w-6 h-6" fill="none"
-                                            stroke="currentColor" viewbox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                        </svg></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- Row 3 -->
-                        <tr class="border-b border-gray-50">
-                            <td class="py-6 px-4">12 Oct 2026</td>
-                            <td class="py-6 px-4 text-center">#BCD - 2210</td>
-                            <td class="py-6 px-4 text-center">Zona A - Cúcuta</td>
-                            <td class="py-6 px-4 text-center">2h 45 min</td>
-                            <td class="py-6 px-4 text-center">
-                                <span
-                                    class="status-badge-green px-3 py-1 rounded text-xs font-bold uppercase" data-i18n="status.resolved">Resuelto</span>
-                            </td>
-                            <td class="py-6 px-4 text-right">
-                                <div class="flex justify-end gap-4">
-                                    <button class="text-gray-600 hover:text-black"><svg class="w-6 h-6" fill="none"
-                                            stroke="currentColor" viewbox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="2"></path>
-                                            <path
-                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                        </svg></button>
-                                    <button class="text-gray-600 hover:text-black"><svg class="w-6 h-6" fill="none"
-                                            stroke="currentColor" viewbox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                        </svg></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- Row 4 -->
-                        <tr>
-                            <td class="py-6 px-4">02 Oct 2026</td>
-                            <td class="py-6 px-4 text-center">#FTC - 1133</td>
-                            <td class="py-6 px-4 text-center">Zona C - Cúcuta</td>
-                            <td class="py-6 px-4 text-center">2h 00 min</td>
-                            <td class="py-6 px-4 text-center">
-                                <span
-                                    class="status-badge-green px-3 py-1 rounded text-xs font-bold uppercase" data-i18n="status.resolved">Resuelto</span>
-                            </td>
-                            <td class="py-6 px-4 text-right">
-                                <div class="flex justify-end gap-4">
-                                    <button class="text-gray-600 hover:text-black"><svg class="w-6 h-6" fill="none"
-                                            stroke="currentColor" viewbox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="2"></path>
-                                            <path
-                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                        </svg></button>
-                                    <button class="text-gray-600 hover:text-black"><svg class="w-6 h-6" fill="none"
-                                            stroke="currentColor" viewbox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                                                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                        </svg></button>
-                                </div>
-                            </td>
-                        </tr>
+                        <tr><td colspan="5" class="py-10 text-center text-gray-400" data-i18n="status.loading_short">Cargando...</td></tr>
                     </tbody>
                 </table>
             </div>
-            <!-- BEGIN: Footer Filters (Table Internal) -->
-            <div class="mt-8 flex justify-between gap-4">
-                <div
-                    class="flex-1 bg-white border border-[#E0E0E0] rounded-2xl p-4 text-[#B0B0B0] font-medium text-center">
-                    22/Oct/2026 - 22/Oct/2026
-                </div>
-                <div
-                    class="flex-1 bg-white border border-[#E0E0E0] rounded-2xl p-4 text-[#B0B0B0] font-medium text-center">
-                    <span data-i18n="filter.zones_all">Zonas: Todas</span>
-                </div>
-                <div
-                    class="flex-1 bg-white border border-[#E0E0E0] rounded-2xl p-4 text-[#B0B0B0] font-medium text-center">
-                    <span data-i18n="filter.status_all">Estado: Todos</span>
-                </div>
-            </div>
-            <!-- END: Footer Filters -->
         </div>
         <!-- END: Data Table Section -->
     </main>

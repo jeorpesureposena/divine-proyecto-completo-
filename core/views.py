@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from .models import Usuario
 from .serializers import RegistroSerializer, UsuarioSerializer, CambiarPasswordSerializer
+import logging
 
 # =============================================================================
 # DIVINE PARK — CAPA DE CONTROLADORES HTTP (SERVLET-EQUIVALENT ARCHITECTURE)
@@ -182,14 +183,71 @@ def login_admin(request):
 # Lifecycle Management: Petición GET síncrona (solo lectura).
 # doGet → request.user ≡ req.getUserPrincipal() (usuario autenticado en sesión).
 #         Response(serializer.data) ≡ resp.getWriter().write(json).
-@api_view(['GET'])
+@api_view(['GET', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def perfil(request):
     """
-    Controlador para consultar el perfil del usuario autenticado.
+    Controlador para consultar o eliminar el perfil del usuario autenticado.
     """
+    if request.method == 'DELETE':
+        user = request.user
+        # Se elimina el usuario; por la configuración en cascada de Django, 
+        # esto también eliminará sus vehículos, reservas, etc.
+        user.delete()
+        return Response({'mensaje': 'Cuenta eliminada exitosamente'}, status=status.HTTP_200_OK)
+
     serializer = UsuarioSerializer(request.user)
     return Response(serializer.data)
+
+
+# -----------------------------------------------------------------------------
+# Debug helpers (temporal) — permiten verificar desde el cliente móvil qué
+# usuario y cabeceras llegan al backend. Elimina estos endpoints antes de
+# mover a producción.
+# -----------------------------------------------------------------------------
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def whoami(request):
+    """
+    Retorna información básica del usuario autenticado y presencia de header
+    Authorization. Útil para comprobar desde la app móvil qué token está
+    siendo enviado.
+    """
+    usuario = request.user
+    auth = request.META.get('HTTP_AUTHORIZATION', '')
+    masked = ''
+    if auth.startswith('Bearer '):
+        token = auth.split(' ', 1)[1]
+        # Mostrar sólo 8 primeros y 8 últimos caracteres para depuración
+        masked = f"{token[:8]}...{token[-8:]}"
+    return Response({
+        'user_id': getattr(usuario, 'id', None),
+        'correo': getattr(usuario, 'correo', getattr(usuario, 'email', None)),
+        'auth_header_present': bool(auth),
+        'auth_header_masked': masked,
+    })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def debug_echo(request):
+    """
+    Echo del body y algunas cabeceras para depuración de peticiones (p.ej. la
+    petición de cancelar reserva enviada desde la app). Requiere autenticación
+    para evitar exposición pública.
+    """
+    usuario = request.user
+    auth = request.META.get('HTTP_AUTHORIZATION', '')
+    return Response({
+        'user_id': getattr(usuario, 'id', None),
+        'correo': getattr(usuario, 'correo', getattr(usuario, 'email', None)),
+        'auth_header_present': bool(auth),
+        'body': request.data,
+        'headers_sample': {
+            'User-Agent': request.META.get('HTTP_USER_AGENT'),
+            'Content-Type': request.META.get('CONTENT_TYPE'),
+        }
+    })
 
 
 # ─── RECUPERAR CONTRASEÑA (FLUJO CÓDIGO EMAIL) ────────────────────
@@ -385,7 +443,7 @@ class VehiculoViewSet(viewsets.ModelViewSet):
         """
         # Los administradores y operadores pueden ver todos, conductores solo los suyos
         user = self.request.user
-        if hasattr(user, 'rol') and user.rol in ['administrador', 'operador']:
+        if self.request.query_params.get('all') == 'true' and hasattr(user, 'rol') and user.rol in ['administrador', 'operador']:
             return Vehiculo.objects.all()
         return Vehiculo.objects.filter(usuario=user)
 
@@ -394,6 +452,18 @@ class VehiculoViewSet(viewsets.ModelViewSet):
         Asocia el nuevo vehículo creado al usuario que realiza la petición HTTP.
         """
         serializer.save(usuario=self.request.user)
+
+    from rest_framework.decorators import action
+    from rest_framework.response import Response
+
+    @action(detail=False, methods=['get'])
+    def tipos(self, request):
+        """
+        Retorna los tipos de vehículos definidos en la base de datos.
+        """
+        tipos_list = [{'id': k, 'nombre': v} for k, v in Vehiculo.TIPO_CHOICES]
+        return Response(tipos_list)
+
 
 
 # [ARCHITECTURE_MAPPING]: Servlet-Equivalent
@@ -407,6 +477,64 @@ class EspacioParqueoViewSet(viewsets.ModelViewSet):
     queryset = EspacioParqueo.objects.all()
     serializer_class = EspacioParqueoSerializer
     permission_classes = [IsAdministradorOrReadOnly]
+
+    from rest_framework.decorators import action
+    @action(detail=False, methods=['get'])
+    def disponibles(self, request):
+        """
+        Retorna los espacios que no tienen una reserva activa que se solape con el rango dado.
+        """
+        inicio_str = request.query_params.get('inicio')
+        fin_str = request.query_params.get('fin')
+        
+        if not inicio_str or not fin_str:
+            from rest_framework.response import Response
+            from rest_framework import status
+            return Response({'error': 'Faltan parámetros inicio y fin'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        from django.utils.dateparse import parse_datetime
+        from datetime import timedelta
+        from django.utils import timezone
+        
+        try:
+            inicio = parse_datetime(inicio_str)
+            if inicio and timezone.is_naive(inicio):
+                inicio = timezone.make_aware(inicio)
+            
+            fin = parse_datetime(fin_str)
+            if fin and timezone.is_naive(fin):
+                fin = timezone.make_aware(fin)
+                
+            if not inicio or not fin:
+                raise ValueError("Fecha no válida")
+        except Exception:
+            from rest_framework.response import Response
+            from rest_framework import status
+            return Response({'error': 'Formato de fecha inválido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        margen = timedelta(minutes=15)
+        inicio_con_margen = inicio - margen
+        fin_con_margen = fin + margen
+        
+        try:
+            from .models import Reserva
+            espacios_solapados = Reserva.objects.filter(
+                estado='activa',
+                fecha_inicio__lt=fin_con_margen,
+                fecha_fin__gt=inicio_con_margen
+            ).values_list('espacio_id', flat=True)
+            
+            espacios_libres = self.queryset.exclude(id__in=list(espacios_solapados)).exclude(estado__in=['ocupado', 'mantenimiento'])
+            serializer = self.get_serializer(espacios_libres, many=True)
+            
+            from rest_framework.response import Response
+            return Response(serializer.data)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            from rest_framework.response import Response
+            from rest_framework import status
+            return Response({'error': str(e), 'trace': traceback.format_exc()}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # [ARCHITECTURE_MAPPING]: Servlet-Equivalent
@@ -447,15 +575,35 @@ class ReservaViewSet(viewsets.ModelViewSet):
     serializer_class = ReservaSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        """
+        Retorna el listado de reservas disponibles dependiendo del usuario.
+        """
+        user = self.request.user
+        if self.request.query_params.get('all') == 'true' and hasattr(user, 'rol') and user.rol in ['administrador', 'operador']:
+            return Reserva.objects.all()
+        return Reserva.objects.filter(usuario=user)
+
     def perform_create(self, serializer):
         """
-        Guarda la reserva y actualiza automáticamente el estado del espacio de parqueo a reservado.
+        Guarda la reserva en la base de datos validando los horarios y disponibilidad.
         """
-        reserva = serializer.save()
-        espacio = reserva.espacio
-        if espacio.estado == 'libre':
-            espacio.estado = 'reservado'
-            espacio.save()
+        serializer.save()
+
+    def destroy(self, request, *args, **kwargs):
+        # Logging temporal para depuración de cancelaciones desde cliente móvil
+        logger = logging.getLogger(__name__)
+        usuario = request.user
+        logger.info(f"Reserva.destroy called - user_id={getattr(usuario,'id',None)} correo={getattr(usuario,'correo',getattr(usuario,'email',None))} kwargs={kwargs} body={request.data}")
+        return super().destroy(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        # Capturar intentos de actualizar estado (p.ej. cancelar)
+        logger = logging.getLogger(__name__)
+        usuario = request.user
+        estado = request.data.get('estado')
+        logger.info(f"Reserva.partial_update called - user_id={getattr(usuario,'id',None)} correo={getattr(usuario,'correo',getattr(usuario,'email',None))} estado={estado} body={request.data}")
+        return super().partial_update(request, *args, **kwargs)
 
 
 # [ARCHITECTURE_MAPPING]: Servlet-Equivalent
@@ -472,6 +620,59 @@ class SesionParqueoViewSet(viewsets.ModelViewSet):
     queryset = SesionParqueo.objects.all()
     serializer_class = SesionParqueoSerializer
     permission_classes = [IsOperadorOrAdministrador]
+
+    @action(detail=False, methods=['post'], url_path='validar-entrada')
+    def validar_entrada(self, request):
+        """
+        Verifica si una placa tiene reserva activa y retorna los datos del vehículo y espacio.
+        """
+        placa = request.data.get('placa')
+        if not placa:
+            return Response({'error': 'Placa es requerida'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        from django.utils import timezone
+        from datetime import timedelta
+        from django.db.models import Value
+        from django.db.models.functions import Replace
+
+        ahora = timezone.now()
+        margen = timedelta(minutes=30)
+        placa_limpia_input = placa.replace('-', '').replace(' ', '').upper()
+
+        reserva_activa = Reserva.objects.annotate(
+            placa_db=Replace('vehiculo__placa', Value('-'), Value('')),
+            placa_db_clean=Replace('placa_db', Value(' '), Value(''))
+        ).filter(
+            placa_db_clean__iexact=placa_limpia_input,
+            estado='activa',
+            fecha_inicio__lte=ahora + margen,
+            fecha_fin__gte=ahora - margen
+        ).first()
+
+        if not reserva_activa:
+            return Response({'error': 'No hay reserva activa para esta placa en este horario.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        vehiculo = reserva_activa.vehiculo
+        espacio = reserva_activa.espacio
+        
+        return Response({
+            'valido': True,
+            'reserva_id': reserva_activa.id,
+            'vehiculo': {
+                'id': vehiculo.id,
+                'placa': vehiculo.placa,
+                'marca': vehiculo.marca,
+                'modelo': vehiculo.modelo,
+                'color': vehiculo.color,
+                'tipo': vehiculo.tipo
+            },
+            'espacio': {
+                'id': espacio.id,
+                'zona': espacio.zona,
+                'numero': espacio.numero
+            },
+            'usuario': reserva_activa.usuario.nombre
+        })
 
     @action(detail=False, methods=['post'], url_path='entrada-manual')
     def entrada_manual(self, request):
@@ -493,10 +694,35 @@ class SesionParqueoViewSet(viewsets.ModelViewSet):
         if espacio.estado != 'libre':
             return Response({'error': 'El espacio no está libre'}, status=status.HTTP_400_BAD_REQUEST)
 
-        vehiculo, created = Vehiculo.objects.get_or_create(
-            placa=placa,
-            defaults={'tipo': tipo, 'usuario': request.user}
-        )
+        from django.utils import timezone
+        from datetime import timedelta
+        
+        from django.db.models import Value
+        from django.db.models.functions import Replace
+
+        ahora = timezone.now()
+        margen = timedelta(minutes=30)
+        
+        placa_limpia_input = placa.replace('-', '').replace(' ', '').upper()
+
+        # Verificar si existe una reserva activa para esa placa (ignorando guiones/espacios)
+        reserva_activa = Reserva.objects.annotate(
+            placa_db=Replace('vehiculo__placa', Value('-'), Value('')),
+            placa_db_clean=Replace('placa_db', Value(' '), Value(''))
+        ).filter(
+            placa_db_clean__iexact=placa_limpia_input,
+            estado='activa',
+            fecha_inicio__lte=ahora + margen,
+            fecha_fin__gte=ahora - margen
+        ).first()
+
+        if not reserva_activa:
+            return Response({'error': 'Ingreso denegado: El vehículo no tiene una reserva activa en este horario o la placa no coincide.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Si tiene reserva, obtenemos el vehículo (ya sabemos que existe)
+        vehiculo = reserva_activa.vehiculo
+
+
         
         sesion = SesionParqueo.objects.create(
             vehiculo=vehiculo,
@@ -563,7 +789,7 @@ class SesionParqueoViewSet(viewsets.ModelViewSet):
             sesion=sesion,
             tarifa=tarifa_activa,
             monto=monto,
-            metodo='efectivo',
+            metodo='excepcion',
             estado_pago='pendiente'
         )
 
@@ -585,6 +811,127 @@ class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all()
     serializer_class = PagoSerializer
     permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        from rest_framework.exceptions import ValidationError
+        from django.db import transaction
+        from .models import Billetera
+
+        # Logging temporal para depuración: registra qué usuario y token
+        logger = logging.getLogger(__name__)
+        usuario = getattr(self.request, 'user', None)
+        user_id = getattr(usuario, 'id', None)
+        user_correo = getattr(usuario, 'correo', getattr(usuario, 'email', None))
+        auth_header = self.request.META.get('HTTP_AUTHORIZATION', '')
+        logger.info(f"Pago.perform_create called - user_id={user_id} correo={user_correo} metodo_field={serializer.initial_data.get('metodo')} monto_field={serializer.initial_data.get('monto')} AuthorizationHeaderPresent={'Bearer' in auth_header}")
+
+        monto = serializer.validated_data.get('monto', 0)
+        metodo = serializer.validated_data.get('metodo', '')
+
+        with transaction.atomic():
+            if metodo == 'app':
+                billetera, _ = Billetera.objects.get_or_create(usuario=self.request.user)
+                if billetera.saldo < monto:
+                    raise ValidationError("Saldo insuficiente en la billetera.")
+                billetera.saldo -= monto
+                billetera.save()
+            serializer.save()
+
+    @action(detail=True, methods=['get'], permission_classes=[AllowAny])
+    def factura(self, request, pk=None):
+        """
+        Genera una vista en HTML simulando una factura descargable en PDF.
+        """
+        from django.http import HttpResponse
+        pago = self.get_object()
+        
+        # Recuperar placa y usuario para mostrar en la factura
+        vehiculo_placa = 'N/A'
+        usuario_nombre = 'N/A'
+        if getattr(pago, 'reserva', None):
+            if pago.reserva.vehiculo:
+                vehiculo_placa = pago.reserva.vehiculo.placa
+            if pago.reserva.usuario:
+                usuario_nombre = getattr(pago.reserva.usuario, 'nombre', getattr(pago.reserva.usuario, 'email', 'N/A'))
+        elif getattr(pago, 'sesion', None):
+            if pago.sesion.vehiculo:
+                vehiculo_placa = pago.sesion.vehiculo.placa
+            if pago.sesion.usuario:
+                usuario_nombre = getattr(pago.sesion.usuario, 'nombre', getattr(pago.sesion.usuario, 'email', 'N/A'))
+
+        html = f"""
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <title>Factura PX-{pago.id:04d}</title>
+            <style>
+                body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; max-width: 600px; margin: 0 auto; color: #334155; }}
+                h1 {{ color: #1e293b; margin-bottom: 5px; }}
+                h2 {{ color: #64748b; font-size: 16px; margin-top: 0; font-weight: normal; }}
+                .invoice-header {{ border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 20px; }}
+                .detail-row {{ display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }}
+                .total-row {{ display: flex; justify-content: space-between; margin-top: 20px; font-size: 18px; font-weight: bold; color: #0f172a; }}
+                .badge {{ padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; text-transform: uppercase; }}
+                .badge-aprobado {{ background: #22c55e; color: white; }}
+                .badge-pendiente {{ background: #facc15; color: white; }}
+                .badge-rechazado {{ background: #ef4444; color: white; }}
+                .footer {{ margin-top: 40px; text-align: center; color: #94a3b8; font-size: 14px; border-top: 1px solid #e2e8f0; padding-top: 20px; }}
+                @media print {{
+                    @page {{ margin: 0; }}
+                    body {{ padding: 2cm; max-width: 100%; }}
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="invoice-header">
+                <h1>Divine Park</h1>
+                <h2>Soluciones de Estacionamiento Inteligente</h2>
+            </div>
+            
+            <div class="detail-row">
+                <span><strong>No. de Factura:</strong></span>
+                <span>#PX-{pago.id:04d}</span>
+            </div>
+            <div class="detail-row">
+                <span><strong>Fecha:</strong></span>
+                <span>{pago.fecha.strftime('%d/%m/%Y %I:%M %p')}</span>
+            </div>
+            <div class="detail-row">
+                <span><strong>Usuario:</strong></span>
+                <span>{usuario_nombre}</span>
+            </div>
+            <div class="detail-row">
+                <span><strong>Vehículo (Placa):</strong></span>
+                <span>{vehiculo_placa}</span>
+            </div>
+            <div class="detail-row">
+                <span><strong>Método de pago:</strong></span>
+                <span style="text-transform: capitalize;">{pago.metodo}</span>
+            </div>
+            <div class="detail-row">
+                <span><strong>Estado:</strong></span>
+                <span class="badge badge-{pago.estado_pago}">{pago.estado_pago}</span>
+            </div>
+            
+            <div class="total-row">
+                <span>Monto Total:</span>
+                <span>${pago.monto} COP</span>
+            </div>
+            
+            <div class="footer">
+                <p>Gracias por utilizar nuestros servicios.</p>
+                <p><small>Este documento es generado automáticamente y sirve como comprobante de pago electrónico.</small></p>
+            </div>
+            
+            <script>
+                // Opcional: abrir el diálogo de impresión automáticamente al abrir el enlace
+                setTimeout(function() {{ window.print(); }}, 500);
+            </script>
+        </body>
+        </html>
+        """
+        return HttpResponse(html)
 
 
 # [ARCHITECTURE_MAPPING]: Servlet-Equivalent
@@ -835,58 +1182,38 @@ class EstadisticasViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'])
     def alertas_tiempo(self, request):
         """
-        Genera reportes de sesiones activas que han superado el límite de tiempo permitido.
+        Retorna las entradas y salidas registradas por los operadores (reemplazando el reporte de alertas de tiempo).
         """
-        from django.db.models import Sum, Avg, Count
-        import datetime
+        from django.db.models import Count
+        from .models import EventoAcceso
 
-        hoy = timezone.now()
-        inicio_mes = hoy.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        eventos = EventoAcceso.objects.select_related('operador', 'espacio', 'vehiculo').order_by('-fecha_hora')
 
-        # Sesiones con duracion mayor a 120 minutos (2 horas) = sobretiempo
-        LIMITE_MIN = 120
-        sesiones_excedidas = SesionParqueo.objects.filter(
-            hora_fin__isnull=False,
-            duracion_min__gt=LIMITE_MIN,
-            hora_inicio__gte=inicio_mes
-        ).select_related('espacio', 'vehiculo')
+        total_entradas = eventos.filter(tipo_evento='entrada').count()
+        total_salidas = eventos.filter(tipo_evento='salida').count()
 
-        total_infracciones = sesiones_excedidas.count()
-        agg = sesiones_excedidas.aggregate(prom=Avg('duracion_min'))
-        prom_raw = agg['prom']
-        promedio_excedido = round(prom_raw - LIMITE_MIN, 1) if prom_raw else 0
+        # Operador más activo
+        operador_data = eventos.exclude(operador__isnull=True).values('operador__nombre').annotate(total=Count('id')).order_by('-total').first()
+        operador_mas_activo = operador_data['operador__nombre'] if operador_data else 'N/A'
 
-        # Zona con mas incidencias
-        zona_max = None
-        if total_infracciones > 0:
-            from django.db.models import Count as DCount
-            zona_data = sesiones_excedidas.values('espacio__zona').annotate(total=DCount('id')).order_by('-total').first()
-            zona_max = f"Zona {zona_data['espacio__zona']}" if zona_data else 'N/A'
-
-        # Lista de incidencias
+        # Lista de accesos
         incidencias = []
-        for s in sesiones_excedidas.order_by('-hora_inicio')[:20]:
-            excedido_min = s.duracion_min - LIMITE_MIN
-            h = excedido_min // 60
-            m = excedido_min % 60
-            tiempo_str = f"{h}h {m:02d} min" if h > 0 else f"{m} min"
-            total_str = f"{s.duracion_min // 60}h {s.duracion_min % 60:02d} min"
-            placa = s.vehiculo.placa if s.vehiculo else 'N/A'
-            zona = f"Zona {s.espacio.zona}" if s.espacio else 'N/A'
-            estado = 'En Proceso' if s.estado_sesion == 'abierta' else 'Resuelto'
+        for ev in eventos[:100]:
+            placa = ev.vehiculo.placa if ev.vehiculo else ev.placa_detectada
+            operador = ev.operador.nombre if ev.operador else 'Automático (LPR)'
+            zona = f"Zona {ev.espacio.zona}" if ev.espacio else 'N/A'
             incidencias.append({
-                'fecha': s.hora_inicio.strftime('%d %b %Y'),
+                'fecha': ev.fecha_hora.strftime('%d %b %Y, %I:%M %p'),
                 'placa': placa,
                 'ubicacion': zona,
-                'tiempo_total': total_str,
-                'tiempo_excedido': tiempo_str,
-                'estado': estado,
+                'tiempo_total': operador,  # Reutilizamos este campo para el Operador
+                'estado': ev.tipo_evento.capitalize(), # Reutilizamos este campo para el Tipo de Evento (Entrada/Salida)
             })
 
         return Response({
-            'total_infracciones': total_infracciones,
-            'promedio_excedido_min': promedio_excedido,
-            'zona_mas_incidencias': zona_max or 'N/A',
+            'total_infracciones': total_entradas,
+            'promedio_excedido_min': total_salidas,
+            'zona_mas_incidencias': operador_mas_activo,
             'incidencias': incidencias,
         })
 

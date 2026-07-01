@@ -23,7 +23,7 @@ class AuthService {
         // El backend debe devolver `response.data` con `token` y `user`.
         this.storeAuthData(response.data);
     
-        this.showSuccessMessage('Login successful! Redirecting...');
+        this.showSuccessMessage('Iniciado exitosamente');
         
         // Pequeña pausa para mostrar el mensaje antes de redirigir.
         setTimeout(() => {

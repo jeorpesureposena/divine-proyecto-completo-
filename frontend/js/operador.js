@@ -34,7 +34,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadBarreras(),
         loadNotificaciones(),
         loadHistorialEventos(),
-        loadEspacios()
+        loadEspacios(),
+        loadTiposVehiculo()
     ]);
 
     // 4. Configurar eventos de modales y formularios
@@ -161,14 +162,35 @@ async function loadNotificaciones() {
 
 // ─── HISTORIAL DE EVENTOS ─────────────────────────────────────────
 
+function extractArrayFromApiResponse(resp) {
+    if (Array.isArray(resp)) return resp;
+    if (!resp || typeof resp !== 'object') return [];
+
+    const keysToCheck = ['results', 'data', 'eventos', 'events', 'items', 'results'];
+    for (const key of keysToCheck) {
+        if (Array.isArray(resp[key])) return resp[key];
+    }
+
+    for (const value of Object.values(resp)) {
+        if (Array.isArray(value)) return value;
+        if (value && typeof value === 'object') {
+            const nested = extractArrayFromApiResponse(value);
+            if (Array.isArray(nested) && nested.length > 0) return nested;
+        }
+    }
+
+    return [];
+}
+
 async function loadHistorialEventos() {
     try {
-        const eventos = await apiFetch('/eventos/');
+        const eventosResp = await apiFetch('/eventos/');
+        const eventos = extractArrayFromApiResponse(eventosResp);
         const tbody = document.getElementById('historial-tbody');
         if (!tbody) return;
 
-        if (eventos.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#94a3b8; padding:20px;">Sin registros aún.</td></tr>`;
+        if (!eventos || eventos.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8; padding:20px;">Sin registros aún.</td></tr>`;
             return;
         }
 
@@ -180,15 +202,23 @@ async function loadHistorialEventos() {
                 day: '2-digit', month: 'short', year: 'numeric',
                 hour: '2-digit', minute: '2-digit'
             });
-            const esEntrada = evento.tipo_evento === 'entrada';
+            const esEntrada = (evento.tipo_evento || '').toString().toLowerCase() === 'entrada';
             const badgeClass = esEntrada ? 'badge-process' : 'badge-complete';
             const badgeText = esEntrada ? 'En Proceso' : 'Completado';
             const tipoText = esEntrada ? 'Entrada' : 'Salida';
+
+            let espacioInfo = '--';
+            if (evento.espacio_zona && evento.espacio_numero !== null && evento.espacio_numero !== undefined) {
+                espacioInfo = `${evento.espacio_zona}-${String(evento.espacio_numero).padStart(2, '0')}`;
+            } else if (evento.ubicacion) {
+                espacioInfo = evento.ubicacion;
+            }
 
             return `
                 <tr>
                     <td>${fechaFormateada}</td>
                     <td style="font-weight: 600;">${evento.placa_detectada || '--'}</td>
+                    <td>${espacioInfo}</td>
                     <td>${tipoText}</td>
                     <td><span class="badge ${badgeClass}">${badgeText}</span></td>
                 </tr>`;
@@ -197,7 +227,7 @@ async function loadHistorialEventos() {
     } catch (error) {
         const tbody = document.getElementById('historial-tbody');
         if (tbody) {
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#e53e3e; padding:20px;">Error al cargar el historial.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#e53e3e; padding:20px;">Error al cargar el historial.</td></tr>`;
         }
     }
 }
@@ -228,6 +258,27 @@ async function loadEspacios() {
     }
 }
 
+async function loadTiposVehiculo() {
+    try {
+        const tipos = await apiFetch('/vehiculos/tipos/');
+        const selectTipos = document.getElementById('tipo-entrada');
+        if (selectTipos) {
+            selectTipos.innerHTML = '';
+            if (tipos.length === 0) {
+                selectTipos.innerHTML = '<option value="">No hay tipos disponibles</option>';
+                return;
+            }
+            tipos.forEach(tipo => {
+                const opt = document.createElement('option');
+                opt.value = tipo.id;
+                opt.textContent = tipo.nombre;
+                selectTipos.appendChild(opt);
+            });
+        }
+    } catch (error) {
+        console.error('Error cargando tipos de vehículo:', error);
+    }
+}
 
 // ─── MODALES ──────────────────────────────────────────────────────
 
@@ -258,11 +309,68 @@ function setupForms() {
     // FORMULARIO ENTRADA MANUAL
     const formEntrada = document.getElementById('form-entrada');
     if (formEntrada) {
+        const btnRegistrar = formEntrada.querySelector('button[type="submit"]');
+        btnRegistrar.disabled = true; // Bloqueado por defecto
+
+        const btnBuscar = document.getElementById('btn-buscar-entrada');
+        if (btnBuscar) {
+            btnBuscar.addEventListener('click', async () => {
+                const placa = document.getElementById('placa-entrada').value.toUpperCase().trim();
+                if (!placa) {
+                    showToast('Por favor ingresa una placa', 'error');
+                    return;
+                }
+
+                btnBuscar.innerHTML = '<i class="bx bx-loader bx-spin"></i>';
+                btnBuscar.disabled = true;
+
+                try {
+                    const data = await apiFetch('/sesiones/validar-entrada/', {
+                        method: 'POST',
+                        body: JSON.stringify({ placa })
+                    });
+
+                    if (data.valido) {
+                        const infoDiv = document.getElementById('vehiculo-info-entrada');
+                        infoDiv.style.display = 'block';
+                        infoDiv.innerHTML = `
+                            <strong>Vehículo:</strong> ${data.vehiculo.marca} ${data.vehiculo.modelo} (${data.vehiculo.color})<br>
+                            <strong>Reserva:</strong> #${data.reserva_id} | <strong>Espacio:</strong> ${data.espacio.zona}-${String(data.espacio.numero).padStart(2, '0')}
+                        `;
+
+                        document.getElementById('tipo-entrada').value = data.vehiculo.tipo;
+                        const selectEspacio = document.getElementById('espacio-entrada');
+                        selectEspacio.value = data.espacio.id;
+                        
+                        if (!selectEspacio.value) {
+                            const opt = document.createElement('option');
+                            opt.value = data.espacio.id;
+                            opt.textContent = `${data.espacio.zona}-${String(data.espacio.numero).padStart(2, '0')} (Reservado)`;
+                            selectEspacio.appendChild(opt);
+                            selectEspacio.value = data.espacio.id;
+                        }
+
+                        document.getElementById('tipo-entrada').style.pointerEvents = 'none';
+                        document.getElementById('espacio-entrada').style.pointerEvents = 'none';
+
+                        btnRegistrar.disabled = false;
+                        showToast('Vehículo verificado', 'success');
+                    }
+                } catch (error) {
+                    document.getElementById('vehiculo-info-entrada').style.display = 'none';
+                    btnRegistrar.disabled = true;
+                    showToast(error.message || 'No se encontró reserva para esta placa', 'error');
+                } finally {
+                    btnBuscar.innerHTML = '<i class="bx bx-search"></i> Buscar';
+                    btnBuscar.disabled = false;
+                }
+            });
+        }
+
         formEntrada.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = formEntrada.querySelector('button[type="submit"]');
-            btn.disabled = true;
-            btn.textContent = 'Registrando...';
+            btnRegistrar.disabled = true;
+            btnRegistrar.textContent = 'Registrando...';
 
             const payload = {
                 placa: document.getElementById('placa-entrada').value.toUpperCase().trim(),
@@ -293,8 +401,8 @@ function setupForms() {
             } catch (error) {
                 showToast(error.message || 'Error al registrar entrada', 'error');
             } finally {
-                btn.disabled = false;
-                btn.textContent = 'Confirmar Entrada';
+                btnRegistrar.disabled = false;
+                btnRegistrar.textContent = 'Confirmar Entrada';
             }
         });
     }
@@ -311,13 +419,15 @@ function setupForms() {
             const placa = document.getElementById('placa-salida').value.toUpperCase().trim();
 
             try {
-                // 1. Buscar sesión activa por placa
+                // 1. Buscar sesión activa por placa ignorando guiones y espacios
                 btn.textContent = 'Procesando...';
                 const sesiones = await apiFetch('/sesiones/');
-                const sesionActiva = sesiones.find(s =>
-                    s.vehiculo_placa === placa &&
-                    s.estado_sesion === 'abierta'
-                );
+                const placaLimpia = placa.replace(/[-\s]/g, '');
+                
+                const sesionActiva = sesiones.find(s => {
+                    const dbPlaca = (s.vehiculo_placa || '').toUpperCase().replace(/[-\s]/g, '');
+                    return dbPlaca === placaLimpia && s.estado_sesion === 'abierta';
+                });
 
                 if (!sesionActiva) {
                     throw new Error(`No se encontró una sesión abierta para la placa ${placa}`);
@@ -432,15 +542,32 @@ const HistorialModal = {
         document.getElementById('modal-historial').classList.add('active');
         this.todos = [];
         this.paginaActual = 1;
-        document.getElementById('hist-modal-tbody').innerHTML =
-            `<tr><td colspan="4" style="text-align:center;padding:30px;color:#94a3b8;">Cargando...</td></tr>`;
+        const tbody = document.getElementById('hist-modal-tbody');
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:30px;color:#94a3b8;">Cargando...</td></tr>`;
+        }
+
         try {
-            this.todos = await apiFetch('/eventos/');
+            const eventosResp = await apiFetch('/eventos/');
+            this.todos = extractArrayFromApiResponse(eventosResp);
             this.filtrados = [...this.todos];
+
+            const selZona = document.getElementById('hist-filtro-zona');
+            if (selZona) {
+                const zonasRaw = this.todos.map(ev =>
+                    ev.espacio_zona || ev.ubicacion || ev.zona || (ev.espacio && ev.espacio.zona) || ''
+                ).filter(Boolean);
+                const zonas = Array.from(new Set(zonasRaw.map(z => z.toString().trim())))
+                    .filter(Boolean)
+                    .sort((a, b) => a.localeCompare(b));
+                selZona.innerHTML = '<option value="">Todas las Zonas</option>' + zonas.map(z => `<option value="${z}">${z}</option>`).join('');
+            }
+
             this.render();
         } catch (e) {
-            document.getElementById('hist-modal-tbody').innerHTML =
-                `<tr><td colspan="4" style="text-align:center;padding:30px;color:#e53e3e;">Error al cargar el historial.</td></tr>`;
+            if (tbody) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:30px;color:#e53e3e;">Error al cargar el historial.</td></tr>`;
+            }
         }
     },
 
@@ -448,14 +575,20 @@ const HistorialModal = {
         const fecha = document.getElementById('hist-filtro-fecha').value;
         const desde = document.getElementById('hist-filtro-desde').value;
         const hasta = document.getElementById('hist-filtro-hasta').value;
-        const tipo = document.getElementById('hist-filtro-tipo').value;
+        const tipo = (document.getElementById('hist-filtro-tipo').value || '').toLowerCase();
+        const zonaFiltro = (document.getElementById('hist-filtro-zona') ? document.getElementById('hist-filtro-zona').value : '').toString().trim();
 
         this.filtrados = this.todos.filter(ev => {
             const dt = new Date(ev.fecha_hora);
+            if (isNaN(dt.getTime())) return false;
+
             if (fecha) {
-                const fechaEv = dt.toISOString().split('T')[0];
-                if (fechaEv !== fecha) return false;
+                const start = new Date(`${fecha}T00:00:00`);
+                const end = new Date(`${fecha}T23:59:59.999`);
+                if (isNaN(start.getTime()) || isNaN(end.getTime())) return false;
+                if (dt < start || dt > end) return false;
             }
+
             if (desde) {
                 const hhmm = dt.toTimeString().slice(0, 5);
                 if (hhmm < desde) return false;
@@ -464,9 +597,15 @@ const HistorialModal = {
                 const hhmm = dt.toTimeString().slice(0, 5);
                 if (hhmm > hasta) return false;
             }
-            if (tipo && ev.tipo_evento !== tipo) return false;
+            if (tipo && (ev.tipo_evento || '').toString().toLowerCase() !== tipo) return false;
+
+            if (zonaFiltro) {
+                const evZona = (ev.espacio_zona || ev.ubicacion || ev.zona || (ev.espacio && ev.espacio.zona) || '').toString().trim();
+                if (!evZona || evZona !== zonaFiltro) return false;
+            }
             return true;
         });
+
         this.paginaActual = 1;
         this.render();
     },
@@ -476,55 +615,74 @@ const HistorialModal = {
         document.getElementById('hist-filtro-desde').value = '';
         document.getElementById('hist-filtro-hasta').value = '';
         document.getElementById('hist-filtro-tipo').value = '';
+        document.getElementById('hist-filtro-zona').value = '';
+
         this.filtrados = [...this.todos];
         this.paginaActual = 1;
         this.render();
     },
 
     render() {
-        const totalPaginas = Math.ceil(this.filtrados.length / this.porPagina) || 1;
+        const totalPaginas = Math.max(1, Math.ceil(this.filtrados.length / this.porPagina));
+        this.paginaActual = Math.min(this.paginaActual, totalPaginas);
         const inicio = (this.paginaActual - 1) * this.porPagina;
         const pagina = this.filtrados.slice(inicio, inicio + this.porPagina);
 
         const tbody = document.getElementById('hist-modal-tbody');
-        if (pagina.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:30px;color:#94a3b8;">Sin resultados para los filtros aplicados.</td></tr>`;
-        } else {
-            tbody.innerHTML = pagina.map(ev => {
-                const dt = new Date(ev.fecha_hora);
-                const fecha = dt.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
-                const hora = dt.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
-                const esEntrada = ev.tipo_evento === 'entrada';
-                const badge = esEntrada
-                    ? `<span class="badge badge-process">En Proceso</span>`
-                    : `<span class="badge badge-complete">Completado</span>`;
-                return `
-                    <tr>
-                        <td>${fecha}/ ${hora}</td>
-                        <td style="font-weight:600;">#${ev.placa_detectada || '--'}</td>
-                        <td>${esEntrada ? 'Entrada' : 'Salida'}</td>
-                        <td>${badge}</td>
-                    </tr>`;
-            }).join('');
+        if (tbody) {
+            if (pagina.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:30px;color:#94a3b8;">Sin resultados para los filtros aplicados.</td></tr>`;
+            } else {
+                tbody.innerHTML = pagina.map(ev => {
+                    const dt = new Date(ev.fecha_hora);
+                    const fecha = dt.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
+                    const hora = dt.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+                    const esEntrada = (ev.tipo_evento || '').toString().toLowerCase() === 'entrada';
+                    const badge = esEntrada
+                        ? `<span class="badge badge-process">En Proceso</span>`
+                        : `<span class="badge badge-complete">Completado</span>`;
+
+                    let espacioInfo = '--';
+                    if (ev.espacio_zona && ev.espacio_numero !== null && ev.espacio_numero !== undefined) {
+                        espacioInfo = `${ev.espacio_zona}-${String(ev.espacio_numero).padStart(2, '0')}`;
+                    } else if (ev.ubicacion) {
+                        espacioInfo = ev.ubicacion;
+                    }
+
+                    return `
+                        <tr>
+                            <td>${fecha} / ${hora}</td>
+                            <td style="font-weight:600;">#${ev.placa_detectada || '--'}</td>
+                            <td>${espacioInfo}</td>
+                            <td>${esEntrada ? 'Entrada' : 'Salida'}</td>
+                            <td>${badge}</td>
+                        </tr>`;
+                }).join('');
+            }
         }
 
-        // Botones de paginación
         const prevBtn = document.getElementById('hist-prev');
         const nextBtn = document.getElementById('hist-next');
-        prevBtn.disabled = this.paginaActual <= 1;
-        nextBtn.disabled = this.paginaActual >= totalPaginas;
-        prevBtn.classList.toggle('nav-btn-active', this.paginaActual > 1);
-        nextBtn.classList.toggle('nav-btn-active', this.paginaActual < totalPaginas);
+        if (prevBtn) {
+            prevBtn.disabled = this.paginaActual <= 1;
+            prevBtn.classList.toggle('nav-btn-active', this.paginaActual > 1);
+        }
+        if (nextBtn) {
+            nextBtn.disabled = this.paginaActual >= totalPaginas;
+            nextBtn.classList.toggle('nav-btn-active', this.paginaActual < totalPaginas);
+        }
 
-        document.getElementById('hist-info-pagina').textContent =
-            `Página ${this.paginaActual} de ${totalPaginas}  (${this.filtrados.length} registros)`;
+        const info = document.getElementById('hist-info-pagina');
+        if (info) {
+            info.textContent = `Página ${this.paginaActual} de ${totalPaginas}  (${this.filtrados.length} registros)`;
+        }
     },
 
     paginaAnterior() {
         if (this.paginaActual > 1) { this.paginaActual--; this.render(); }
     },
     paginaSiguiente() {
-        const total = Math.ceil(this.filtrados.length / this.porPagina);
+        const total = Math.max(1, Math.ceil(this.filtrados.length / this.porPagina));
         if (this.paginaActual < total) { this.paginaActual++; this.render(); }
     }
 };

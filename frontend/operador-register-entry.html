@@ -117,8 +117,8 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <i class='bx bxs-parking' style='font-size: 2rem; color: var(--accent-color);'></i>
-            <h2>DivinePark</h2>
+            <img src="assets/logo.jpg" alt="Divine Park Logo" style="width: 32px; height: 32px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2); object-fit: cover;">
+            <h2 style="color: white; font-weight: 800; letter-spacing: -0.5px;">Divine Park</h2>
         </div>
 
         <nav class="sidebar-nav">
@@ -174,19 +174,29 @@
                         <!-- Número de Placa -->
                         <div class="field-group">
                             <label for="placa">Número de Placa</label>
-                            <div class="input-wrapper">
-                                <i class='bx bx-car input-icon'></i>
-                                <input
-                                    type="text"
-                                    id="placa"
-                                    name="placa"
-                                    class="field-input with-icon"
-                                    placeholder="ABC-1234"
-                                    required
-                                    autocomplete="off"
-                                    style="text-transform: uppercase;"
-                                >
+                            <div style="display: flex; gap: 10px;">
+                                <div class="input-wrapper" style="flex: 1;">
+                                    <i class='bx bx-car input-icon'></i>
+                                    <input
+                                        type="text"
+                                        id="placa"
+                                        name="placa"
+                                        class="field-input with-icon"
+                                        placeholder="Ej. ABC123"
+                                        required
+                                        autocomplete="off"
+                                        style="text-transform: uppercase;"
+                                    >
+                                </div>
+                                <button type="button" class="submit-btn" id="btn-buscar-entrada" style="width: auto; padding: 0 20px; margin-top: 0;">
+                                    <i class='bx bx-search'></i> Buscar
+                                </button>
                             </div>
+                        </div>
+
+                        <!-- Info del Vehículo Encontrado -->
+                        <div id="vehiculo-info-entrada" style="display: none; margin-bottom: 24px; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <!-- Dinámico -->
                         </div>
 
                         <!-- Tipo de Vehículo -->
@@ -195,8 +205,7 @@
                             <div class="input-wrapper">
                                 <i class='bx bx-category input-icon'></i>
                                 <select id="tipo" name="tipo" class="field-input with-icon" required>
-                                    <option value="carro">Carro</option>
-                                    <option value="camioneta">Camioneta</option>
+                                    <option value="">Cargando tipos de vehículo...</option>
                                 </select>
                             </div>
                         </div>
@@ -256,15 +265,84 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('operador-nombre').textContent = nombre;
     }
 
-    // Cargar espacios libres
+    // Cargar espacios y tipos de vehículo
+    await cargarTiposVehiculo();
     await cargarEspacios();
+
+    const btnRegistrar = document.getElementById('btn-registrar');
+    btnRegistrar.disabled = true; // Deshabilitado por defecto hasta buscar
+
+    document.getElementById('btn-buscar-entrada').addEventListener('click', async () => {
+        const placa = document.getElementById('placa').value.toUpperCase().trim();
+        if (!placa) {
+            showToast('Por favor ingresa una placa', 'error');
+            return;
+        }
+
+        const btnBuscar = document.getElementById('btn-buscar-entrada');
+        btnBuscar.innerHTML = '<i class="bx bx-loader bx-spin"></i> Buscando...';
+        btnBuscar.disabled = true;
+
+        try {
+            const data = await apiFetch('/sesiones/validar-entrada/', {
+                method: 'POST',
+                body: JSON.stringify({ placa })
+            });
+
+            if (data.valido) {
+                const infoDiv = document.getElementById('vehiculo-info-entrada');
+                infoDiv.style.display = 'block';
+                infoDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="color: #0f172a; margin-bottom: 4px; font-size: 1.1rem;">Vehículo Verificado</h3>
+                            <p style="margin: 2px 0; color: #475569;"><strong>Propietario:</strong> ${data.usuario}</p>
+                            <p style="margin: 2px 0; color: #475569;"><strong>Vehículo:</strong> ${data.vehiculo.marca} ${data.vehiculo.modelo} (${data.vehiculo.color})</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="background: #e0f2fe; color: #0284c7; padding: 4px 12px; border-radius: 999px; font-weight: 600; font-size: 0.85rem;">Reserva #${data.reserva_id}</span>
+                            <p style="margin-top: 8px; color: #0f172a; font-weight: bold;">Espacio Asignado: ${data.espacio.zona}-${String(data.espacio.numero).padStart(2, '0')}</p>
+                        </div>
+                    </div>
+                `;
+
+                // Seleccionar automáticamente el tipo y el espacio, y bloquearlos para evitar errores
+                document.getElementById('tipo').value = data.vehiculo.tipo;
+                const selectEspacio = document.getElementById('espacio');
+                selectEspacio.value = data.espacio.id;
+                
+                // Si el espacio asignado no está en la lista (por alguna razón), añadirlo temporalmente para poder seleccionarlo
+                if (!selectEspacio.value) {
+                    const opt = document.createElement('option');
+                    opt.value = data.espacio.id;
+                    opt.textContent = `${data.espacio.zona}-${String(data.espacio.numero).padStart(2, '0')} (Asignado en Reserva)`;
+                    selectEspacio.appendChild(opt);
+                    selectEspacio.value = data.espacio.id;
+                }
+
+                document.getElementById('tipo').style.pointerEvents = 'none';
+                document.getElementById('tipo').style.background = '#f1f5f9';
+                document.getElementById('espacio').style.pointerEvents = 'none';
+                document.getElementById('espacio').style.background = '#f1f5f9';
+
+                btnRegistrar.disabled = false;
+                showToast('Vehículo verificado con éxito', 'success');
+            }
+        } catch (error) {
+            document.getElementById('vehiculo-info-entrada').style.display = 'none';
+            btnRegistrar.disabled = true;
+            showToast(error.message || 'No se encontró reserva para esta placa', 'error');
+        } finally {
+            btnBuscar.innerHTML = '<i class="bx bx-search"></i> Buscar';
+            btnBuscar.disabled = false;
+        }
+    });
 
     // Manejar envío del formulario
     document.getElementById('form-registro-entrada').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('btn-registrar');
-        btn.disabled = true;
-        btn.textContent = 'Registrando...';
+        btnRegistrar.disabled = true;
+        btnRegistrar.textContent = 'Registrando...';
 
         const placa   = document.getElementById('placa').value.toUpperCase().trim();
         const tipo    = document.getElementById('tipo').value;
@@ -272,21 +350,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (!espacio) {
             showToast('Selecciona un espacio disponible', 'error');
-            btn.disabled = false;
-            btn.textContent = 'Registrar Entrada';
+            btnRegistrar.disabled = false;
+            btnRegistrar.textContent = 'Registrar Entrada';
             return;
         }
 
         try {
-            const resultado = await apiFetch('/sesiones/entrada-manual/', {
+            await apiFetch('/sesiones/entrada-manual/', {
                 method: 'POST',
                 body: JSON.stringify({ placa, tipo, espacio_id: espacio })
             });
 
-            const codigo = resultado.espacio_codigo || `#${espacio}`;
-            showToast(`¡Entrada de ${placa} registrada — ${codigo}!`, 'success');
-            document.getElementById('form-registro-entrada').reset();
-            await cargarEspacios(); // refrescar espacios
+            showToast('Entrada registrada exitosamente', 'success');
 
             // Redirigir al dashboard después de 2 segundos
             setTimeout(() => {
@@ -295,11 +370,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         } catch (error) {
             showToast(error.message || 'Error al registrar la entrada', 'error');
-            btn.disabled = false;
-            btn.textContent = 'Registrar Entrada';
+            btnRegistrar.disabled = false;
+            btnRegistrar.textContent = 'Registrar Entrada';
         }
     });
 });
+
+async function cargarTiposVehiculo() {
+    const select = document.getElementById('tipo');
+    try {
+        const tipos = await apiFetch('/vehiculos/tipos/');
+        select.innerHTML = '';
+        
+        if (tipos.length === 0) {
+            select.innerHTML = '<option value="">No hay tipos disponibles</option>';
+            return;
+        }
+
+        tipos.forEach(tipo => {
+            const opt = document.createElement('option');
+            opt.value = tipo.id;
+            opt.textContent = tipo.nombre;
+            select.appendChild(opt);
+        });
+
+    } catch(e) {
+        select.innerHTML = '<option value="">Error al cargar tipos</option>';
+        console.error('Error cargando tipos de vehículo:', e);
+    }
+}
 
 async function cargarEspacios() {
     const select = document.getElementById('espacio');
@@ -339,8 +438,8 @@ async function cargarEspacios() {
             zonas[zona].forEach(esp => {
                 const opt = document.createElement('option');
                 opt.value = esp.id;
-                // Calcular número dentro de la zona (1-15)
-                const numZona = String(esp.numero - (['A','B','C','D'].indexOf(zona) * 15)).padStart(2, '0');
+                // Usar directamente el número que viene de la base de datos
+                const numZona = String(esp.numero).padStart(2, '0');
                 const code = `${zona}-${numZona}`;
                 opt.textContent = `${code}  (${esp.tipo === 'discapacitado' ? '♿ Discapacitado' : 'Estándar'})`;
                 opt.dataset.code = code;
