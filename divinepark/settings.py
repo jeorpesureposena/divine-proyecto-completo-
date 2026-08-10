@@ -1,3 +1,5 @@
+import os
+import dj_database_url
 from pathlib import Path
 from datetime import timedelta
 
@@ -29,6 +31,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -58,14 +61,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'divinepark.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'divinepark1',
-        'USER': 'postgres',
-        'PASSWORD': 'Cobito18',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default='postgresql://postgres:Cobito18@localhost:5432/divinepark1'
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -81,6 +79,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
